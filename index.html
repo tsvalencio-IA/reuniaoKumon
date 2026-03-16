@@ -1,0 +1,437 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  ChevronRight, 
+  ChevronLeft, 
+  Users, 
+  Target, 
+  History, 
+  BookOpen, 
+  Trophy, 
+  Smartphone, 
+  Clock, 
+  MessageCircle,
+  Heart,
+  Baby,
+  Brain,
+  School,
+  PlayCircle
+} from 'lucide-react';
+
+/**
+ * CONFIGURAÇÃO FIREBASE (Opcional - Para interatividade em tempo real)
+ * Se desejar usar, preencha os campos abaixo. Caso contrário, a app funciona offline/estática.
+ */
+const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "", // Seu link do Realtime Database aqui
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+
+const App = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [dbContent, setDbContent] = useState({ videoUrl: "", announcement: "" });
+
+  // Navegação via Teclado (Ideal para Android TV com teclado/mouse)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") nextSlide();
+      if (e.key === "ArrowLeft") prevSlide();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentSlide]);
+
+  const slides = [
+    {
+      id: 1,
+      type: "cover",
+      title: "Reunião de Pais 2026",
+      subtitle: "Unidade Kumon Rio Preto Shopping",
+      location: "São José do Rio Preto",
+      bg: "bg-gradient-to-br from-[#00AEEF] to-[#004578]"
+    },
+    {
+      id: 2,
+      title: "Toru Kumon: A Origem",
+      icon: <Heart className="w-12 h-12 text-red-500" />,
+      content: [
+        "Metodologia nascida do amor e da extrema dedicação de um pai.",
+        "Foco total no desenvolvimento pleno da autonomia do aluno.",
+        "Baseado no encorajamento e na consistência de estudos diários.",
+        "Uma filosofia de vida que vai além da sala de aula."
+      ]
+    },
+    {
+      id: 3,
+      type: "quote",
+      text: "Obter máximo resultado com o mínimo de esforço. Produzir os melhores resultados no menor espaço de tempo é possível.",
+      author: "Toru Kumon",
+      bg: "bg-[#F39200]"
+    },
+    {
+      id: 4,
+      title: "O que é o Kumon?",
+      grid: [
+        { t: "Autodidatismo", d: "Capacidade de aprender por si, buscando o conhecimento de forma ativa.", i: <Brain /> },
+        { t: "Material Didático", d: "Estruturado e autoinstrutivo, evoluindo em pequenos passos.", i: <BookOpen /> },
+        { t: "Individualização", d: "Ensino focado no ritmo e na capacidade única de cada aluno.", i: <Target /> },
+        { t: "Orientador", d: "Guia o aluno a descobrir e alcançar seu próprio potencial máximo.", i: <Users /> }
+      ]
+    },
+    {
+      id: 5,
+      title: "Objetivos do Kumon",
+      content: [
+        "Ressignificar o sentido da educação para crianças e jovens.",
+        "Transformar a educação após os desafios da pandemia.",
+        "Promover mudança de vida e transformação social através do estudo.",
+        "Garantir uma organização com sequência lógica e coerente.",
+        "Construir uma base sólida de conhecimento para a vida toda."
+      ]
+    },
+    {
+      id: 6,
+      title: "Nossa História: Referência em Qualidade",
+      content: [
+        "1993: Início da unidade com a pioneira Fernanda Musolino.",
+        "1998: Única unidade Clube Ouro de Rio Preto (título mantido).",
+        "2013: Maria Flavia Musolino assume a liderança da unidade.",
+        "Pandemia: Atingimos a marca histórica de 450 alunos.",
+        "Hoje: Referência em excelência para a Matriz Kumon."
+      ],
+      icon: <History className="text-blue-500" />
+    },
+    {
+      id: 7,
+      title: "Nossa Equipe",
+      layout: "team",
+      management: [
+        { role: "Orientadora", name: "Maria Flavia" },
+        { role: "Gerente Geral", name: "Thamis" },
+        { role: "Psicóloga", name: "Maria Carolina" },
+        { role: "Adm/Recepção", name: "Ingrid e Rafaela" }
+      ],
+      staff: [
+        "Tia Dani", "Tia Gabi", "Tia Ana Julia", "Tia Maria Clara", "Tia Isadhora", "Tio João", "Tio Bruno (Estagiário)"
+      ]
+    },
+    {
+      id: 8,
+      title: "Estrutura Pedagógica: Estágios",
+      type: "table",
+      data: [
+        { d: "Português", ini: "7A ao CII", ava: "DI ao L" },
+        { d: "Matemática", ini: "6A ao A", ava: "B ao F | G ao O" },
+        { d: "Inglês", ini: "7A ao C", ava: "D ao O" }
+      ]
+    },
+    {
+      id: 9,
+      title: "Indicadores Reais",
+      layout: "stats",
+      stats: [
+        { label: "Alunos Totais", value: "364", color: "text-[#00AEEF]" },
+        { label: "Acima da Série", value: "197", color: "text-[#F39200]" }
+      ]
+    },
+    {
+      id: 10,
+      title: "Kumon Baby",
+      icon: <Baby className="w-16 h-16 text-pink-500" />,
+      content: [
+        "Atendimento focado a partir dos 6 meses de idade.",
+        "Estímulos essenciais na primeira infância.",
+        "Desenvolvimento das coordenações motoras e cognitivas.",
+        "Preparação para o aprendizado e alfabetização futura.",
+        "Ambiente lúdico, seguro e acolhedor para os pequenos."
+      ]
+    },
+    {
+      id: 11,
+      type: "quote",
+      text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?",
+      author: "Reflexão para o Futuro",
+      bg: "bg-[#004578]"
+    },
+    {
+      id: 12,
+      title: "O Kumon como Complemento Escolar",
+      content: [
+        "Resgate do interesse pelo aprendizado ativo.",
+        "Preenchimento de lacunas do ensino tradicional.",
+        "Fortalecimento da base e hábito de estudo diário.",
+        "Confiança e autonomia para enfrentar os desafios escolares."
+      ],
+      icon: <School className="text-green-500" />
+    },
+    {
+      id: 13,
+      title: "Suporte Especializado: TDAH / Dislexia",
+      content: [
+        "Acompanhamento focado no desenvolvimento individual.",
+        "Respeito ao ritmo e forma única de aprendizado.",
+        "Atuação da psicóloga Maria Carolina junto à equipe.",
+        "Aumento gradual e seguro da capacidade de concentração.",
+        "Parceria contínua entre Unidade, Escola e Família."
+      ]
+    },
+    {
+      id: 14,
+      title: "Aluna Destaque: Sophia Sangolete",
+      layout: "highlight",
+      data: {
+        info: "Início: 16/06/2016 (Matemática)",
+        status: "Matemática Estágio M 111",
+        achievements: "Concluinte de Português e Inglês",
+        result: "Aprovada em Enfermagem (8º Lugar FAMEMA e FAMERP)"
+      }
+    },
+    {
+      id: 15,
+      title: "Kumon Connect: Inovação Digital",
+      content: [
+        "Evolução digital do método tradicional com tablets e canetas.",
+        "Correção ágil e acompanhamento em tempo real pela unidade.",
+        "Estudo diário interativo e atraente para o aluno.",
+        "Sustentabilidade e modernidade aliadas ao aprendizado."
+      ],
+      icon: <Smartphone className="text-purple-500" />
+    },
+    {
+      id: 16,
+      title: "A Tríade do Sucesso",
+      grid: [
+        { t: "Unidade", d: "Planejamento, orientação e motivação do aluno.", i: <Smartphone /> },
+        { t: "Pais", d: "Acompanhamento, elogios e ambiente de estudo.", i: <MessageCircle /> },
+        { t: "Aluno", d: "Resolução diária, dedicação e autonomia.", i: <Target /> }
+      ]
+    },
+    {
+      id: 17,
+      title: "Avisos Importantes",
+      icon: <Clock className="text-orange-500" />,
+      content: [
+        "Horários: Respeite o horário agendado para garantir o fluxo.",
+        "Reposição: Deve ser marcada com antecedência na recepção.",
+        "Consistência: O estudo diário é o segredo do sucesso.",
+        "Contato: Administrativo disponível para dúvidas (Ingrid/Rafaela)."
+      ]
+    },
+    {
+      id: 18,
+      type: "closing",
+      title: "Muito Obrigado!",
+      subtitle: "Kumon Rio Preto Shopping",
+      phone: "(17) 3227-0644",
+      bg: "bg-white"
+    }
+  ];
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+
+  const slide = slides[currentSlide];
+
+  return (
+    <div className={`w-full h-screen overflow-hidden flex flex-col font-sans transition-all duration-700 ${slide.bg || 'bg-slate-50'}`}>
+      
+      {/* HEADER DINÂMICO */}
+      {slide.type !== 'cover' && slide.type !== 'closing' && (
+        <div className="p-8 flex items-center justify-between animate-in fade-in slide-in-from-top-4 duration-700">
+          <div className="flex items-center gap-4">
+            <div className="bg-[#00AEEF] p-3 rounded-2xl shadow-lg text-white">
+              {slide.icon || <Target size={32} />}
+            </div>
+            <h2 className="text-4xl font-extrabold text-[#004578] uppercase tracking-tight">{slide.title}</h2>
+          </div>
+          <div className="text-[#00AEEF] font-bold text-2xl">Kumon 2026</div>
+        </div>
+      )}
+
+      {/* CONTEÚDO PRINCIPAL CENTRALIZADO */}
+      <main className="flex-grow flex items-center justify-center p-12">
+        
+        {/* LAYOUT: CAPA */}
+        {slide.type === 'cover' && (
+          <div className="text-center text-white space-y-8 animate-in zoom-in-75 duration-1000">
+            <div className="bg-white/10 backdrop-blur-md p-16 rounded-[40px] border border-white/20 shadow-2xl">
+              <h1 className="text-8xl font-black mb-4 leading-none uppercase">{slide.title}</h1>
+              <p className="text-4xl font-light tracking-widest">{slide.subtitle}</p>
+              <div className="h-2 w-32 bg-[#F39200] mx-auto mt-8 rounded-full"></div>
+            </div>
+            <p className="text-2xl font-semibold tracking-widest animate-pulse uppercase">{slide.location}</p>
+          </div>
+        )}
+
+        {/* LAYOUT: QUOTE / REFLEXÃO */}
+        {slide.type === 'quote' && (
+          <div className="max-w-6xl text-center text-white space-y-12 animate-in slide-in-from-bottom-8 duration-700">
+            <span className="text-9xl font-serif opacity-30">"</span>
+            <h2 className="text-6xl font-bold leading-tight italic -mt-16">{slide.text}</h2>
+            <div className="flex items-center justify-center gap-4">
+              <div className="h-[2px] w-12 bg-white opacity-50"></div>
+              <cite className="text-3xl font-medium not-italic uppercase tracking-wider">{slide.author}</cite>
+              <div className="h-[2px] w-12 bg-white opacity-50"></div>
+            </div>
+          </div>
+        )}
+
+        {/* LAYOUT: LISTA DE TÓPICOS */}
+        {slide.content && !slide.layout && (
+          <div className="w-full max-w-5xl space-y-6">
+            {slide.content.map((item, idx) => (
+              <div 
+                key={idx} 
+                className="bg-white p-8 rounded-3xl shadow-xl flex items-center gap-6 border-l-[12px] border-[#00AEEF] animate-in slide-in-from-right-12 duration-500"
+                style={{ animationDelay: `${idx * 150}ms` }}
+              >
+                <div className="bg-blue-50 p-3 rounded-full text-[#00AEEF]">
+                   <ChevronRight size={24} strokeWidth={4} />
+                </div>
+                <p className="text-3xl font-semibold text-slate-700">{item}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* LAYOUT: GRID / TRÍADE */}
+        {slide.grid && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl">
+            {slide.grid.map((item, idx) => (
+              <div 
+                key={idx} 
+                className="bg-white p-12 rounded-[40px] shadow-2xl text-center space-y-6 border-b-8 border-[#F39200] transform transition-transform hover:scale-105 duration-300 animate-in fade-in zoom-in duration-500"
+                style={{ animationDelay: `${idx * 200}ms` }}
+              >
+                <div className="bg-orange-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto text-[#F39200]">
+                  {React.cloneElement(item.i, { size: 48 })}
+                </div>
+                <h3 className="text-4xl font-black text-[#004578] uppercase">{item.t}</h3>
+                <p className="text-xl text-slate-500 leading-relaxed font-medium">{item.d}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* LAYOUT: EQUIPE */}
+        {slide.layout === 'team' && (
+          <div className="grid grid-cols-2 gap-12 w-full max-w-7xl">
+            <div className="space-y-6">
+              <h3 className="text-3xl font-black text-[#00AEEF] mb-8 border-b-4 border-blue-100 pb-4 uppercase">Gestão e Psicologia</h3>
+              {slide.management.map((m, i) => (
+                <div key={i} className="bg-white p-6 rounded-2xl shadow-lg flex justify-between items-center border-r-8 border-blue-500">
+                  <span className="text-xl font-bold text-slate-400 uppercase tracking-tighter">{m.role}</span>
+                  <span className="text-2xl font-black text-[#004578]">{m.name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-6">
+              <h3 className="text-3xl font-black text-[#F39200] mb-8 border-b-4 border-orange-100 pb-4 uppercase">Corpo Pedagógico</h3>
+              <div className="flex flex-wrap gap-4">
+                {slide.staff.map((name, i) => (
+                  <div key={i} className="bg-orange-500 text-white px-8 py-4 rounded-full font-bold text-xl shadow-md border-b-4 border-orange-700">
+                    {name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* LAYOUT: TABELA PEDAGÓGICA */}
+        {slide.type === 'table' && (
+          <div className="w-full max-w-6xl overflow-hidden rounded-[40px] shadow-2xl bg-white border border-slate-200">
+            <table className="w-full text-left">
+              <thead className="bg-[#004578] text-white">
+                <tr>
+                  <th className="p-10 text-3xl font-black uppercase">Disciplina</th>
+                  <th className="p-10 text-3xl font-black uppercase">Orientação Inicial</th>
+                  <th className="p-10 text-3xl font-black uppercase text-[#F39200]">Orientação Avançada</th>
+                </tr>
+              </thead>
+              <tbody className="text-2xl font-bold text-slate-600">
+                {slide.data.map((row, i) => (
+                  <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-blue-50/30"}>
+                    <td className="p-10 border-b border-slate-100">{row.d}</td>
+                    <td className="p-10 border-b border-slate-100">{row.ini}</td>
+                    <td className="p-10 border-b border-slate-100 text-[#F39200]">{row.ava}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* LAYOUT: INDICADORES */}
+        {slide.layout === 'stats' && (
+          <div className="flex gap-16 w-full max-w-6xl">
+             {slide.stats.map((stat, i) => (
+               <div key={i} className="flex-1 bg-white p-20 rounded-[50px] shadow-2xl text-center border-t-[15px] border-slate-100">
+                  <div className={`text-[150px] font-black leading-none mb-4 ${stat.color}`}>{stat.value}</div>
+                  <div className="text-4xl font-bold text-slate-400 uppercase tracking-widest">{stat.label}</div>
+               </div>
+             ))}
+          </div>
+        )}
+
+        {/* LAYOUT: DESTAQUE SOPHIA */}
+        {slide.layout === 'highlight' && (
+          <div className="bg-white p-16 rounded-[50px] shadow-2xl w-full max-w-6xl border-l-[30px] border-[#00AEEF] flex gap-12 items-center">
+            <div className="flex-1 space-y-8">
+              <div className="bg-blue-600 text-white inline-block px-8 py-3 rounded-full font-black text-xl mb-4 shadow-lg uppercase">Exemplo de Sucesso</div>
+              <h3 className="text-7xl font-black text-[#004578] tracking-tighter">SOPHIA SANGOLETE</h3>
+              <div className="space-y-4">
+                <p className="text-3xl text-slate-600 font-bold flex items-center gap-4"><ChevronRight className="text-blue-500" /> {slide.data.info}</p>
+                <p className="text-3xl text-slate-600 font-bold flex items-center gap-4"><ChevronRight className="text-blue-500" /> {slide.data.status}</p>
+                <p className="text-3xl text-slate-600 font-bold flex items-center gap-4"><ChevronRight className="text-blue-500" /> {slide.data.achievements}</p>
+                <p className="text-4xl text-[#004578] font-black pt-4 bg-yellow-400 px-6 py-2 rounded-2xl inline-block shadow-md"> {slide.data.result}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* LAYOUT: ENCERRAMENTO */}
+        {slide.type === 'closing' && (
+          <div className="text-center space-y-12 animate-in fade-in duration-1000">
+            <Trophy size={120} className="text-[#F39200] mx-auto animate-bounce" />
+            <h2 className="text-9xl font-black text-[#004578] uppercase leading-none">{slide.title}</h2>
+            <div className="space-y-4">
+              <p className="text-4xl font-bold text-slate-400">{slide.subtitle}</p>
+              <div className="bg-[#00AEEF] text-white inline-block px-12 py-6 rounded-full text-5xl font-black shadow-2xl mt-8">
+                {slide.phone}
+              </div>
+            </div>
+          </div>
+        )}
+
+      </main>
+
+      {/* FOOTER FIXO - ASSINATURA */}
+      <footer className="p-8 flex justify-between items-center bg-slate-100 border-t border-slate-200">
+        <div className="flex gap-4">
+          <button onClick={prevSlide} className="bg-white p-4 rounded-full shadow-md text-slate-400 hover:text-blue-500 transition-colors">
+            <ChevronLeft size={32} strokeWidth={3} />
+          </button>
+          <button onClick={nextSlide} className="bg-white p-4 rounded-full shadow-md text-slate-400 hover:text-blue-500 transition-colors">
+            <ChevronRight size={32} strokeWidth={3} />
+          </button>
+        </div>
+        <div className="text-center font-black text-[#004578] text-xl opacity-20 uppercase tracking-widest">
+           Unidade Kumon Rio Preto Shopping
+        </div>
+        <div className="bg-[#004578] text-white px-8 py-3 rounded-full font-black text-lg shadow-lg">
+          powered by thIAguinho Soluções
+        </div>
+      </footer>
+
+      {/* INDICADOR DE PROGRESSO */}
+      <div className="fixed top-0 left-0 h-2 bg-[#F39200] transition-all duration-300" style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}></div>
+    </div>
+  );
+};
+
+export default App;
