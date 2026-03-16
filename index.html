@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA GESTOR - Kumon Rio Preto Shopping</title>
+    <title>KUMON RIO PRETO SHOPPING - SISTEMA GESTOR V177</title>
+    <!-- Carregamento de Bibliotecas Robustas -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -15,22 +16,26 @@
             overflow: hidden; background: #010409; font-family: 'Poppins', sans-serif; 
         }
         
-        #app-viewport {
+        #root-viewport {
             width: 100vw; height: 100vh;
             display: flex; align-items: center; justify-content: center;
+            background: #000;
+            position: relative;
         }
 
-        /* Virtual Stage 1080p */
-        #main-stage {
+        /* Virtual Stage 1080p - Engenharia de Precisão */
+        #slide-stage {
             width: 1920px;
             height: 1080px;
             background: white;
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 50%;
             transform-origin: center center;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+            box-shadow: 0 0 150px rgba(0,0,0,1);
         }
 
         .bg-kumon-blue { background-color: #00AEEF; }
@@ -39,46 +44,45 @@
         .text-kumon-blue { color: #00AEEF; }
         .text-kumon-dark { color: #004578; }
 
-        .slide-anim { animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-        @keyframes slideIn { from { opacity: 0; transform: scale(0.98) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .slide-fade-in { animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.97) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-        .admin-mode-active .editable-unit {
-            outline: 2px dashed #F39200;
-            cursor: cell !important;
+        /* Estilos Administrativos */
+        .admin-edit-mode .managed-unit {
+            outline: 4px dashed #F39200 !important;
+            cursor: pointer !important;
             position: relative;
         }
-        .admin-mode-active .editable-unit:hover::after {
-            content: '🔗 ADD LINK';
-            position: absolute;
-            top: -30px; left: 0;
-            background: #F39200; color: white;
-            font-size: 12px; padding: 2px 8px; border-radius: 4px; font-weight: 800;
-        }
+        .admin-edit-mode .managed-unit:hover { background: rgba(243, 146, 0, 0.1); }
+        
+        .active-link { cursor: pointer; border-bottom: 6px solid #00AEEF; transition: all 0.2s; }
+        .active-link:hover { filter: brightness(1.2); }
 
-        .custom-link { cursor: pointer; transition: all 0.2s; }
-        .custom-link:hover { filter: brightness(1.2); text-decoration: underline; }
-
-        /* Scrollbar hide */
-        ::-webkit-scrollbar { display: none; }
+        video { border-radius: 40px; box-shadow: 0 40px 100px rgba(0,0,0,0.5); border: 15px solid white; }
+        .sig-footer { font-size: 22px; opacity: 0.5; font-weight: 700; color: #64748b; }
     </style>
 </head>
 <body>
-    <div id="app-viewport">
-        <div id="app-root"></div>
+    <div id="root-viewport">
+        <div id="app"></div>
     </div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // Componente de Elemento Interativo do Gestor
-        const InteractiveItem = ({ id, children, className, links, setLinks, isAdmin }) => {
+        // Componente de Bloco Inteligente para Interatividade
+        const ManagedBlock = ({ id, children, className, links, setLinks, isAdmin }) => {
             const hasLink = links[id];
             
-            const handleClick = (e) => {
+            const handleInteraction = (e) => {
                 if (isAdmin) {
                     e.stopPropagation();
-                    const url = prompt(`EDITAR LINK PARA ESTE ELEMENTO [${id}]:`, links[id] || "");
-                    if (url !== null) setLinks(prev => ({ ...prev, [id]: url }));
+                    const url = prompt(`[SISTEMA GESTOR] Inserir Link para: ${id}`, links[id] || "");
+                    if (url !== null) {
+                        const newLinks = { ...links, [id]: url };
+                        setLinks(newLinks);
+                        localStorage.setItem('kumon_v177_links', JSON.stringify(newLinks));
+                    }
                 } else if (hasLink) {
                     window.open(hasLink, '_blank');
                 }
@@ -86,162 +90,180 @@
 
             return (
                 <div 
-                    onClick={handleClick}
-                    className={`${className} ${isAdmin ? 'editable-unit' : ''} ${hasLink && !isAdmin ? 'custom-link' : ''}`}
+                    onClick={handleInteraction}
+                    className={`${className} ${isAdmin ? 'managed-unit' : ''} ${hasLink && !isAdmin ? 'active-link' : ''}`}
                 >
                     {children}
                 </div>
             );
         };
 
-        const App = () => {
-            const [currentSlide, setCurrentSlide] = useState(0);
+        const PresentationApp = () => {
+            const [current, setCurrent] = useState(0);
             const [isAdmin, setIsAdmin] = useState(false);
-            const [links, setLinks] = useState({});
             const [scale, setScale] = useState(1);
-            const logoClicks = useRef(0);
+            const [links, setLinks] = useState(() => {
+                const saved = localStorage.getItem('kumon_v177_links');
+                return saved ? JSON.parse(saved) : {};
+            });
+            const clickRef = useRef(0);
 
-            // Escalonamento Dinâmico Inteligente
+            // Motor de Redimensionamento Matemático Automático
             useEffect(() => {
-                const handleResize = () => {
-                    const w = window.innerWidth;
-                    const h = window.innerHeight;
-                    const scaleFactor = Math.min(w / 1920, h / 1080);
-                    setScale(scaleFactor);
+                const applyScale = () => {
+                    const winW = window.innerWidth;
+                    const winH = window.innerHeight;
+                    const s = Math.min(winW / 1920, winH / 1080);
+                    setScale(s);
                 };
-                window.addEventListener('resize', handleResize);
-                handleResize();
-                return () => window.removeEventListener('resize', handleResize);
+                window.addEventListener('resize', applyScale);
+                applyScale();
+                return () => window.removeEventListener('resize', applyScale);
             }, []);
 
-            // Login Gestor Secreto
-            const checkAdmin = () => {
-                logoClicks.current += 1;
-                if (logoClicks.current === 3) {
-                    const pw = prompt("MODO GESTOR ATIVADO (*177). SENHA:");
-                    if (pw === "*177") {
-                        setIsAdmin(true);
-                    }
-                    logoClicks.current = 0;
+            // Controlo de Navegação por Teclado
+            useEffect(() => {
+                const keys = (e) => {
+                    if (e.key === "ArrowRight") setCurrent(c => Math.min(c + 1, slides.length - 1));
+                    if (e.key === "ArrowLeft") setCurrent(c => Math.max(c - 1, 0));
+                };
+                window.addEventListener("keydown", keys);
+                return () => window.removeEventListener("keydown", keys);
+            }, []);
+
+            const authGestor = () => {
+                clickRef.current += 1;
+                if (clickRef.current === 3) {
+                    const pass = prompt("SISTEMA GESTOR ATIVADO (*177). SENHA:");
+                    if (pass === "*177") setIsAdmin(true);
+                    clickRef.current = 0;
                 }
             };
 
             const slides = [
-                { id: "s1", type: "cover", title: "REUNIÃO DE PAIS 2026", subtitle: "KUMON RIO PRETO SHOPPING", extra: "Unidade Tia Fernanda", bg: "bg-gradient-to-br from-[#00AEEF] via-[#004578] to-[#010b1a]" },
-                { id: "s2", title: "TORU KUMON: A ORIGEM", icon: "💎", items: ["Metodologia nascida do amor de um pai.", "Desenvolvimento pleno da autonomia.", "Encouragement e consistência diária.", "Uma filosofia que transforma vidas."] },
-                { id: "s3", type: "quote", text: "Obter máximo resultado com o mínimo de esforço. Produzir os melhores resultados no menor espaço de tempo é possível.", author: "Toru Kumon", bg: "bg-kumon-orange" },
-                { id: "s4", title: "O QUE É O KUMON?", grid: [
-                    { id: "g1", t: "AUTODIDATISMO", d: "Aprender por si, de forma ativa.", i: "🧠" },
+                { id: "s1", type: "cover", t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Unidade Tia Fernanda", bg: "bg-gradient-to-br from-[#00AEEF] via-[#004578] to-[#010b1a]" },
+                { id: "s2", t: "TORU KUMON: A ORIGEM", items: ["Metodologia nascida do amor de um pai.", "Foco total na autonomia do aluno.", "Baseado na consistência de estudos diários.", "Uma filosofia que transforma vidas."], icon: "🌱" },
+                { id: "s3", type: "quote", text: "Obter máximo resultado com o mínimo de esforço. Produzir os melhores resultados no menor espaço de tempo é possível.", auth: "Toru Kumon", bg: "bg-kumon-orange" },
+                { id: "s4", t: "O QUE É O KUMON?", grid: [
+                    { id: "g1", t: "AUTODIDATISMO", d: "Aprender por si de forma ativa.", i: "🧠" },
                     { id: "g2", t: "MATERIAL DIDÁTICO", d: "Estruturado e autoinstrutivo.", i: "📚" },
-                    { id: "g3", t: "INDIVIDUALIZAÇÃO", d: "Foco no ritmo único do aluno.", i: "🎯" },
+                    { id: "g3", t: "INDIVIDUALIZAÇÃO", d: "Foco no ritmo único de cada um.", i: "🎯" },
                     { id: "g4", t: "ORIENTADOR", d: "Guia para o potencial máximo.", i: "👨‍🏫" }
                 ]},
-                { id: "s5", title: "OBJETIVOS DO MÉTODO", items: ["Ressignificar a educação escolar.", "Transformar a educação pós-pandemia.", "Mudança de vida e impacto social.", "Sequência lógica e coerente.", "Base sólida para a vida toda."] },
-                { id: "s6", title: "NOSSA HISTÓRIA", items: ["1993: Início com Fernanda Musolino.", "1998: Única Clube Ouro de Rio Preto.", "2013: Liderança de Maria Flavia Musolino.", "450 alunos atingidos na pandemia.", "Referência para a Matriz Kumon Brasil."] },
-                { id: "s7", title: "EQUIPE DA UNIDADE", layout: "team", groups: [
-                    { t: "LIDERANÇA E APOIO", m: [{r: "Orientadora", n: "Maria Flavia"}, {r: "Gerente Geral", n: "Thamis"}, {r: "Psicóloga", n: "Maria Carolina"}, {r: "Adm", n: "Ingrid e Rafaela"}]},
-                    { t: "CORPO PEDAGÓGICO", m: [{r: "Auxiliares", n: "Dani, Gabi, Ana Julia"}, {r: "Auxiliares", n: "Maria Clara, Isadhora, João"}, {r: "Estagiário", n: "Bruno (Correção)"}]}
+                { id: "s5", t: "OBJETIVOS DO MÉTODO", items: ["Ressignificar a educação escolar.", "Transformar o ensino pós-pandemia.", "Mudança de vida e impacto social.", "Sequência lógica e eficiente.", "Base sólida para a vida toda."] },
+                { id: "s6", t: "NOSSA HISTÓRIA", items: ["1993: Início com Fernanda Musolino.", "1998: Única Clube Ouro de Rio Preto.", "2013: Liderança de Maria Flavia Musolino.", "450 alunos atingidos na pandemia.", "Referência para a Matriz Kumon Brasil."] },
+                { id: "s7", t: "EQUIPA DA UNIDADE", layout: "team", groups: [
+                    { t: "GESTÃO", m: [{r: "Orientadora", n: "Maria Flavia"}, {r: "Gerente Geral", n: "Thamis"}, {r: "Psicóloga", n: "Maria Carolina"}]},
+                    { t: "PEDAGÓGICO", m: [{r: "Adm", n: "Ingrid e Rafaela"}, {r: "Auxiliares", n: "Dani, Gabi, Ana Julia, Maria Clara, Isadhora, João"}, {r: "Correção", n: "Bruno"}]}
                 ]},
-                { id: "s8", title: "ESTRUTURA PEDAGÓGICA", type: "table", rows: [
-                    { d: "PORTUGUÊS", ini: "7A ao CII", ava: "DI ao L" },
-                    { d: "MATEMÁTICA", ini: "6A ao A", ava: "B ao F | G ao O" },
-                    { d: "INGLÊS", ini: "7A ao C", ava: "D ao O" }
+                { id: "s8", t: "ESTRUTURA PEDAGÓGICA", type: "table", rows: [
+                    {d: "PORTUGUÊS", ini: "7A ao CII", ava: "DI ao L"},
+                    {d: "MATEMÁTICA", ini: "6A ao A", ava: "B ao F | G ao O"},
+                    {d: "INGLÊS", ini: "7A ao C", ava: "D ao O"}
                 ]},
-                { id: "s9", title: "INDICADORES REAIS", layout: "stats", stats: [{l: "ALUNOS ATIVOS", v: "364", c: "text-kumon-blue"}, {l: "ACIMA DA SÉRIE", v: "197", c: "text-kumon-orange"}] },
-                { id: "s10", title: "KUMON BABY", icon: "👶", items: ["Atendimento a partir dos 6 meses.", "Estímulos cruciais na infância.", "Coordenação motora e cognitiva.", "Ambiente lúdico e seguro."] },
-                { id: "s11", type: "quote", text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?", author: "Reflexão para o Futuro", bg: "bg-kumon-dark" },
-                { id: "s12", title: "COMPLEMENTO ESCOLAR", items: ["Resgate do interesse pelo saber.", "Preenchimento de lacunas escolares.", "Hábito inabalável de estudo diário.", "Autonomia para desafios e provas."] },
-                { id: "s13", title: "SUPORTE: TDAH / DISLEXIA", items: ["Acompanhamento focado e individual.", "Respeito ao tempo e forma de aprender.", "Atuação direta da psicóloga Carolina.", "Aumento gradual da concentração.", "Parceria Unidade, Escola e Pais."] },
-                { id: "s14", title: "ALUNA DESTAQUE", layout: "sophia", name: "SOPHIA SANGOLETE", details: ["Início: 16/06/2016", "Matemática Estágio M 111", "Concluinte de Português e Inglês", "Aprovada em Enfermagem (8º FAMEMA / FAMERP)"] },
-                { id: "s15", title: "KUMON CONNECT", items: ["Material tradicional no formato digital.", "Tablets e canetas interativas.", "Correção ágil e tempo real.", "Sustentabilidade e inovação."] },
-                { id: "s16", title: "A TRÍADE DO SUCESSO", grid: [
-                    { id: "t1", t: "UNIDADE", d: "Planejamento e motivação.", i: "🏢" },
-                    { id: "t2", t: "OS PAIS", d: "Acompanhamento e elogios.", i: "👨‍👩‍👧" },
-                    { id: "t3", t: "O ALUNO", d: "Dedicação e autonomia.", i: "🎓" },
-                    { id: "t4", t: "FUTURO", d: "Resultados permanentes.", i: "🚀" }
+                { id: "s9", t: "INDICADORES REAIS", layout: "stats", stats: [{l: "ALUNOS ATIVOS", v: "364", c: "text-kumon-blue"}, {l: "ACIMA DA SÉRIE", v: "197", c: "text-kumon-orange"}] },
+                { id: "s10", t: "KUMON BABY", items: ["A partir dos 6 meses de idade.", "Estímulos cognitivos precoces.", "Desenvolvimento motor e foco.", "Ambiente lúdico e seguro."], icon: "👶" },
+                { id: "s11", t: "REFLEXÃO", type: "quote", text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?", auth: "Reflexão para o Futuro", bg: "bg-kumon-dark" },
+                { id: "s12", t: "COMPLEMENTO ESCOLAR", items: ["Resgate do interesse pelo saber.", "Preenchimento de lacunas escolares.", "Hábito inabalável de estudo.", "Autonomia para o sucesso escolar."] },
+                { id: "s13", t: "TDAH / DISLEXIA", items: ["Acompanhamento individualizado.", "Respeito total ao ritmo único.", "Suporte da psicóloga Carolina.", "Parceria Unidade, Escola e Família."] },
+                { id: "s14", t: "ALUNA DESTAQUE", layout: "sophia", name: "SOPHIA SANGOLETE", details: ["Início: 16/06/2016", "Matemática Estágio M 111", "Concluinte de Português e Inglês", "Aprovada em Enfermagem (8º FAMEMA / FAMERP)"] },
+                { id: "s15", t: "KUMON CONNECT", items: ["Material tradicional no tablet.", "Canetas interativas e foco.", "Correção ágil e tempo real.", "Sustentabilidade e tecnologia."] },
+                { id: "s16", t: "TRÍADE DO SUCESSO", grid: [
+                    { id: "t1", t: "UNIDADE", d: "Planeamento e orientação.", i: "🏢" },
+                    { id: "t2", t: "PAIS", d: "Acompanhamento e apoio.", i: "👨‍👩‍👧" },
+                    { id: "t3", t: "ALUNO", d: "Dedicação e autonomia.", i: "🎓" },
+                    { id: "t4", t: "FUTURO", d: "Resultados que ficam.", i: "🚀" }
                 ]},
-                { id: "s17", title: "AVISOS IMPORTANTES", items: ["HORÁRIOS: Respeite o fluxo agendado.", "REPOSIÇÃO: Marcar na recepção.", "CONSISTÊNCIA: Estudo diário gera êxito.", "CONTATO: Administrativo à disposição."] },
-                { id: "s18", type: "end", title: "MUITO OBRIGADO!", subtitle: "Unidade Kumon Rio Preto Shopping", contact: "Telefone: (17) 3227-0644" }
+                { id: "s17", t: "AVISOS IMPORTANTES", items: ["Respeite os horários agendados.", "Reposições marcadas na recepção.", "Estudo diário gera resultados.", "Fale com Ingrid ou Rafaela."] },
+                { id: "s18", type: "end", t: "MUITO OBRIGADO!", sub: "Unidade Kumon Rio Preto Shopping", contact: "Telefone: (17) 3227-0644" }
             ];
 
-            const slide = slides[currentSlide];
+            const slide = slides[current];
 
             return (
-                <div id="main-stage" className={isAdmin ? "admin-mode-active" : ""} style={{ transform: `scale(${scale})` }}>
-                    
-                    <div className={`w-full h-full flex flex-col p-24 slide-anim ${slide.bg || 'bg-white'}`}>
+                <div 
+                    id="slide-stage" 
+                    className={isAdmin ? 'admin-edit-mode' : ''} 
+                    style={{ transform: `translate(-50%, -50%) scale(${scale})` }}
+                >
+                    <div className={`w-full h-full flex flex-col p-24 slide-fade-in ${slide.bg || 'bg-white'}`}>
                         
-                        {/* HEADER */}
+                        {/* CABEÇALHO */}
                         {slide.type !== 'cover' && slide.type !== 'end' && (
-                            <div className="flex justify-between items-center mb-20 border-b-8 border-slate-50 pb-10">
+                            <div className="flex justify-between items-center mb-16 border-b-8 border-slate-50 pb-8">
                                 <div className="flex items-center gap-10">
-                                    <span className="text-[110px] leading-none">{slide.icon || "📘"}</span>
-                                    <InteractiveItem id={`title_${slide.id}`} links={links} setLinks={setLinks} isAdmin={isAdmin}>
-                                        <h1 className="text-9xl font-black text-kumon-dark uppercase tracking-tighter">{slide.title}</h1>
-                                    </InteractiveItem>
+                                    <span className="text-9xl leading-none">{slide.icon || "📘"}</span>
+                                    <ManagedBlock id={`title_${slide.id}`} links={links} setLinks={setLinks} isAdmin={isAdmin}>
+                                        <h1 className="text-9xl font-black text-kumon-dark uppercase tracking-tighter">{slide.t}</h1>
+                                    </ManagedBlock>
                                 </div>
-                                <div className="text-kumon-blue font-black text-4xl tracking-widest">KUMON 2026</div>
+                                <div className="text-kumon-blue font-black text-5xl tracking-widest uppercase">REUNIÃO 2026</div>
                             </div>
                         )}
 
-                        <div className="flex-grow flex items-center justify-center">
+                        <div className="flex-grow flex items-center justify-center overflow-hidden">
                             
+                            {/* LAYOUT: CAPA */}
                             {slide.type === 'cover' && (
                                 <div className="text-center text-white space-y-16">
-                                    <InteractiveItem id="cover_title" links={links} setLinks={setLinks} isAdmin={isAdmin}>
-                                        <h1 className="text-[210px] font-black leading-none drop-shadow-2xl">{slide.title}</h1>
-                                    </InteractiveItem>
-                                    <div className="h-4 w-[600px] bg-kumon-orange mx-auto rounded-full"></div>
-                                    <p className="text-8xl font-light tracking-[0.5em] opacity-90">{slide.subtitle}</p>
-                                    <div className="bg-white/10 backdrop-blur-xl border border-white/20 px-20 py-10 rounded-[60px] inline-block mt-20 shadow-2xl">
-                                        <p className="text-5xl font-bold uppercase tracking-[0.6em]">{slide.extra}</p>
-                                    </div>
+                                    <ManagedBlock id="main_t" links={links} setLinks={setLinks} isAdmin={isAdmin}>
+                                        <h1 className="text-[200px] font-black leading-none drop-shadow-2xl">{slide.t}</h1>
+                                    </ManagedBlock>
+                                    <div className="h-4 w-[800px] bg-kumon-orange mx-auto rounded-full"></div>
+                                    <p className="text-9xl font-light tracking-[0.4em] opacity-90 uppercase">{slide.sub}</p>
+                                    <ManagedBlock id="unit_tag" links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-white/10 backdrop-blur-xl border border-white/20 px-24 py-12 rounded-[80px] inline-block mt-20 shadow-2xl">
+                                        <p className="text-6xl font-bold uppercase tracking-[0.7em]">{slide.ext}</p>
+                                    </ManagedBlock>
                                 </div>
                             )}
 
+                            {/* LAYOUT: CITAÇÃO */}
                             {slide.type === 'quote' && (
-                                <div className="max-w-[1650px] text-center text-white space-y-24 p-24 bg-black/5 rounded-[100px]">
-                                    <InteractiveItem id={`quote_${slide.id}`} links={links} setLinks={setLinks} isAdmin={isAdmin}>
-                                        <h2 className="text-[115px] font-bold italic leading-tight drop-shadow-lg">"{slide.text}"</h2>
-                                    </InteractiveItem>
-                                    <cite className="text-7xl font-black not-italic uppercase tracking-widest block opacity-60">— {slide.author}</cite>
+                                <div className="max-w-[1600px] text-center text-white space-y-24 p-24 bg-black/5 rounded-[120px]">
+                                    <ManagedBlock id={`quote_${slide.id}`} links={links} setLinks={setLinks} isAdmin={isAdmin}>
+                                        <h2 className="text-[110px] font-bold italic leading-tight drop-shadow-lg">"{slide.text}"</h2>
+                                    </ManagedBlock>
+                                    <cite className="text-8xl font-black not-italic uppercase tracking-widest block opacity-60">— {slide.auth}</cite>
                                 </div>
                             )}
 
+                            {/* LAYOUT: LISTA */}
                             {slide.items && (
-                                <div className="w-full max-w-[1550px] space-y-14">
+                                <div className="w-full max-w-[1500px] space-y-12">
                                     {slide.items.map((txt, i) => (
-                                        <InteractiveItem key={i} id={`item_${slide.id}_${i}`} links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-slate-50 p-14 rounded-[70px] shadow-xl flex items-center gap-14 border-l-[60px] border-kumon-blue">
+                                        <ManagedBlock key={i} id={`item_${slide.id}_${i}`} links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-slate-50 p-12 rounded-[60px] shadow-xl flex items-center gap-12 border-l-[50px] border-kumon-blue">
                                             <div className="text-8xl text-kumon-blue font-black">➔</div>
                                             <p className="text-8xl font-bold text-slate-700 leading-tight">{txt}</p>
-                                        </InteractiveItem>
+                                        </ManagedBlock>
                                     ))}
                                 </div>
                             )}
 
+                            {/* LAYOUT: GRID */}
                             {slide.grid && (
-                                <div className="grid grid-cols-2 gap-24 w-full max-w-[1750px]">
+                                <div className="grid grid-cols-2 gap-20 w-full max-w-[1700px]">
                                     {slide.grid.map((g, i) => (
-                                        <InteractiveItem key={i} id={g.id} links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-slate-50 p-24 rounded-[110px] shadow-2xl text-center space-y-14 border-b-[50px] border-kumon-orange transition-all hover:scale-105">
-                                            <div className="text-[180px] leading-none">{g.i}</div>
+                                        <ManagedBlock key={i} id={g.id} links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-slate-50 p-16 rounded-[100px] shadow-2xl text-center space-y-12 border-b-[40px] border-kumon-orange transition-all hover:scale-105">
+                                            <div className="text-[170px] leading-none">{g.i}</div>
                                             <h3 className="text-8xl font-black text-kumon-dark uppercase">{g.t}</h3>
-                                            <p className="text-6xl text-slate-400 font-bold leading-relaxed">{g.d}</p>
-                                        </InteractiveItem>
+                                            <p className="text-5xl text-slate-400 font-bold leading-relaxed">{g.d}</p>
+                                        </ManagedBlock>
                                     ))}
                                 </div>
                             )}
 
+                            {/* LAYOUT: EQUIPA */}
                             {slide.layout === 'team' && (
-                                <div className="grid grid-cols-2 gap-32 w-full max-w-[1750px]">
+                                <div className="grid grid-cols-2 gap-24 w-full max-w-[1700px]">
                                     {slide.groups.map((group, i) => (
-                                        <div key={i} className="space-y-16">
-                                            <h3 className="text-8xl font-black text-white bg-kumon-dark p-14 rounded-[60px] uppercase text-center shadow-2xl tracking-tighter">{group.t}</h3>
-                                            <div className="space-y-10">
+                                        <div key={i} className="space-y-12">
+                                            <h3 className="text-8xl font-black text-white bg-kumon-dark p-12 rounded-[60px] uppercase text-center shadow-2xl tracking-tighter">{group.t}</h3>
+                                            <div className="space-y-8">
                                                 {group.m.map((mem, j) => (
-                                                    <InteractiveItem key={j} id={`team_${i}_${j}`} links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-slate-50 p-14 rounded-3xl flex justify-between items-center border-r-[40px] border-kumon-blue shadow-lg">
-                                                        <span className="text-5xl font-bold text-slate-400 uppercase tracking-widest">{mem.r}</span>
-                                                        <span className="text-7xl font-black text-kumon-dark">{mem.n}</span>
-                                                    </InteractiveItem>
+                                                    <ManagedBlock key={j} id={`team_${i}_${j}`} links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-slate-50 p-10 rounded-3xl flex justify-between items-center border-r-[35px] border-kumon-blue shadow-lg">
+                                                        <span className="text-4xl font-bold text-slate-400 uppercase tracking-widest">{mem.r}</span>
+                                                        <span className="text-6xl font-black text-kumon-dark">{mem.n}</span>
+                                                    </ManagedBlock>
                                                 ))}
                                             </div>
                                         </div>
@@ -249,22 +271,23 @@
                                 </div>
                             )}
 
+                            {/* LAYOUT: TABELA */}
                             {slide.type === 'table' && (
-                                <div className="w-full max-w-[1750px] rounded-[130px] overflow-hidden shadow-2xl border-[20px] border-slate-50">
+                                <div className="w-full max-w-[1700px] rounded-[130px] overflow-hidden shadow-2xl border-[15px] border-slate-50">
                                     <table className="w-full text-left">
                                         <thead className="bg-kumon-dark text-white text-8xl font-black uppercase">
                                             <tr>
-                                                <th className="p-24 text-center">Matéria</th>
-                                                <th className="p-24 text-center">Inicial</th>
-                                                <th className="p-24 text-center text-kumon-orange">Avançada</th>
+                                                <th className="p-20 text-center">Matéria</th>
+                                                <th className="p-20 text-center">Inicial</th>
+                                                <th className="p-20 text-center text-kumon-orange">Avançada</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="text-8xl font-bold text-slate-600">
+                                        <tbody className="text-7xl font-bold text-slate-600">
                                             {slide.rows.map((r, i) => (
                                                 <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-slate-50"}>
-                                                    <td className="p-24 border-b border-slate-100 text-center">{r.d}</td>
-                                                    <td className="p-24 text-center border-b border-slate-100">{r.ini}</td>
-                                                    <td className="p-24 text-center border-b border-slate-100 text-kumon-orange font-black">{r.ava}</td>
+                                                    <td className="p-20 border-b border-slate-100 text-center">{r.d}</td>
+                                                    <td className="p-20 text-center border-b border-slate-100">{r.ini}</td>
+                                                    <td className="p-20 text-center border-b border-slate-100 text-kumon-orange font-black">{r.ava}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -272,33 +295,35 @@
                                 </div>
                             )}
 
+                            {/* LAYOUT: INDICADORES */}
                             {slide.layout === 'stats' && (
-                                <div className="flex gap-32 w-full max-w-[1650px]">
+                                <div className="flex gap-24 w-full max-w-[1600px]">
                                     {slide.stats.map((s, i) => (
-                                        <InteractiveItem key={i} id={`stat_${i}`} links={links} setLinks={setLinks} isAdmin={isAdmin} className="flex-1 bg-slate-50 p-40 rounded-[150px] shadow-2xl text-center border-t-[80px] border-kumon-blue transform hover:scale-105 transition-all">
-                                            <div className={`text-[480px] font-black leading-none mb-16 ${s.c}`}>{s.v}</div>
+                                        <ManagedBlock key={i} id={`stat_${i}`} links={links} setLinks={setLinks} isAdmin={isAdmin} className="flex-1 bg-slate-50 p-32 rounded-[150px] shadow-2xl text-center border-t-[60px] border-kumon-blue transform hover:scale-105 transition-all">
+                                            <div className={`text-[450px] font-black leading-none mb-14 ${s.c}`}>{s.v}</div>
                                             <div className="text-9xl font-black text-slate-300 uppercase tracking-[0.4em]">{s.l}</div>
-                                        </InteractiveItem>
+                                        </ManagedBlock>
                                     ))}
                                 </div>
                             )}
 
+                            {/* LAYOUT: SOPHIA */}
                             {slide.layout === 'sophia' && (
-                                <div className="bg-slate-50 p-24 rounded-[130px] shadow-2xl w-full max-w-[1850px] border-l-[120px] border-kumon-blue flex items-center gap-24">
-                                    <div className="flex-1 space-y-20">
-                                        <div className="inline-block bg-kumon-orange text-white px-20 py-8 rounded-full font-black text-6xl uppercase shadow-lg">⭐ ALUNA DE SUCESSO</div>
-                                        <InteractiveItem id="sophia_name" links={links} setLinks={setLinks} isAdmin={isAdmin}>
-                                            <h3 className="text-[180px] font-black text-kumon-dark leading-none tracking-tighter">{slide.name}</h3>
-                                        </InteractiveItem>
-                                        <div className="space-y-10">
+                                <div className="bg-slate-50 p-24 rounded-[140px] shadow-2xl w-full max-w-[1850px] border-l-[120px] border-kumon-blue flex items-center gap-24">
+                                    <div className="flex-1 space-y-16">
+                                        <div className="inline-block bg-kumon-orange text-white px-16 py-6 rounded-full font-black text-5xl uppercase shadow-lg">⭐ ALUNA DE SUCESSO</div>
+                                        <ManagedBlock id="sophia_n" links={links} setLinks={setLinks} isAdmin={isAdmin}>
+                                            <h3 className="text-[170px] font-black text-kumon-dark leading-none tracking-tighter">{slide.name}</h3>
+                                        </ManagedBlock>
+                                        <div className="space-y-8">
                                             {slide.details.map((d, i) => (
-                                                <div key={i} className="flex items-center gap-12 text-7xl font-bold text-slate-500">
-                                                    <span className="text-kumon-blue text-8xl font-black">✔</span> {d}
-                                                </div>
+                                                <ManagedBlock key={i} id={`sophia_d_${i}`} links={links} setLinks={setLinks} isAdmin={isAdmin} className="flex items-center gap-10 text-6xl font-bold text-slate-500">
+                                                    <span className="text-kumon-blue text-7xl font-black">✔</span> {d}
+                                                </ManagedBlock>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="w-[900px] aspect-video bg-black rounded-[90px] overflow-hidden shadow-2xl border-[25px] border-white flex items-center justify-center">
+                                    <div className="w-[850px] aspect-video bg-black rounded-[90px] overflow-hidden shadow-2xl flex items-center justify-center">
                                         <video className="w-full h-full object-cover" controls autoPlay loop muted>
                                             <source src="video_sophia.mp4" type="video/mp4" />
                                             [Vídeo Sophia Sangolete]
@@ -307,45 +332,47 @@
                                 </div>
                             )}
 
+                            {/* LAYOUT: ENCERRAMENTO */}
                             {slide.type === 'end' && (
-                                <div className="text-center space-y-40">
-                                    <div className="text-[400px] animate-bounce leading-none" onClick={checkAdmin}>🤝</div>
-                                    <h2 className="text-[250px] font-black text-kumon-dark leading-none tracking-tighter">{slide.title}</h2>
-                                    <div className="space-y-16">
-                                        <p className="text-[100px] font-black text-kumon-blue tracking-[0.2em]">{slide.subtitle}</p>
-                                        <div className="bg-kumon-dark text-white px-40 py-20 rounded-full text-[110px] font-black shadow-2xl inline-block mt-24">{slide.contact}</div>
+                                <div className="text-center space-y-32">
+                                    <div className="text-[350px] animate-bounce leading-none" onClick={authGestor}>🤝</div>
+                                    <h2 className="text-[230px] font-black text-kumon-dark leading-none tracking-tighter">{slide.t}</h2>
+                                    <div className="space-y-12">
+                                        <p className="text-9xl font-black text-kumon-blue tracking-[0.2em]">{slide.sub}</p>
+                                        <ManagedBlock id="end_info" links={links} setLinks={setLinks} isAdmin={isAdmin} className="bg-kumon-dark text-white px-32 py-16 rounded-full text-[100px] font-black shadow-2xl inline-block mt-20 shadow-2xl">
+                                            {slide.contact}
+                                        </ManagedBlock>
                                     </div>
                                 </div>
                             )}
 
                         </div>
 
-                        {/* NAV & SIG */}
-                        <footer className="mt-auto flex justify-between items-end border-t-[12px] border-slate-50 pt-14">
-                            <div className="flex gap-14">
-                                <button onClick={() => setCurrentSlide(s => Math.max(s-1,0))} className="bg-slate-100 h-32 w-32 rounded-full flex items-center justify-center text-8xl shadow-xl hover:bg-kumon-blue hover:text-white transition-all transform active:scale-90">⬅</button>
+                        {/* NAV & SIGNATURE */}
+                        <footer className="mt-auto flex justify-between items-end border-t-[10px] border-slate-50 pt-16">
+                            <div className="flex gap-16">
+                                <button onClick={() => setCurrent(s => Math.max(s-1,0))} className="bg-slate-100 h-32 w-32 rounded-full flex items-center justify-center text-8xl shadow-xl hover:bg-kumon-blue hover:text-white transition-all transform active:scale-90 shadow-2xl text-slate-400">⬅</button>
                                 <button 
-                                    onClick={checkAdmin}
-                                    className="w-32 h-32 bg-kumon-blue rounded-full flex items-center justify-center text-white text-6xl font-black shadow-xl hover:scale-110 transition-transform"
+                                    onClick={authGestor}
+                                    className="w-32 h-32 bg-kumon-blue rounded-full flex items-center justify-center text-white text-7xl font-black shadow-xl hover:scale-110 transition-transform shadow-2xl"
                                 >K</button>
-                                <button onClick={() => setCurrentSlide(s => Math.min(s+1, slides.length-1))} className="bg-slate-100 h-32 w-32 rounded-full flex items-center justify-center text-8xl shadow-xl hover:bg-kumon-blue hover:text-white transition-all transform active:scale-90">➡</button>
+                                <button onClick={() => setCurrent(s => Math.min(s+1, slides.length-1))} className="bg-slate-100 h-32 w-32 rounded-full flex items-center justify-center text-8xl shadow-xl hover:bg-kumon-blue hover:text-white transition-all transform active:scale-90 shadow-2xl text-slate-400">➡</button>
                             </div>
                             <div className="text-right">
-                                <div className="text-slate-100 text-6xl font-black uppercase tracking-[0.7em] mb-8 opacity-40">REUNIÃO 2026</div>
-                                <div className="sig-box text-3xl font-bold italic">
+                                <div className="text-slate-100 text-6xl font-black uppercase tracking-[0.7em] mb-10 opacity-30">REUNIÃO 2026</div>
+                                <div className="sig-footer italic">
                                     powered by <span className="text-kumon-dark font-black">thIAguinho Soluções</span>
                                 </div>
                             </div>
                         </footer>
                     </div>
-                    {/* Progress Bar */}
-                    <div className="absolute top-0 left-0 h-4 bg-kumon-orange transition-all duration-300" style={{ width: `${((currentSlide+1)/slides.length)*100}%` }}></div>
                 </div>
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('app-root'));
-        root.render(<App />);
+        const container = document.getElementById('app');
+        const root = ReactDOM.createRoot(container);
+        root.render(<PresentationApp />);
     </script>
 </body>
 </html>
