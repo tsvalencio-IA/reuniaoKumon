@@ -5,39 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Reunião de Pais 2026 - Kumon Rio Preto Shopping</title>
     
-    <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@500;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* 1. RESET E SETUP DO VIEWPORT */
+        /* 1. BLOQUEIO FÍSICO DA TELA (Zero Scroll) */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
+            width: 100vw; height: 100vh;
+            overflow: hidden; /* Proíbe qualquer rolagem */
             background-color: #0f172a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden;
+            touch-action: none; /* Evita que o celular tente rolar a tela */
         }
 
-        /* 2. MOTOR DE ESCALA ABSOLUTA 16:9 (Proporção Travada) */
-        #stage {
-            width: 100vw;
-            height: 56.25vw; /* 100 * 9/16 */
-            max-height: 100vh;
-            max-width: 177.7778vh; /* 100 * 16/9 */
-            margin: auto;
+        /* 2. ARQUITETURA DO VIEWPORT */
+        #app-container {
+            width: 100vw; height: 100vh;
+            display: flex; flex-direction: column;
+            background-color: white;
             position: relative;
-            background-color: #ffffff;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            container-type: size;
-            container-name: stage;
+        }
+
+        /* Fundo Animado Baseado no Viewport */
+        .bg-blobs::before {
+            content: ''; position: absolute; top: -10vh; right: -5vw; width: 40vmin; height: 40vmin;
+            background: radial-gradient(circle, rgba(0, 174, 239, 0.08) 0%, transparent 70%);
+            border-radius: 50%; z-index: 0; pointer-events: none;
+        }
+        .bg-blobs::after {
+            content: ''; position: absolute; bottom: -10vh; left: -5vw; width: 50vmin; height: 50vmin;
+            background: radial-gradient(circle, rgba(243, 146, 0, 0.05) 0%, transparent 70%);
+            border-radius: 50%; z-index: 0; pointer-events: none;
         }
 
         /* 3. CORES INSTITUCIONAIS */
@@ -46,472 +46,379 @@
             --k-dark: #004578;
             --k-orange: #F39200;
             --k-yellow: #FFB703;
-            --k-bg-light: #F8FAFC;
-            --txt-main: #1E293B;
-            --txt-muted: #475569;
+            --txt-main: #334155;
         }
 
-        /* 4. TIPOGRAFIA ESCALÁVEL (cqw) */
-        .txt-h1 { font-family: 'Nunito', sans-serif; font-size: 5.5cqw; font-weight: 900; line-height: 1.1; color: var(--k-dark); text-transform: uppercase; }
-        .txt-h2 { font-family: 'Nunito', sans-serif; font-size: 3.5cqw; font-weight: 900; color: var(--k-dark); text-transform: uppercase; }
-        .txt-h3 { font-family: 'Nunito', sans-serif; font-size: 2cqw; font-weight: 800; color: var(--k-dark); }
-        .txt-body { font-size: 1.6cqw; font-weight: 600; color: var(--txt-main); line-height: 1.4; }
-        .txt-small { font-size: 0.8cqw; font-weight: 700; color: var(--txt-muted); letter-spacing: 0.1cqw; text-transform: uppercase; }
+        /* 4. TIPOGRAFIA MATEMÁTICA (vmin garante que caiba em qualquer tela) */
+        .txt-mega { font-family: 'Nunito', sans-serif; font-size: 8vmin; font-weight: 900; line-height: 1.1; color: var(--k-dark); text-transform: uppercase; }
+        .txt-title { font-family: 'Nunito', sans-serif; font-size: 5vmin; font-weight: 900; color: var(--k-dark); text-transform: uppercase; }
+        .txt-sub { font-size: 3vmin; font-weight: 700; letter-spacing: 0.3vmin; color: var(--k-blue); text-transform: uppercase; }
+        .txt-body { font-size: 2.5vmin; font-weight: 600; color: var(--txt-main); line-height: 1.3; }
+        .txt-small { font-size: 1.5vmin; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1vmin; }
         
-        .text-blue { color: var(--k-blue); }
-        .text-orange { color: var(--k-orange); }
-        .text-white { color: #ffffff; }
+        .icon-xl { font-size: 12vmin; }
+        .icon-lg { font-size: 6vmin; }
+        .icon-md { font-size: 3.5vmin; }
 
-        /* 5. SISTEMA DE LAYOUT */
-        .flex-col { display: flex; flex-direction: column; }
-        .flex-row { display: flex; flex-direction: row; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
+        /* 5. GESTÃO DE ÁREAS DA TELA (Garante 100vh no total) */
+        .progress-bar { height: 1vh; width: 0%; background: var(--k-orange); transition: width 0.3s; z-index: 50; }
         
-        .gap-sm { gap: 0.8cqw; }
-        .gap-md { gap: 1.5cqw; }
-        .gap-lg { gap: 3cqw; }
-
-        /* 6. COMPONENTES DO SLIDE */
-        .slide {
-            display: none;
-            width: 100%; height: 100%;
-            padding: 3cqw 5cqw;
-            box-sizing: border-box;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: white; z-index: 10;
+        .header-area {
+            height: 12vh; width: 100%; display: flex; align-items: center;
+            padding: 0 5vw; border-bottom: 0.2vh solid #f1f5f9; z-index: 10;
         }
-        .slide.active { display: flex; animation: fadeIn 0.4s ease-out forwards; }
+        
+        .main-area {
+            height: 75vh; width: 100%; display: flex; flex-direction: column;
+            justify-content: center; padding: 2vh 5vw; z-index: 10; position: relative;
+        }
+        
+        .footer-area {
+            height: 12vh; width: 100%; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5vw; border-top: 0.2vh solid #f1f5f9; z-index: 10; background: white;
+        }
+
+        /* 6. LAYOUTS INTERNOS (Sempre flexionam para caber) */
+        .slide { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .slide.active { display: flex; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* Fundo Animado */
-        .bg-blobs::before {
-            content: ''; position: absolute; top: -5cqw; right: -5cqw; width: 30cqw; height: 30cqw;
-            background: radial-gradient(circle, rgba(0, 174, 239, 0.08) 0%, transparent 70%);
-            border-radius: 50%; z-index: -1;
-        }
-        .bg-blobs::after {
-            content: ''; position: absolute; bottom: -5cqw; left: -5cqw; width: 35cqw; height: 35cqw;
-            background: radial-gradient(circle, rgba(243, 146, 0, 0.05) 0%, transparent 70%);
-            border-radius: 50%; z-index: -1;
+        .flex-row-locked { display: flex; flex-direction: row; gap: 4vw; height: 100%; align-items: center; }
+        .flex-col-locked { display: flex; flex-direction: column; gap: 2vh; height: 100%; justify-content: center; }
+        
+        /* Grid flexível para caber na altura */
+        .grid-locked { display: grid; gap: 2vmin; height: 100%; }
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        /* Adaptação estrita para celulares (Mantém na tela) */
+        @media (orientation: portrait) {
+            .flex-row-locked { flex-direction: column; justify-content: space-evenly; gap: 2vh; }
+            .grid-2, .grid-4 { grid-template-columns: 1fr; grid-auto-rows: minmax(0, 1fr); }
+            .txt-mega { font-size: 10vmin; }
+            .txt-title { font-size: 7vmin; }
+            .txt-body { font-size: 3.5vmin; }
+            .media-box { height: 30vh !important; } /* Restringe mídia em pé */
         }
 
-        .slide-header {
-            display: flex; align-items: center; gap: 1.5cqw;
-            margin-bottom: 2.5cqw; padding-bottom: 1cqw;
-            border-bottom: 0.2cqw solid #e2e8f0; width: 100%; flex-shrink: 0;
+        /* 7. ELEMENTOS VISUAIS */
+        .card-box {
+            background: white; padding: 2vmin 3vmin; border-radius: 2vmin;
+            box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.08); border-left: 1vmin solid var(--k-blue);
+            display: flex; align-items: center; gap: 3vmin; flex: 1; min-height: 0;
         }
-        .header-icon {
-            width: 4cqw; height: 4cqw; background: var(--k-blue); color: white;
-            border-radius: 1cqw; display: flex; align-items: center; justify-content: center;
-            font-size: 2cqw; box-shadow: 0 0.5cqw 1cqw rgba(0,0,0,0.1);
-        }
-
-        /* Elementos de Lista e Grid */
-        .card-list { display: flex; flex-direction: column; gap: 1.2cqw; width: 100%; max-width: 70cqw; margin: 0 auto; }
-        .card-item {
-            background: white; padding: 1.2cqw 1.8cqw; border-radius: 1cqw;
-            box-shadow: 0 0.4cqw 1.2cqw rgba(0,0,0,0.06); border-left: 0.6cqw solid var(--k-blue);
-            display: flex; align-items: center; gap: 1.5cqw;
-        }
-        .card-icon {
-            width: 2.5cqw; height: 2.5cqw; background: #eff6ff; color: var(--k-blue);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2cqw; flex-shrink: 0;
-        }
-
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3cqw; width: 100%; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2cqw; width: 100%; }
         
         .grid-card {
-            background: white; padding: 2.5cqw; border-radius: 1.5cqw;
-            box-shadow: 0 0.8cqw 2cqw rgba(0,0,0,0.08); border-bottom: 0.6cqw solid var(--k-orange);
-            text-align: center; display: flex; flex-direction: column; align-items: center;
+            background: white; padding: 3vmin; border-radius: 3vmin;
+            box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.08); border-bottom: 1vmin solid var(--k-orange);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; min-height: 0;
         }
 
-        /* Tabela */
-        .styled-table {
-            width: 100%; border-collapse: collapse; background: white;
-            border-radius: 1cqw; overflow: hidden; box-shadow: 0 0.5cqw 1.5cqw rgba(0,0,0,0.08);
-            border: 0.1cqw solid #e2e8f0;
-        }
-        .styled-table th { background: var(--k-dark); color: white; font-family: 'Nunito', sans-serif; font-size: 1.6cqw; padding: 1.5cqw; text-align: center; }
-        .styled-table td { padding: 1.5cqw; text-align: center; font-size: 1.5cqw; font-weight: 600; border-bottom: 0.1cqw solid #f1f5f9; }
-        .styled-table td:first-child { background: var(--k-bg-light); text-align: left; color: var(--k-dark); font-weight: 800; }
-
-        /* Mídia Boxes */
         .media-box {
-            border-radius: 1.5cqw; overflow: hidden;
-            box-shadow: 0 1cqw 2.5cqw rgba(0,0,0,0.15); border: 0.4cqw solid white;
-            height: 100%; width: 100%; display: flex; align-items: center; justify-content: center;
-            background: #e2e8f0; position: relative;
+            background: black; border-radius: 3vmin; overflow: hidden;
+            width: 100%; height: 100%; border: 0.5vmin solid white; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.2);
+            position: relative; display: flex; align-items: center; justify-content: center;
         }
-        .media-box img, .media-box video, .media-box iframe {
-            width: 100%; height: 100%; object-fit: cover; border: none;
-        }
-        .media-placeholder {
-            color: #94a3b8; font-size: 3cqw; display: flex; flex-direction: column; align-items: center; gap: 1cqw;
-        }
+        .media-box img, .media-box video, .media-box iframe { width: 100%; height: 100%; object-fit: cover; border: none; }
 
-        /* 7. RODAPÉ FIXO */
-        .stage-footer {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 6cqw;
-            background: white; border-top: 0.2cqw solid #f1f5f9;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 4cqw; z-index: 50; box-shadow: 0 -0.5cqw 1.5cqw rgba(0,0,0,0.02);
-        }
+        /* 8. BOTÕES DO RODAPÉ */
         .btn-nav {
-            width: 3.5cqw; height: 3.5cqw; border-radius: 50%; background: #f1f5f9;
-            color: var(--k-dark); display: flex; align-items: center; justify-content: center;
-            font-size: 1.5cqw; cursor: pointer; border: none; transition: all 0.2s;
+            height: 8vh; width: 8vh; border-radius: 50%; background: #f1f5f9; color: var(--k-dark);
+            display: flex; align-items: center; justify-content: center; font-size: 3vh; cursor: pointer;
+            border: none; transition: 0.2s; box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.05);
         }
-        .btn-nav:hover { background: var(--k-blue); color: white; transform: scale(1.05); }
+        .btn-nav:active { transform: scale(0.9); }
         .btn-logo {
-            width: 4cqw; height: 4cqw; border-radius: 50%; background: var(--k-blue);
-            color: white; display: flex; align-items: center; justify-content: center;
-            font-size: 2cqw; font-weight: 900; cursor: pointer; border: none; transition: transform 0.2s;
+            height: 10vh; width: 10vh; border-radius: 50%; background: var(--k-blue); color: white;
+            display: flex; align-items: center; justify-content: center; font-size: 4vh; font-weight: 900; cursor: pointer;
+            border: none; box-shadow: 0 1vh 2vh rgba(0,174,239,0.3); transition: 0.2s;
         }
 
-        .progress-bar-container { position: absolute; top: 0; left: 0; right: 0; height: 0.5cqw; background: #e2e8f0; z-index: 50; }
-        #progress-bar { height: 100%; background: var(--k-orange); width: 0%; transition: width 0.4s ease; }
-
-        /* 8. MODO GESTOR (*177) */
+        /* 9. MODO GESTOR E EDIÇÃO (*177) */
         .admin-mode .editable {
-            outline: 0.2cqw dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 0.4cqw;
+            outline: 0.4vmin dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 1vmin;
         }
-        .admin-mode .editable:hover { background-color: rgba(243, 146, 0, 0.1); }
         .admin-mode .editable::before {
-            content: '🔗 ADD LINK'; position: absolute; top: -1.5cqw; left: 0;
-            background: var(--k-orange); color: white; font-size: 0.8cqw; font-weight: bold;
-            padding: 0.2cqw 0.6cqw; border-radius: 0.3cqw; opacity: 0; transition: opacity 0.2s; z-index: 100;
+            content: '🔗 LINK'; position: absolute; top: -2vmin; left: 0; background: var(--k-orange); color: white;
+            font-size: 1.5vmin; font-weight: bold; padding: 0.2vmin 1vmin; border-radius: 0.5vmin; z-index: 100;
         }
-        .admin-mode .editable:hover::before { opacity: 1; }
-        
-        .has-link:not(.editable) { cursor: pointer; border-bottom: 0.2cqw solid var(--k-blue); }
-        
-        /* Gestão de Mídias Reais */
-        .admin-mode .editable-media {
-            outline: 0.3cqw dashed var(--k-blue); cursor: pointer; position: relative;
-        }
+        .admin-mode .editable-media { outline: 0.5vmin dashed var(--k-blue); cursor: pointer; }
         .admin-mode .editable-media::after {
             content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(0, 174, 239, 0.9); color: white; padding: 1cqw 2cqw; border-radius: 1cqw;
-            font-size: 1.5cqw; font-weight: bold; opacity: 0; transition: all 0.3s; pointer-events: none;
+            background: rgba(0,174,239,0.9); color: white; padding: 1vmin 2vmin; border-radius: 1vmin; font-size: 2vmin; font-weight: bold;
         }
-        .admin-mode .editable-media:hover::after { opacity: 1; }
+        .has-link:not(.editable) { cursor: pointer; border-bottom: 0.3vmin solid var(--k-blue); }
 
+        /* Tabela de forma que caiba na tela */
+        table { width: 100%; height: 100%; border-collapse: collapse; background: white; border-radius: 2vmin; overflow: hidden; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.08); }
+        th { background: var(--k-dark); color: white; padding: 1.5vmin; font-size: 2.2vmin; text-align: center; }
+        td { padding: 1.5vmin; text-align: center; font-size: 2vmin; font-weight: 600; color: var(--txt-main); border-bottom: 0.2vmin solid #f1f5f9; }
+        td:first-child { background: #f8fafc; text-align: left; color: var(--k-dark); font-weight: 800; }
     </style>
 </head>
 <body>
 
-    <!-- CAIXA DE ESCALA ABSOLUTA -->
-    <div id="stage">
-        <div class="progress-bar-container"><div id="progress-bar"></div></div>
+    <div id="app-container">
+        <!-- Barra Fixa Superior -->
+        <div class="progress-bar" id="progress-bar"></div>
 
-        <!-- ÁREA DE RENDERIZAÇÃO DE SLIDES -->
-        <main id="slide-container" class="flex-grow flex-col relative w-full h-full bg-blobs"></main>
+        <!-- Header Fixo -->
+        <header class="header-area" id="main-header">
+            <div style="display: flex; align-items: center; gap: 3vmin; width: 100%;">
+                <div id="slide-icon" style="width: 7vh; height: 7vh; background: var(--k-blue); color: white; border-radius: 1.5vh; display: flex; align-items: center; justify-content: center;" class="icon-md">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <h2 id="slide-title" class="txt-title editable">Título Padrão</h2>
+            </div>
+        </header>
 
-        <!-- RODAPÉ FIXO -->
-        <footer class="stage-footer">
-            <div class="flex-row items-center gap-sm">
+        <!-- Área de Conteúdo Central (Restrita) -->
+        <main class="main-area bg-blobs" id="main-content">
+            <!-- Os slides são injetados aqui via JS -->
+        </main>
+
+        <!-- Footer Fixo -->
+        <footer class="footer-area">
+            <div style="display: flex; gap: 2vw; align-items: center;">
                 <button onclick="prevSlide()" class="btn-nav"><i class="fa-solid fa-chevron-left"></i></button>
-                <button onclick="triggerAdmin()" class="btn-logo" title="Clique 3x para modo Gestor">K</button>
+                <button onclick="triggerAdmin()" class="btn-logo">K</button>
                 <button onclick="nextSlide()" class="btn-nav"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
-            <div class="flex-col" style="align-items: flex-end; justify-content: center;">
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
                 <span class="txt-small">Reunião 2026</span>
-                <span class="txt-small" style="text-transform: none; font-weight: 600; font-size: 0.7cqw; letter-spacing: 0;">powered by <strong style="color: var(--k-dark);">thIAguinho Soluções</strong></span>
+                <span class="txt-small" style="text-transform: none; color: #cbd5e1;">powered by <strong style="color: var(--k-dark);">thIAguinho Soluções</strong></span>
             </div>
         </footer>
     </div>
 
     <script>
-        // ESTADO GLOBAL E PERSISTÊNCIA (LINKS + MÍDIAS)
         let currentIndex = 0;
         let isAdmin = false;
         let adminClicks = 0;
         let savedLinks = JSON.parse(localStorage.getItem('kumon_v177_links') || '{}');
         let savedMedia = JSON.parse(localStorage.getItem('kumon_v177_media') || '{}');
 
-        // DADOS DOS SLIDES
+        // BANCO DE DADOS
         const slidesData = [
-            { id: 'capa', type: 'cover', t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Unidade Tia Fernanda", bg: "linear-gradient(135deg, #00AEEF 0%, #004578 100%)" },
+            { id: 'capa', type: 'cover', t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Unidade Tia Fernanda", bg: "linear-gradient(135deg, #00AEEF, #004578)" },
             { id: 'origem', type: 'media-left', title: "Toru Kumon: A Origem", icon: "fa-seedling", mediaId: "img_toru",
-              items: ["Metodologia nascida do amor e extrema dedicação de um pai.", "Foco total no desenvolvimento pleno da autonomia.", "Baseado no encorajamento e consistência de estudos.", "Uma filosofia que transforma vidas e o futuro."] },
+              items: ["Metodologia nascida do amor e extrema dedicação.", "Foco total no desenvolvimento da autonomia.", "Baseado no encorajamento e consistência.", "Uma filosofia que transforma vidas."] },
             { id: 'frase1', type: 'quote', text: "Obter máximo resultado com o mínimo de esforço. Produzir os melhores resultados no menor espaço de tempo é possível.", author: "Toru Kumon", bg: "#F39200" },
             { id: 'oque', type: 'grid', title: "O que é o Kumon?", icon: "fa-circle-question", grid: [
-                { id: 'g1', t: "AUTODIDATISMO", d: "Aprender por si, buscando o conhecimento de forma ativa.", i: "fa-brain" },
-                { id: 'g2', t: "MATERIAL DIDÁTICO", d: "Estruturado e autoinstrutivo, evoluindo em pequenos passos.", i: "fa-book-open" },
-                { id: 'g3', t: "INDIVIDUALIZAÇÃO", d: "Foco absoluto no ritmo e capacidade única do aluno.", i: "fa-bullseye" },
-                { id: 'g4', t: "ORIENTADOR", d: "Guia o aluno a descobrir seu próprio potencial máximo.", i: "fa-compass" }
+                { id: 'g1', t: "AUTODIDATISMO", d: "Aprender por si, de forma ativa.", i: "fa-brain" },
+                { id: 'g2', t: "MATERIAL DIDÁTICO", d: "Estruturado e autoinstrutivo.", i: "fa-book-open" },
+                { id: 'g3', t: "INDIVIDUALIZAÇÃO", d: "Foco absoluto no ritmo do aluno.", i: "fa-bullseye" },
+                { id: 'g4', t: "ORIENTADOR", d: "Guia para o potencial máximo.", i: "fa-compass" }
             ]},
             { id: 'objetivos', type: 'media-right', title: "Objetivos do Método", icon: "fa-rocket", mediaId: "img_objetivos",
-              items: ["Ressignificar o sentido da educação escolar tradicional.", "Transformar o ensino após os desafios da pandemia.", "Promover mudança de vida e impacto social.", "Garantir uma sequência lógica de estudos.", "Construir uma base inabalável para a vida."] },
-            { id: 'historia', type: 'list', title: "Nossa História", icon: "fa-landmark", items: ["1993: Início das atividades com Fernanda Musolino.", "1998: Única unidade Clube Ouro de Rio Preto (título mantido).", "2013: Liderança assumida por Maria Flavia Musolino.", "450 alunos alcançados, mantendo o foco no desenvolvimento.", "Referência em excelência para a Matriz Kumon."] },
+              items: ["Ressignificar o sentido da educação escolar.", "Transformar o ensino após a pandemia.", "Promover mudança de vida e impacto social.", "Garantir sequência lógica de estudos.", "Construir base inabalável para a vida."] },
+            { id: 'historia', type: 'list', title: "Nossa História", icon: "fa-landmark", items: ["1993: Início das atividades com Fernanda Musolino.", "1998: Única unidade Clube Ouro (título mantido).", "2013: Liderança assumida por Maria Flavia Musolino.", "450 alunos alcançados durante a pandemia.", "Referência em excelência para a Matriz Kumon."] },
             { id: 'equipe', type: 'team', title: "Equipe da Unidade", icon: "fa-users", groups: [
                 { t: "GESTÃO E LIDERANÇA", m: ["Orientadora: Maria Flavia", "Gerente Geral: Thamis", "Psicóloga: Maria Carolina"] },
-                { t: "APOIO E PEDAGÓGICO", m: ["Adm: Ingrid e Rafaela", "Auxiliares: Dani, Gabi, Ana Julia, Maria Clara, Isadhora, João", "Estagiário: Bruno (Correção)"] }
+                { t: "APOIO E PEDAGÓGICO", m: ["Adm: Ingrid e Rafaela", "Auxiliares: Dani, Gabi, Ana Julia, Clara, Isadhora, João", "Estagiário: Bruno (Correção)"] }
             ]},
             { id: 'tabela', type: 'table', title: "Estrutura Pedagógica", icon: "fa-sitemap", rows: [
                 { mat: "Português", ini: "7A ao CII", ava: "DI ao L" }, { mat: "Matemática", ini: "6A ao A", ava: "B ao F | G ao O" }, { mat: "Inglês", ini: "7A ao C", ava: "D ao O" }
             ]},
             { id: 'indicadores', type: 'stats', title: "Indicadores Reais", icon: "fa-chart-pie", stats: [
-                { label: "Alunos Ativos", val: "364", color: "text-blue" }, { label: "Acima da Série", val: "197", color: "text-orange" }
+                { label: "Alunos Ativos", val: "364", color: "var(--k-blue)" }, { label: "Acima da Série", val: "197", color: "var(--k-orange)" }
             ]},
             { id: 'baby', type: 'media-left', title: "Kumon Baby", icon: "fa-baby-carriage", mediaId: "img_baby",
-              items: ["Atendimento focado a partir de 6 meses de idade.", "Foco nos primeiros estímulos da infância.", "Desenvolvimento das coordenações motoras.", "Ambiente estruturado, lúdico e acolhedor."] },
+              items: ["Atendimento especial a partir de 6 meses.", "Foco nos primeiros estímulos da infância.", "Desenvolvimento de coordenações motoras.", "Ambiente estruturado: lúdico, seguro e acolhedor."] },
             { id: 'frase2', type: 'quote', text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?", author: "Reflexão para o Futuro", bg: "#004578" },
             { id: 'complemento', type: 'media-right', title: "Complemento Escolar", icon: "fa-plus", mediaId: "img_escola",
-              items: ["Resgate do interesse para alunos desmotivados.", "Preenchimento ativo de lacunas deixadas pelo ensino.", "Fortalecimento da base e criação do hábito de estudo.", "Prepara o aluno com autonomia para desafios."] },
+              items: ["Resgate do interesse para alunos desmotivados.", "Preenchimento ativo de lacunas do ensino.", "Fortalecimento da base e criação do hábito.", "Prepara o aluno com autonomia para desafios."] },
             { id: 'inclusao', type: 'media-left', title: "TDAH, TDA e Dislexia", icon: "fa-brain", mediaId: "video_tdah", mediaType: "video",
-              items: ["Acompanhamento focado no desenvolvimento individual.", "Respeito absoluto ao ritmo e forma de aprendizado.", "Apoio e direcionamento da nossa psicóloga.", "Aumento gradual da capacidade de concentração."] },
+              items: ["Acompanhamento focado no desenvolvimento individual.", "Respeito absoluto ao ritmo de aprendizado.", "Apoio e direcionamento da nossa psicóloga.", "Aumento gradual da capacidade de concentração."] },
             { id: 'sophia', type: 'sophia', title: "Aluna Destaque", name: "Sophia Sangolete", mediaId: "video_sophia",
-              details: ["Início na Unidade: 16/06/2016", "Status Atual: Matemática Estágio M 111", "Concluinte: Disciplinas de Português e Inglês", "Aprovada em Enfermagem (FAMEMA 8º Lugar)"] },
+              details: ["Início na Unidade: 16/06/2016", "Status: Matemática Estágio M 111", "Concluinte: Português e Inglês", "Aprovada em Enfermagem (FAMEMA 8º Lugar)"] },
             { id: 'connect', type: 'media-right', title: "Kumon Connect", icon: "fa-tablet-screen-button", mediaId: "img_connect",
-              items: ["A evolução do método tradicional para o formato digital.", "Estudo através de tablets e canetas interativas.", "Correção ágil e acompanhamento em tempo real.", "Inovação educacional na palma da mão."] },
+              items: ["A evolução do método para o formato digital.", "Estudo diário através de tablets e canetas.", "Correção ágil e acompanhamento em tempo real.", "Sustentabilidade e inovação na palma da mão."] },
             { id: 'triade', type: 'grid', title: "A Tríade do Sucesso", icon: "fa-circle-nodes", grid: [
-                { id: 'tr1', t: "A Unidade", d: "Planejamento adequado, orientação individual e motivação.", i: "fa-school" },
-                { id: 'tr2', t: "Os Pais", d: "Acompanhamento diário, fornecendo apoio, elogios e ambiente.", i: "fa-house-chimney-user" },
-                { id: 'tr3', t: "O Aluno", d: "Protagonista focado na resolução diária, dedicação e autonomia.", i: "fa-user-graduate" }
+                { id: 'tr1', t: "A Unidade", d: "Planejamento, orientação e motivação.", i: "fa-school" },
+                { id: 'tr2', t: "Os Pais", d: "Acompanhamento diário, fornecendo apoio e ambiente.", i: "fa-house-chimney-user" },
+                { id: 'tr3', t: "O Aluno", d: "Protagonista focado na resolução e autonomia.", i: "fa-user-graduate" }
             ]},
-            { id: 'avisos', type: 'list', title: "Avisos Importantes", icon: "fa-bell", items: ["Atenção máxima aos horários agendados para manter o fluxo.", "As reposições devem ser marcadas com antecedência.", "Lembre-se: A consistência diária é o que garante os resultados.", "Mantenham comunicação aberta com a equipe administrativa."] },
+            { id: 'avisos', type: 'list', title: "Avisos Importantes", icon: "fa-bell", items: ["Atenção máxima aos horários agendados para manter o fluxo.", "As reposições devem ser marcadas com antecedência.", "Lembre-se: A consistência diária garante resultados.", "Mantenham contato aberto com a nossa recepção."] },
             { id: 'fim', type: 'end', title: "MUITO OBRIGADO!", subtitle: "Unidade Kumon Rio Preto Shopping", contact: "WhatsApp: (17) 3227-0644" }
         ];
 
-        // FUNÇÃO INTELIGENTE DE RENDERIZAÇÃO DE MÍDIA (YouTube ou MP4 local)
-        function generateMediaTag(mediaId, defaultType) {
+        // GESTÃO DE MÍDIA
+        function getMediaTag(mediaId, defaultType) {
             let src = savedMedia[mediaId];
-            if (!src) {
-                return `<div class="media-placeholder"><i class="fa-solid fa-photo-film"></i><span>Área de Mídia</span></div>`;
-            }
-            // Se for link do YouTube, converte para Embed automaticamente
+            if (!src) return `<div style="color: #cbd5e1; text-align: center;"><i class="fa-solid fa-image icon-xl"></i><br><span class="txt-small">Mídia</span></div>`;
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
-                let videoId = src.split('v=')[1] || src.split('youtu.be/')[1];
-                if(videoId) {
-                    let ampersandPosition = videoId.indexOf('&');
-                    if(ampersandPosition !== -1) videoId = videoId.substring(0, ampersandPosition);
-                }
-                return `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=0" allowfullscreen></iframe>`;
+                let vid = src.split('v=')[1] || src.split('youtu.be/')[1];
+                if(vid && vid.includes('&')) vid = vid.split('&')[0];
+                return `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0" allowfullscreen></iframe>`;
             }
-            // Se for MP4, usa a tag nativa de vídeo
-            else if (src.endsWith('.mp4') || defaultType === 'video') {
-                return `<video src="${src}" controls></video>`;
-            }
-            // Caso contrário, renderiza como imagem
-            else {
-                return `<img src="${src}" alt="Mídia da Apresentação" />`;
-            }
+            if (src.endsWith('.mp4') || defaultType === 'video') return `<video src="${src}" controls></video>`;
+            return `<img src="${src}" alt="Midia" />`;
         }
 
-        // RENDERIZADOR NATIVO (Geração de HTML via JS)
+        // MOTOR DE RENDERIZAÇÃO ABSOLUTO
         function renderSlide() {
-            const container = document.getElementById('slide-container');
             const data = slidesData[currentIndex];
+            const mainContent = document.getElementById('main-content');
+            const header = document.getElementById('main-header');
             let html = '';
 
-            let bgStyle = data.bg ? `background: ${data.bg}; color: white;` : `background: transparent;`;
-            let isDark = data.bg ? true : false;
-
-            html += `<div class="slide active" style="${bgStyle}">`;
-
-            // CABEÇALHO PADRÃO
-            if (data.type !== 'cover' && data.type !== 'end' && data.type !== 'quote') {
-                html += `
-                    <header class="slide-header">
-                        <div class="header-icon"><i class="fa-solid ${data.icon || 'fa-star'}"></i></div>
-                        <h2 class="txt-h2 editable-elem" data-id="${data.id}_title" style="${isDark ? 'color: white;' : ''}">${data.title}</h2>
-                    </header>
-                    <div class="flex-grow flex-col justify-center w-full">
-                `;
+            // Configurações Globais
+            document.body.style.background = data.bg ? data.bg : '#0f172a';
+            document.getElementById('app-container').style.background = data.bg ? 'transparent' : 'white';
+            
+            // Exibir ou Ocultar Header
+            if(data.type === 'cover' || data.type === 'quote' || data.type === 'end') {
+                header.style.display = 'none';
             } else {
-                html += `<div class="flex-grow flex-col justify-center items-center w-full h-full">`;
+                header.style.display = 'flex';
+                document.getElementById('slide-title').innerHTML = data.title;
+                document.getElementById('slide-title').dataset.id = `${data.id}_title`;
+                document.getElementById('slide-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
+                
+                // Ajuste de cores se o fundo for escuro
+                const isDark = data.bg ? true : false;
+                document.getElementById('slide-title').style.color = isDark ? 'white' : 'var(--k-dark)';
             }
 
-            // CORPO: CAPA
+            // INJEÇÃO DE CONTEÚDO (Sem margens fixas, usando flex para preencher a tela)
+            
             if (data.type === 'cover') {
-                html += `
-                    <div class="flex-col items-center justify-center text-center gap-md w-full">
-                        <h1 class="txt-h1 editable-elem text-white" data-id="${data.id}_t" style="font-size: 7.5cqw; text-shadow: 0 0.5cqw 1cqw rgba(0,0,0,0.3);">${data.t}</h1>
-                        <div style="width: 25cqw; height: 0.5cqw; background: var(--k-orange); border-radius: 1cqw; margin: 1cqw 0;"></div>
-                        <p class="txt-body text-white editable-elem" data-id="${data.id}_sub" style="font-size: 2cqw; letter-spacing: 0.3cqw; font-weight: 300;">${data.sub}</p>
-                        <div class="editable-elem" data-id="${data.id}_ext" style="background: rgba(255,255,255,0.1); border: 0.1cqw solid rgba(255,255,255,0.2); padding: 1cqw 3cqw; border-radius: 3cqw; margin-top: 2cqw;">
-                            <p class="txt-body text-white" style="font-size: 1.2cqw; letter-spacing: 0.2cqw; margin:0;">${data.ext}</p>
+                html = `
+                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
+                        <h1 class="txt-mega editable text-white" data-id="${data.id}_t" style="text-shadow: 0 1vh 2vh rgba(0,0,0,0.3); color: white;">${data.t}</h1>
+                        <div style="width: 20vw; height: 1vh; background: var(--k-orange); border-radius: 1vh;"></div>
+                        <p class="txt-sub editable text-white" data-id="${data.id}_sub" style="color: white;">${data.sub}</p>
+                        <div class="editable" data-id="${data.id}_ext" style="margin-top: 2vh; background: rgba(255,255,255,0.1); border: 0.2vh solid rgba(255,255,255,0.2); padding: 1.5vh 3vw; border-radius: 4vh;">
+                            <p class="txt-body text-white" style="margin:0; color: white;">${data.ext}</p>
                         </div>
-                    </div>
-                `;
-            }
-            // CORPO: LISTA SIMPLES
+                    </div>`;
+            } 
             else if (data.type === 'list') {
-                html += `
-                    <div class="card-list">
+                html = `
+                    <div class="flex-col-locked" style="width: 100%; max-width: 80vw; margin: auto;">
                         ${data.items.map((item, i) => `
-                            <div class="card-item editable-elem" data-id="${data.id}_i${i}">
-                                <div class="card-icon"><i class="fa-solid fa-check"></i></div>
+                            <div class="card-box editable" data-id="${data.id}_i${i}">
+                                <div style="background: #f0f9ff; color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
                                 <p class="txt-body" style="margin:0;">${item}</p>
                             </div>
                         `).join('')}
-                    </div>
-                `;
+                    </div>`;
             }
-            // CORPO: MÍDIA À ESQUERDA (NOVO LAYOUT)
-            else if (data.type === 'media-left') {
-                html += `
-                    <div class="flex-row gap-lg items-center w-full" style="height: 100%;">
-                        <div class="media-box editable-media" data-media-id="${data.mediaId}" style="flex: 1;">
-                            ${generateMediaTag(data.mediaId, data.mediaType)}
+            else if (data.type === 'media-left' || data.type === 'media-right') {
+                const mediaBlock = `<div class="media-box editable-media" data-media-id="${data.mediaId}" style="flex: 1;">${getMediaTag(data.mediaId, data.mediaType)}</div>`;
+                const listBlock = `<div class="flex-col-locked" style="flex: 1.2;">
+                    ${data.items.map((item, i) => `
+                        <div class="card-box editable" data-id="${data.id}_i${i}">
+                            <div style="background: #f0f9ff; color: var(--k-blue); width: 5vmin; height: 5vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
+                            <p class="txt-body" style="margin:0;">${item}</p>
                         </div>
-                        <div class="card-list" style="flex: 1.2; margin: 0;">
-                            ${data.items.map((item, i) => `
-                                <div class="card-item editable-elem" data-id="${data.id}_i${i}">
-                                    <div class="card-icon"><i class="fa-solid fa-check"></i></div>
-                                    <p class="txt-body" style="margin:0;">${item}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
+                    `).join('')}
+                </div>`;
+                
+                html = `<div class="flex-row-locked w-full h-full">
+                    ${data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock}
+                </div>`;
             }
-            // CORPO: MÍDIA À DIREITA (NOVO LAYOUT)
-            else if (data.type === 'media-right') {
-                html += `
-                    <div class="flex-row gap-lg items-center w-full" style="height: 100%;">
-                        <div class="card-list" style="flex: 1.2; margin: 0;">
-                            ${data.items.map((item, i) => `
-                                <div class="card-item editable-elem" data-id="${data.id}_i${i}">
-                                    <div class="card-icon"><i class="fa-solid fa-check"></i></div>
-                                    <p class="txt-body" style="margin:0;">${item}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="media-box editable-media" data-media-id="${data.mediaId}" style="flex: 1;">
-                            ${generateMediaTag(data.mediaId, data.mediaType)}
-                        </div>
-                    </div>
-                `;
-            }
-            // CORPO: QUOTE
             else if (data.type === 'quote') {
-                html += `
-                    <div class="flex-col items-center justify-center text-center gap-md" style="max-width: 60cqw;">
-                        <i class="fa-solid fa-quote-left text-white" style="font-size: 5cqw; opacity: 0.3;"></i>
-                        <h2 class="txt-h1 text-white editable-elem" data-id="${data.id}_text" style="font-size: 4cqw; font-style: italic; text-transform: none;">"${data.text}"</h2>
-                        <cite class="txt-h3 text-white editable-elem" data-id="${data.id}_auth" style="opacity: 0.8; margin-top: 1cqw;">— ${data.author}</cite>
-                    </div>
-                `;
+                html = `
+                    <div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 80vw; margin: auto;">
+                        <i class="fa-solid fa-quote-left text-white icon-xl" style="opacity: 0.3;"></i>
+                        <h2 class="txt-title editable" data-id="${data.id}_t" style="color: white; font-style: italic; text-transform: none;">"${data.text}"</h2>
+                        <cite class="txt-sub editable" data-id="${data.id}_auth" style="color: white; opacity: 0.8; margin-top: 2vh;">— ${data.author}</cite>
+                    </div>`;
             }
-            // CORPO: GRID
             else if (data.type === 'grid') {
-                html += `
-                    <div class="${data.grid.length > 3 ? 'grid-4' : 'grid-2'}" style="padding: 0 2cqw;">
-                        ${data.grid.map((g) => `
-                            <div class="grid-card editable-elem" data-id="${g.id}">
-                                <div class="grid-card-icon"><i class="fa-solid ${g.i}"></i></div>
-                                <h3 class="txt-h3" style="margin: 0 0 1cqw 0;">${g.t}</h3>
-                                <p class="txt-body" style="font-size: 1.2cqw; margin:0;">${g.d}</p>
+                const cols = data.grid.length > 3 ? 'grid-4' : 'grid-2';
+                html = `
+                    <div class="grid-locked ${cols} w-full h-full">
+                        ${data.grid.map(g => `
+                            <div class="grid-card editable" data-id="${g.id}">
+                                <div style="color: var(--k-orange);" class="icon-lg"><i class="fa-solid ${g.i}"></i></div>
+                                <h3 class="txt-title" style="margin: 2vh 0 1vh 0; font-size: 3vmin;">${g.t}</h3>
+                                <p class="txt-body" style="margin:0; text-align: center;">${g.d}</p>
                             </div>
                         `).join('')}
-                    </div>
-                `;
+                    </div>`;
             }
-            // CORPO: EQUIPE
             else if (data.type === 'team') {
-                html += `
-                    <div class="grid-2" style="padding: 0 2cqw; gap: 4cqw;">
+                html = `
+                    <div class="grid-locked grid-2 w-full h-full">
                         ${data.groups.map((grp, gIdx) => `
-                            <div class="flex-col gap-sm">
-                                <div style="background: var(--k-dark); color: white; padding: 0.8cqw; text-align: center; border-radius: 0.8cqw; margin-bottom: 0.5cqw;">
-                                    <span class="txt-h3 text-white" style="font-size: 1.5cqw;">${grp.t}</span>
+                            <div class="flex-col-locked">
+                                <div style="background: var(--k-dark); color: white; padding: 1.5vmin; border-radius: 1.5vmin; text-align: center;">
+                                    <span class="txt-title" style="font-size: 3vmin; color: white;">${grp.t}</span>
                                 </div>
-                                <div class="flex-col gap-sm">
+                                <div class="flex-col-locked">
                                     ${grp.m.map((m, mIdx) => `
-                                        <div class="card-item editable-elem" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-color: ${gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)'}; padding: 1cqw 1.5cqw;">
-                                            <p class="txt-body" style="margin:0; font-size: 1.4cqw;">${m}</p>
+                                        <div class="card-box editable" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-color: ${gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)'};">
+                                            <p class="txt-body" style="margin:0;">${m}</p>
                                         </div>
                                     `).join('')}
                                 </div>
                             </div>
                         `).join('')}
-                    </div>
-                `;
+                    </div>`;
             }
-            // CORPO: TABELA
             else if (data.type === 'table') {
-                html += `
-                    <div style="padding: 0 4cqw;">
-                        <table class="styled-table">
-                            <thead>
-                                <tr><th>Disciplina</th><th>Orientação Inicial</th><th style="color: var(--k-orange);">Orientação Avançada</th></tr>
-                            </thead>
+                html = `
+                    <div style="width: 100%; height: 100%; padding: 2vh 0;">
+                        <table>
+                            <thead><tr><th>Disciplina</th><th>Orientação Inicial</th><th style="color: var(--k-orange);">Avançada</th></tr></thead>
                             <tbody>
-                                ${data.rows.map((r) => `
-                                    <tr><td>${r.mat}</td><td>${r.ini}</td><td style="color: var(--k-orange); font-weight: 800;">${r.ava}</td></tr>
-                                `).join('')}
+                                ${data.rows.map(r => `<tr><td>${r.mat}</td><td>${r.ini}</td><td style="color: var(--k-orange); font-weight: 900;">${r.ava}</td></tr>`).join('')}
                             </tbody>
                         </table>
-                    </div>
-                `;
+                    </div>`;
             }
-            // CORPO: ESTATÍSTICAS
             else if (data.type === 'stats') {
-                html += `
-                    <div class="flex-row gap-lg" style="padding: 0 5cqw;">
+                html = `
+                    <div class="flex-row-locked w-full h-full" style="justify-content: center;">
                         ${data.stats.map((s, i) => `
-                            <div class="stat-box editable-elem" data-id="${data.id}_s${i}" style="border-top-color: ${i===0 ? 'var(--k-blue)' : 'var(--k-orange)'};">
-                                <div class="txt-h1 ${s.color}" style="font-size: 12cqw; line-height: 1; margin-bottom: 1cqw;">${s.val}</div>
-                                <div class="txt-h3" style="color: var(--txt-muted);">${s.label}</div>
+                            <div class="grid-card editable" data-id="${data.id}_s${i}" style="border-bottom: none; border-top: 2vmin solid ${i===0 ? 'var(--k-blue)' : 'var(--k-orange)'};">
+                                <div class="txt-mega" style="font-size: 15vmin; color: ${s.color};">${s.val}</div>
+                                <div class="txt-title" style="font-size: 3.5vmin; color: #94a3b8;">${s.label}</div>
                             </div>
                         `).join('')}
-                    </div>
-                `;
+                    </div>`;
             }
-            // CORPO: DESTAQUE SOPHIA (Com sistema de mídia inteligente)
             else if (data.type === 'sophia') {
-                html += `
-                    <div class="flex-row gap-lg" style="height: 100%; align-items: stretch; padding-bottom: 2cqw;">
-                        <div class="flex-col justify-center gap-md" style="flex: 1.2; background: var(--k-bg-light); padding: 3cqw; border-radius: 2cqw; border-left: 1cqw solid var(--k-blue);">
-                            <div style="display: inline-block; background: var(--k-yellow); color: var(--k-dark); padding: 0.5cqw 1.5cqw; border-radius: 2cqw; font-weight: 900; font-size: 1.2cqw; align-self: flex-start;">
-                                <i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO
-                            </div>
-                            <h3 class="txt-h1 editable-elem" data-id="${data.id}_name" style="font-size: 4.5cqw; margin: 0;">${data.name}</h3>
-                            <div class="flex-col gap-sm mt-2">
+                html = `
+                    <div class="flex-row-locked w-full h-full">
+                        <div class="flex-col-locked" style="flex: 1.2; background: #f8fafc; padding: 4vmin; border-radius: 3vmin; border-left: 1.5vmin solid var(--k-blue);">
+                            <div style="background: var(--k-yellow); color: var(--k-dark); padding: 1vmin 2vmin; border-radius: 2vmin; font-weight: 900; align-self: flex-start;" class="txt-small"><i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO</div>
+                            <h3 class="txt-mega editable" data-id="${data.id}_name" style="margin: 2vh 0;">${data.name}</h3>
+                            <div class="flex-col-locked" style="gap: 1.5vh;">
                                 ${data.details.map((d, i) => `
-                                    <div class="flex-row items-center gap-sm editable-elem" data-id="${data.id}_d${i}">
-                                        <i class="fa-solid fa-check text-blue" style="font-size: 1.5cqw;"></i>
-                                        <span class="txt-body" style="font-size: 1.4cqw;">${d}</span>
+                                    <div style="display: flex; align-items: center; gap: 2vmin;" class="editable" data-id="${data.id}_d${i}">
+                                        <i class="fa-solid fa-check" style="color: var(--k-blue);"></i><span class="txt-body">${d}</span>
                                     </div>
                                 `).join('')}
                             </div>
                         </div>
-                        <div style="flex: 1;">
-                            <div class="media-box editable-media" data-media-id="${data.mediaId}">
-                                ${generateMediaTag(data.mediaId, 'video')}
-                            </div>
+                        <div class="media-box editable-media" data-media-id="${data.mediaId}" style="flex: 1;">
+                            ${getMediaTag(data.mediaId, 'video')}
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
-            // CORPO: ENCERRAMENTO
             else if (data.type === 'end') {
-                html += `
-                    <div class="flex-col items-center justify-center text-center gap-md w-full">
-                        <i class="fa-regular fa-handshake text-orange" style="font-size: 12cqw; margin-bottom: 2cqw;"></i>
-                        <h2 class="txt-h1 editable-elem" data-id="${data.id}_t" style="font-size: 6cqw;">${data.title}</h2>
-                        <p class="txt-h3 text-blue editable-elem" data-id="${data.id}_sub" style="font-size: 2.5cqw; margin: 1cqw 0 2cqw 0;">${data.subtitle}</p>
-                        <div class="editable-elem" data-id="${data.id}_contact" style="background: var(--k-dark); color: white; padding: 1.5cqw 4cqw; border-radius: 4cqw; box-shadow: 0 1cqw 2cqw rgba(0,0,0,0.2);">
-                            <span class="txt-h3 text-white" style="font-size: 2cqw;">${data.contact}</span>
+                html = `
+                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
+                        <i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 2vh;"></i>
+                        <h2 class="txt-mega editable" data-id="${data.id}_t" style="font-size: 9vmin;">${data.title}</h2>
+                        <p class="txt-sub editable" data-id="${data.id}_sub" style="margin: 2vh 0;">${data.subtitle}</p>
+                        <div class="editable" data-id="${data.id}_contact" style="background: var(--k-dark); color: white; padding: 2vh 4vw; border-radius: 4vh; margin-top: 2vh;">
+                            <span class="txt-title" style="color: white; text-transform: none; font-size: 3.5vmin;">${data.contact}</span>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
-            html += `</div></div>`;
-            container.innerHTML = html;
+            mainContent.innerHTML = `<div class="slide active w-full h-full">${html}</div>`;
             document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / slidesData.length) * 100}%`;
-            setupInteractivity();
+            setupGestor();
         }
 
-        // CONTROLES DE NAVEGAÇÃO
+        // CONTROLES
         function nextSlide() { if (currentIndex < slidesData.length - 1) { currentIndex++; renderSlide(); } }
         function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(); } }
 
@@ -520,65 +427,45 @@
             if (e.key === 'ArrowLeft' || e.key === 'Backspace') prevSlide();
         });
 
-        // AUTENTICAÇÃO MODO GESTOR (*177)
+        // GESTOR E LINKS
         function triggerAdmin() {
             adminClicks++;
             if (adminClicks === 3) {
-                const pass = prompt("SISTEMA GESTOR (*177). INSIRA A SENHA:");
+                const pass = prompt("SISTEMA GESTOR (*177). SENHA:");
                 if (pass === "*177") {
-                    isAdmin = true;
-                    document.body.classList.add('admin-mode');
-                    alert("Painel Gestor Ativado!\n\nAgora você pode clicar nos textos tracejados para inserir links, E nas áreas de imagem/vídeo para alterar a mídia.");
+                    isAdmin = true; document.body.classList.add('admin-mode');
+                    alert("Painel Gestor Ativado! Clique nos textos ou mídias para editar os links.");
                     renderSlide(); 
-                } else { alert("Senha Incorreta."); }
+                } else alert("Senha Incorreta.");
                 adminClicks = 0;
             }
         }
 
-        // SISTEMA DE LINKS E GESTÃO DE MÍDIA
-        function setupInteractivity() {
-            // 1. Textos e Links
-            document.querySelectorAll('.editable-elem').forEach(el => {
+        function setupGestor() {
+            document.querySelectorAll('.editable').forEach(el => {
                 const id = el.dataset.id;
-                if (savedLinks[id]) el.classList.add('has-link');
-                else el.classList.remove('has-link');
-                
-                if (isAdmin) el.classList.add('editable');
-
+                if (savedLinks[id]) el.classList.add('has-link'); else el.classList.remove('has-link');
                 el.onclick = (e) => {
                     if (isAdmin) {
                         e.stopPropagation();
-                        const currentVal = savedLinks[id] || "";
-                        const newUrl = prompt(`Definir URL (Link de clique) para o texto:`, currentVal);
-                        if (newUrl !== null) { 
-                            if (newUrl.trim() === "") delete savedLinks[id]; 
-                            else savedLinks[id] = newUrl.trim();
-                            localStorage.setItem('kumon_v177_links', JSON.stringify(savedLinks));
-                            renderSlide(); 
+                        const val = prompt(`Definir URL (Link):`, savedLinks[id] || "");
+                        if (val !== null) { 
+                            if (val.trim() === "") delete savedLinks[id]; else savedLinks[id] = val.trim();
+                            localStorage.setItem('kumon_v177_links', JSON.stringify(savedLinks)); renderSlide(); 
                         }
-                    } else if (savedLinks[id]) {
-                        e.stopPropagation();
-                        window.open(savedLinks[id], '_blank');
-                    }
+                    } else if (savedLinks[id]) { e.stopPropagation(); window.open(savedLinks[id], '_blank'); }
                 };
             });
 
-            // 2. Sistema Inteligente de Upload via URL (Imagens e Vídeos)
             if (isAdmin) {
-                document.querySelectorAll('.editable-media').forEach(mediaBox => {
-                    mediaBox.onclick = (e) => {
+                document.querySelectorAll('.editable-media').forEach(box => {
+                    box.onclick = (e) => {
                         e.stopPropagation();
-                        const mediaId = mediaBox.dataset.mediaId;
-                        const currentVal = savedMedia[mediaId] || "";
-                        const promptMsg = "Insira a URL da Mídia:\n\n- Para VÍDEOS: Cole um link do YouTube ou termine com .mp4\n- Para FOTOS: Cole a URL da imagem (.jpg, .png, etc)\n\nExemplo: https://meusite.com/video_sophia.mp4";
-                        
-                        const newUrl = prompt(promptMsg, currentVal);
-                        
-                        if (newUrl !== null) {
-                            if (newUrl.trim() === "") delete savedMedia[mediaId];
-                            else savedMedia[mediaId] = newUrl.trim();
-                            localStorage.setItem('kumon_v177_media', JSON.stringify(savedMedia));
-                            renderSlide();
+                        const mId = box.dataset.mediaId;
+                        const val = prompt("Insira URL (Vídeo YouTube/MP4 ou Imagem JPG/PNG):", savedMedia[mId] || "");
+                        if (val !== null) {
+                            if (val.trim() === "") delete savedMedia[mId]; else savedMedia[mId] = val.trim();
+                            localStorage.setItem('kumon_v177_media', JSON.stringify(savedMedia)); renderSlide();
                         }
                     };
                 });
