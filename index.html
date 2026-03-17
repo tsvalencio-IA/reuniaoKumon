@@ -6,7 +6,7 @@
     <title>Reunião de Pais 2026 - Kumon Rio Preto Shopping</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@500;700;900&display=swap" rel="stylesheet">
     
     <!-- Script Oficial Cloudinary -->
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
@@ -20,37 +20,32 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
     <style>
-        /* =========================================================================
-           1. RESET E BLOQUEIO DE BOUNCE DA PÁGINA
-           ========================================================================= */
+        /* 1. BLOQUEIO FÍSICO DA TELA (Restaurado para a versão estável inicial) */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body, html {
-            width: 100%; height: 100%;
-            height: 100dvh;
-            overflow: hidden;
-            background-color: #f8fafc; 
+            width: 100vw; height: 100vh;
+            overflow: hidden; 
+            background-color: #0f172a;
             font-family: 'Poppins', sans-serif;
-            touch-action: pan-y;
+            touch-action: none;
         }
 
-        /* =========================================================================
-           2. ARQUITETURA RESPONSIVA (FLEXBOX) - FOCO EM TELÃO (VIVO)
-           ========================================================================= */
         #app-container {
-            width: 100%; height: 100%;
+            width: 100vw; height: 100vh;
             display: flex; flex-direction: column;
-            background-color: transparent; position: relative;
+            background-color: white;
+            position: relative;
         }
 
         .bg-blobs::before {
-            content: ''; position: fixed; top: -15vh; right: -10vw; width: 60vmin; height: 60vmin;
-            background: radial-gradient(circle, rgba(0, 174, 239, 0.12) 0%, transparent 70%);
+            content: ''; position: absolute; top: -10vh; right: -5vw; width: 40vmin; height: 40vmin;
+            background: radial-gradient(circle, rgba(0, 174, 239, 0.08) 0%, transparent 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
         .bg-blobs::after {
-            content: ''; position: fixed; bottom: -20vh; left: -10vw; width: 80vmin; height: 80vmin;
-            background: radial-gradient(circle, rgba(243, 146, 0, 0.08) 0%, transparent 70%);
+            content: ''; position: absolute; bottom: -10vh; left: -5vw; width: 50vmin; height: 50vmin;
+            background: radial-gradient(circle, rgba(243, 146, 0, 0.05) 0%, transparent 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
 
@@ -59,139 +54,121 @@
             --k-dark: #004578;
             --k-orange: #F39200;
             --k-yellow: #FFB703;
-            --txt-main: #1e293b;
-            --txt-muted: #64748b;
+            --txt-main: #334155;
         }
 
-        /* =========================================================================
-           3. TIPOGRAFIA FLUIDA (Aprimorada para Leitura no Telão)
-           ========================================================================= */
-        .txt-mega { font-family: 'Nunito', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 900; line-height: 1.1; color: var(--k-dark); text-transform: uppercase; letter-spacing: -1px; }
-        .txt-title { font-family: 'Nunito', sans-serif; font-size: clamp(2rem, 4.5vw, 4rem); font-weight: 900; color: var(--k-dark); text-transform: uppercase; letter-spacing: -0.5px; }
-        .txt-sub { font-size: clamp(1.4rem, 2.8vw, 2.2rem); font-weight: 700; letter-spacing: 0.1em; color: var(--k-blue); text-transform: uppercase; }
-        .txt-body { font-size: clamp(1.1rem, 2.2vw, 1.6rem); font-weight: 600; color: var(--txt-main); line-height: 1.5; }
-        .txt-small { font-size: clamp(0.8rem, 1.4vw, 1.1rem); font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        /* 2. TIPOGRAFIA MATEMÁTICA (Restaurado o uso de VMIN para o Telão perfeito) */
+        .txt-mega { font-family: 'Nunito', sans-serif; font-size: 8vmin; font-weight: 900; line-height: 1.1; color: var(--k-dark); text-transform: uppercase; }
+        .txt-title { font-family: 'Nunito', sans-serif; font-size: 5vmin; font-weight: 900; color: var(--k-dark); text-transform: uppercase; }
+        .txt-sub { font-size: 3vmin; font-weight: 700; letter-spacing: 0.3vmin; color: var(--k-blue); text-transform: uppercase; }
+        .txt-body { font-size: 2.5vmin; font-weight: 600; color: var(--txt-main); line-height: 1.3; }
+        .txt-small { font-size: 1.5vmin; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1vmin; }
         
-        .icon-xl { font-size: clamp(5rem, 12vw, 9rem); }
-        .icon-lg { font-size: clamp(3rem, 6vw, 4.5rem); }
-        .icon-md { font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
+        .icon-xl { font-size: 12vmin; }
+        .icon-lg { font-size: 6vmin; }
+        .icon-md { font-size: 3.5vmin; }
 
-        /* =========================================================================
-           4. ÁREAS DA TELA
-           ========================================================================= */
-        .progress-bar { 
-            position: absolute; top: 0; left: 0; height: 8px; width: 0%; 
-            background: linear-gradient(90deg, var(--k-yellow), var(--k-orange)); transition: width 0.4s ease; z-index: 1000; 
-        }
+        /* 3. GESTÃO DE ÁREAS DA TELA */
+        .progress-bar { height: 1vh; width: 0%; background: var(--k-orange); transition: width 0.3s; z-index: 50; position: absolute; top: 0; left: 0; }
         
         .header-area {
-            flex: 0 0 auto; padding: 2vh 5vw; border-bottom: 1px solid rgba(0,0,0,0.05); 
-            display: flex; align-items: center; z-index: 100;
-            background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+            height: 12vh; width: 100%; display: flex; align-items: center;
+            padding: 0 5vw; border-bottom: 0.2vh solid #f1f5f9; z-index: 10;
         }
         
         .main-area {
-            flex: 1 1 auto; overflow-y: auto; overflow-x: hidden;
-            padding: 5vh 5vw; display: flex; flex-direction: column; position: relative; z-index: 10;
+            height: 75vh; width: 100%; display: flex; flex-direction: column;
+            justify-content: center; padding: 2vh 5vw; z-index: 10; position: relative;
         }
         
         .footer-area {
-            flex: 0 0 auto; padding: 2vh 5vw; border-top: 1px solid rgba(0,0,0,0.05); 
-            display: flex; align-items: center; justify-content: space-between;
-            background: rgba(255,255,255,0.95); z-index: 100; box-shadow: 0 -10px 30px rgba(0,0,0,0.03); position: relative;
+            height: 12vh; width: 100%; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5vw; border-top: 0.2vh solid #f1f5f9; z-index: 10; background: white;
         }
 
-        /* =========================================================================
-           5. LAYOUTS INTERNOS DOS SLIDES (MAIS VIVOS E MODERNOS)
-           ========================================================================= */
-        .slide { display: none; width: 100%; min-height: 100%; flex-direction: column; justify-content: center; }
-        .slide.active { display: flex; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* 4. LAYOUTS INTERNOS */
+        .slide { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .slide.active { display: flex; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        .layout-row { display: flex; flex-direction: row; flex-wrap: wrap; gap: 30px; width: 100%; align-items: stretch; justify-content: center; }
-        .layout-col { display: flex; flex-direction: column; gap: 20px; flex: 1 1 350px; justify-content: center; }
-        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; width: 100%; }
+        .flex-row-locked { display: flex; flex-direction: row; gap: 4vw; height: 100%; align-items: center; }
+        .flex-col-locked { display: flex; flex-direction: column; gap: 2vh; height: 100%; justify-content: center; }
+        
+        .grid-locked { display: grid; gap: 2vmin; height: 100%; }
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
+        @media (orientation: portrait) {
+            .flex-row-locked { flex-direction: column; justify-content: space-evenly; gap: 2vh; }
+            .grid-2, .grid-4 { grid-template-columns: 1fr; grid-auto-rows: minmax(0, 1fr); }
+            .txt-mega { font-size: 10vmin; }
+            .txt-title { font-size: 7vmin; }
+            .txt-body { font-size: 3.5vmin; }
+            .media-box { height: 30vh !important; } 
+        }
+
+        /* 5. ELEMENTOS VISUAIS */
         .card-box {
-            background: white; padding: 25px 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06); border-left: 8px solid var(--k-blue);
-            display: flex; align-items: center; gap: 25px; flex: 1;
-            transition: transform 0.3s;
+            background: white; padding: 2vmin 3vmin; border-radius: 2vmin;
+            box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.08); border-left: 1vmin solid var(--k-blue);
+            display: flex; align-items: center; gap: 3vmin; flex: 1; min-height: 0;
         }
-        .card-box:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
         
         .grid-card {
-            background: white; padding: 40px 30px; border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06); border-bottom: 8px solid var(--k-orange);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-            transition: transform 0.3s;
+            background: white; padding: 3vmin; border-radius: 3vmin;
+            box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.08); border-bottom: 1vmin solid var(--k-orange);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; min-height: 0;
         }
-        .grid-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
 
-        /* V177: MEDIA BOX IMPECÁVEL (Fim dos cortes e distorções) */
+        /* MEDIA BOX AJUSTADA PARA NÃO CORTAR NADA */
         .media-box {
-            background: #ffffff; border-radius: 20px; 
-            overflow: hidden; width: 100%; aspect-ratio: 16/9; max-height: 60vh;
-            border: 4px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: #000; border-radius: 3vmin; overflow: hidden;
+            width: 100%; height: 100%; border: 0.5vmin solid white; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.2);
             position: relative; display: flex; align-items: center; justify-content: center;
         }
-        .slide-sophia .media-box { aspect-ratio: auto; height: 100%; min-height: 450px; }
-        .media-box img, .media-box video, .media-box iframe { 
-            width: 100%; height: 100%; 
-            object-fit: contain; /* NUNCA CORTA A IMAGEM */
-            border: none; outline: none; border-radius: 16px; 
-        }
-        .media-box video, .media-box iframe { background: black; }
-        .media-box img { background: transparent; padding: 5px; }
+        .media-box img { width: 100%; height: 100%; object-fit: contain; background: white; }
+        .media-box video, .media-box iframe { width: 100%; height: 100%; object-fit: contain; border: none; }
 
-        /* =========================================================================
-           6. BOTÕES DO RODAPÉ
-           ========================================================================= */
+        /* Tabela */
+        table { width: 100%; border-collapse: collapse; }
+        th { padding: 4vmin; font-size: 3.5vmin; font-family: 'Nunito', sans-serif; }
+        td { padding: 4vmin; font-size: 3vmin; font-weight: 600; color: var(--txt-main); }
+        .table-container { width: 100%; max-width: 90vw; background: white; border-radius: 3vmin; overflow: hidden; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.1); border: 0.2vmin solid #e2e8f0; }
+
+        /* 6. BOTÕES DO RODAPÉ */
         .btn-nav {
-            height: clamp(50px, 7vh, 65px); width: clamp(50px, 7vh, 65px); 
-            border-radius: 50%; background: white; color: var(--k-dark);
-            display: flex; align-items: center; justify-content: center; font-size: clamp(20px, 3.5vh, 26px); 
-            cursor: pointer; border: 2px solid #e2e8f0; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; z-index: 10;
+            height: 8vh; width: 8vh; border-radius: 50%; background: #f1f5f9; color: var(--k-dark);
+            display: flex; align-items: center; justify-content: center; font-size: 3vh; cursor: pointer;
+            border: none; transition: 0.2s; box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.05);
         }
-        .btn-nav:hover { background: var(--k-blue); color: white; border-color: var(--k-blue); }
         .btn-nav:active { transform: scale(0.9); }
-        
         .btn-logo {
-            height: clamp(60px, 8.5vh, 75px); width: clamp(60px, 8.5vh, 75px); 
-            border-radius: 50%; background: linear-gradient(135deg, var(--k-blue), var(--k-dark)); color: white;
-            display: flex; align-items: center; justify-content: center; font-size: clamp(26px, 4.5vh, 34px); 
-            font-weight: 900; cursor: pointer; border: none; box-shadow: 0 8px 20px rgba(0,174,239,0.4); transition: 0.2s; position: relative; z-index: 10;
+            height: 10vh; width: 10vh; border-radius: 50%; background: var(--k-blue); color: white;
+            display: flex; align-items: center; justify-content: center; font-size: 4vh; font-weight: 900; cursor: pointer;
+            border: none; box-shadow: 0 1vh 2vh rgba(0,174,239,0.3); transition: 0.2s;
         }
 
         .btn-extras {
             background: none; border: none; color: var(--k-dark); cursor: pointer;
-            font-size: clamp(22px, 4vmin, 32px); margin-right: 20px; opacity: 0.5; transition: 0.3s; position: relative; z-index: 10;
+            font-size: 3vh; margin-right: 1.5vw; opacity: 0.5; transition: 0.3s;
         }
         .btn-extras:hover, .btn-extras.active-ar { opacity: 1; color: var(--k-blue); }
         .btn-extras.active-ar { color: #00ff66; text-shadow: 0 0 10px #00ff66; }
 
-        /* V177: ESCONDER BOTÕES EM TELA CHEIA (CINEMA MODE) */
-        :fullscreen #nav-controls { display: none !important; }
-        :-webkit-full-screen #nav-controls { display: none !important; }
-        :-ms-fullscreen #nav-controls { display: none !important; }
+        /* REGRAS DE TELA CHEIA (OCULTA OS BOTÕES NA TV) */
+        :fullscreen .nav-controls { display: none !important; }
+        :-webkit-full-screen .nav-controls { display: none !important; }
+        :-ms-fullscreen .nav-controls { display: none !important; }
+        :fullscreen .btn-extras { display: none !important; }
+        :-webkit-full-screen .btn-extras { display: none !important; }
 
-        /* =========================================================================
-           7. MODO GESTOR E MODAIS
-           ========================================================================= */
-        .admin-mode .editable { outline: 3px dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 8px; transition: background 0.2s; }
+        /* 7. MODO GESTOR (TÁTIL) */
+        .admin-mode .editable { outline: 0.4vmin dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 1vmin; transition: background 0.2s; }
         .admin-mode .editable:hover { background: rgba(243, 146, 0, 0.1); }
-        .admin-mode .editable::before { content: '🔗 LINK'; position: absolute; top: -25px; left: 0; background: var(--k-orange); color: white; font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 4px; z-index: 100; }
-        .admin-mode .editable-media { outline: 4px dashed var(--k-blue); cursor: pointer; position: relative; }
-        .admin-mode .editable-media::after { content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,174,239,0.95); color: white; padding: 15px 30px; border-radius: 10px; font-size: 18px; font-weight: bold; pointer-events: none; }
-        .admin-mode .editable-media > * { pointer-events: none !important; }
-        .has-link:not(.editable) { cursor: pointer; border-bottom: 3px solid var(--k-blue); }
-
-        /* Tabela Responsiva */
-        .table-wrapper { width: 100%; overflow-x: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        table { width: 100%; min-width: 600px; border-collapse: collapse; background: white; }
-        th { background: var(--k-dark); color: white; padding: 20px; font-size: clamp(1.1rem, 2.2vw, 1.4rem); text-align: center; }
-        td { padding: 20px; text-align: center; font-size: clamp(1rem, 2vw, 1.3rem); font-weight: 600; color: var(--txt-main); border-bottom: 2px solid #f1f5f9; }
-        td:first-child { background: #f8fafc; text-align: left; color: var(--k-dark); font-weight: 800; }
+        .admin-mode .editable::before { content: '🔗 LINK'; position: absolute; top: -2.5vmin; left: 0; background: var(--k-orange); color: white; font-size: 1.5vmin; font-weight: bold; padding: 0.2vmin 1vmin; border-radius: 0.5vmin; z-index: 100; }
+        .admin-mode .editable-media { outline: 0.5vmin dashed var(--k-blue); cursor: pointer; position: relative; }
+        .admin-mode .editable-media::after { content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,174,239,0.95); color: white; padding: 1.5vmin 3vmin; border-radius: 1vmin; font-size: 2.5vmin; font-weight: bold; pointer-events: none; }
+        .has-link:not(.editable) { cursor: pointer; border-bottom: 0.3vmin solid var(--k-blue); }
 
         /* MODAIS CUSTOMIZADOS */
         #admin-modal-overlay {
@@ -199,52 +176,50 @@
             z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
         }
         .admin-modal-content {
-            background: white; padding: 30px; border-radius: 15px; width: 90vw; max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif; max-height: 90vh; overflow-y: auto;
+            background: white; padding: 4vmin; border-radius: 2vmin; width: 80vw; max-width: 500px;
+            box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;
         }
-        .admin-input { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; margin-bottom: 15px; font-family: 'Poppins', sans-serif; color: #1e293b; }
-        .admin-input:focus { outline: none; border-color: var(--k-blue); }
-        .admin-btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .admin-input { width: 100%; padding: 1.5vmin; border: 0.2vmin solid #cbd5e1; border-radius: 1vmin; font-size: 2vmin; margin-bottom: 2vmin; font-family: 'Poppins', sans-serif; }
+        .admin-btn { padding: 1.5vmin 2.5vmin; border: none; border-radius: 1vmin; font-weight: 700; font-size: 2vmin; cursor: pointer; transition: 0.2s; }
         .btn-primary { background: var(--k-blue); color: white; }
         .btn-secondary { background: #e2e8f0; color: var(--txt-main); }
-        .btn-upload { background: var(--k-orange); color: white; width: 100%; margin-bottom: 20px; font-size: 18px !important; padding: 15px !important;}
+        .btn-upload { background: var(--k-orange); color: white; width: 100%; margin-bottom: 2vmin;}
         .btn-danger { background: #ef4444; color: white; }
-        
+
         .status-warning {
-            position: fixed; top: 20px; right: 20px; background: #22c55e; color: white;
-            padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: bold;
-            z-index: 9999; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: fixed; top: 2vh; right: 2vw; background: #22c55e; color: white;
+            padding: 1vmin 2vmin; border-radius: 1vmin; font-size: 1.5vmin; font-weight: bold;
+            z-index: 9999; display: none; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.2);
         }
-        .fade-out { animation: fadeOut 5s forwards; animation-delay: 3s; }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; display: none; } }
         .pulse { animation: pulse 1.5s infinite; background: #f59e0b; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* =========================================================================
-           8. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD)
+           8. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD) V177
+           - Botões deslocados para evitar cliques acidentais
            ========================================================================= */
         #ar-dashboard {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            background: radial-gradient(circle at center, #0f172a 0%, #000000 100%);
             z-index: 9990; display: none; flex-direction: column; align-items: center; justify-content: flex-start;
             padding-top: 5vh;
         }
         
         #ar-main-buttons {
-            display: flex; flex-direction: column; width: 90vw; gap: 4vh; align-items: center; margin-top: 5vh;
+            display: flex; flex-direction: column; width: 90vw; gap: 4vh; align-items: center; margin-top: 10vh;
         }
         .ar-row-buttons {
-            display: flex; width: 100%; justify-content: space-between; gap: 6vw; height: 25vh;
+            display: flex; width: 100%; justify-content: space-between; gap: 6vw; height: 22vh;
         }
         
         #ar-confirm-buttons {
-            display: none; flex-direction: column; width: 90vw; height: 60vh; 
-            justify-content: center; align-items: center; gap: 4vh; margin-top: 2vh;
+            display: none; flex-direction: column; width: 90vw; height: 50vh; 
+            justify-content: center; align-items: center; gap: 4vh; margin-top: 10vh;
         }
 
         .ar-control-btn {
             flex: 1; background: rgba(0, 174, 239, 0.05); border: 4px solid rgba(0, 174, 239, 0.4);
-            border-radius: 30px; color: white; font-size: 4.5vmin; font-weight: 900;
+            border-radius: 30px; color: white; font-size: 4vmin; font-weight: 900;
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5vmin;
             transition: 0.3s; box-shadow: 0 0 30px rgba(0, 174, 239, 0.1) inset;
             cursor: pointer; outline: none;
@@ -254,25 +229,15 @@
         .ar-control-btn.orange { border-color: rgba(243, 146, 0, 0.4); box-shadow: 0 0 30px rgba(243, 146, 0, 0.1) inset; }
         .ar-control-btn.orange i { color: var(--k-orange); }
         
-        .ar-control-btn.green { border-color: rgba(0, 255, 102, 0.5); box-shadow: 0 0 40px rgba(0, 255, 102, 0.2) inset; width: 80vw; flex: none; height: 20vh; flex-direction: row; gap: 4vw;}
+        .ar-control-btn.green { border-color: rgba(0, 255, 102, 0.5); box-shadow: 0 0 40px rgba(0, 255, 102, 0.2) inset; width: 80vw; flex: none; height: 18vh; flex-direction: row; gap: 4vw;}
         .ar-control-btn.green i { color: #00ff66; }
 
-        .ar-control-btn.red { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 40px rgba(239, 68, 68, 0.2) inset; width: 80vw; flex: none; height: 20vh; flex-direction: row; gap: 4vw;}
+        .ar-control-btn.red { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 40px rgba(239, 68, 68, 0.2) inset; width: 80vw; flex: none; height: 18vh; flex-direction: row; gap: 4vw;}
         .ar-control-btn.red i { color: #ef4444; }
 
         #ar-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: 9998;
-        }
-
-        @media (max-width: 768px) {
-            .hide-mobile { display: none !important; }
-            .header-area { padding: 15px 20px; }
-            .main-area { padding: 25px 5vw; }
-            .footer-area { padding: 15px 5vw; }
-            .ar-row-buttons { height: 22vh; gap: 4vw; }
-            .ar-control-btn { font-size: 5vmin; border-radius: 20px; }
-            .ar-control-btn.green, .ar-control-btn.red { height: 15vh; width: 85vw; }
         }
     </style>
 </head>
@@ -280,10 +245,10 @@
 
     <div id="app-container">
         <div class="progress-bar" id="progress-bar"></div>
-        <div id="firebase-warning" class="status-warning fade-out"><i class="fa-solid fa-cloud-check"></i> BD Sincronizado</div>
+        <div id="firebase-warning" class="status-warning"><i class="fa-solid fa-cloud-check"></i> BD Sincronizado</div>
         <div id="ar-status-warning" class="status-warning pulse"><i class="fa-solid fa-camera"></i> A Carregar IA Holográfica...</div>
 
-        <!-- CÂMERA ESCONDIDA -->
+        <!-- CÂMERA ESCONDIDA E MUTADA (Para não travar no navegador) -->
         <video id="ar-video" playsinline autoplay muted style="display: none;"></video>
         
         <!-- CANVAS DO ESQUELETO MÁGICO -->
@@ -294,13 +259,12 @@
             <div style="color: #00AEEF; font-size: 4vmin; font-weight: 900; letter-spacing: 2px; margin-bottom: 1vh; text-align: center;">
                 PAINEL HOLOGRÁFICO
             </div>
-            
             <div style="color: white; font-size: 2.5vmin; font-weight: 600; margin-bottom: 2vh; text-align: center;">
                 EXIBINDO NO TELÃO:<br>
                 <span id="ar-dash-slide-name" style="color: #00ff66; font-size: 4.5vmin; text-shadow: 0 0 10px #00ff66;">A CARREGAR...</span>
             </div>
 
-            <!-- Botões Principais (Passo 1) -->
+            <!-- Botões Principais (Nas Bordas) -->
             <div id="ar-main-buttons">
                 <div class="ar-row-buttons">
                     <button id="ar-btn-prev" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('prev')">
@@ -311,14 +275,13 @@
                     </button>
                 </div>
                 
-                <!-- Botão de Ação / Play -->
                 <button id="ar-btn-action" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('action')" style="display: none; width: 100%; height: 18vh; flex-direction: row; gap: 4vw; border-color: rgba(0, 255, 102, 0.4); box-shadow: 0 0 40px rgba(0, 255, 102, 0.15) inset;">
                     <i class="fa-solid fa-play" style="color: #00ff66;"></i> 
                     <span style="color: #00ff66;">PLAY / ABRIR MÍDIA</span>
                 </button>
             </div>
 
-            <!-- Botões de Confirmação (Passo 2) -->
+            <!-- Botões de Confirmação (No Centro) -->
             <div id="ar-confirm-buttons">
                 <div style="color: white; font-size: 4vmin; font-weight: bold; margin-bottom: 2vh; text-align: center;">CONFIRME A AÇÃO:</div>
                 <button id="ar-btn-ok" class="ar-control-btn green admin-btn-target" onclick="window.executeARConfirm()">
@@ -336,8 +299,8 @@
 
         <!-- CONTEÚDO PRINCIPAL DA APRESENTAÇÃO (Visão dos Pais / Projetor) -->
         <header class="header-area" id="main-header">
-            <div style="display: flex; align-items: center; gap: 20px; width: 100%;">
-                <div id="slide-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--k-blue), var(--k-dark)); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 5px 15px rgba(0,174,239,0.3);">
+            <div style="display: flex; align-items: center; gap: 3vmin; width: 100%;">
+                <div id="slide-icon" style="width: 7vh; height: 7vh; background: var(--k-blue); color: white; border-radius: 1.5vh; display: flex; align-items: center; justify-content: center;" class="icon-md">
                     <i class="fa-solid fa-star"></i>
                 </div>
                 <h2 id="slide-title" class="txt-title" data-id="global_title">Título Padrão</h2>
@@ -349,8 +312,8 @@
         </main>
 
         <footer class="footer-area">
-            <!-- V177: Agrupados para sumir na tela cheia -->
-            <div id="nav-controls" style="display: flex; gap: 20px; align-items: center;">
+            <!-- Em Tela Cheia, esta div desaparece -->
+            <div class="nav-controls" style="display: flex; gap: 2vw; align-items: center;">
                 <button id="btn-prev" class="btn-nav"><i class="fa-solid fa-chevron-left"></i></button>
                 <button id="logo-btn" class="btn-logo" title="Gestor: 3 Cliques">K</button>
                 <button id="btn-next" class="btn-nav"><i class="fa-solid fa-chevron-right"></i></button>
@@ -367,10 +330,10 @@
             </div>
 
             <div style="display: flex; align-items: center;">
-                <button class="btn-extras hide-mobile" onclick="window.toggleFullScreen()" title="Tela Cheia">
+                <button class="btn-extras" onclick="window.toggleFullScreen()" title="Tela Cheia">
                     <i class="fa-solid fa-expand"></i>
                 </button>
-                <div class="hide-mobile" style="display: flex; flex-direction: column; align-items: flex-end;">
+                <div style="display: flex; flex-direction: column; align-items: flex-end;">
                     <span class="txt-small" style="color: var(--k-dark);">Reunião 2026</span>
                     <span class="txt-small" style="text-transform: none; color: var(--txt-muted);">powered by <strong style="color: var(--k-blue);">thIAguinho Soluções</strong></span>
                 </div>
@@ -400,11 +363,7 @@
         }
 
         window.isAdmin = false; window.adminClicks = 0; window.currentEditingId = null;
-
-        // V177: Variáveis de Confirmação AR
-        window.arPendingAction = null;
-        window.arConfirmTimeout = null;
-
+        window.arPendingAction = null; window.arConfirmTimeout = null;
         window.savedSlideIndex = parseInt(localStorage.getItem('kumon_v177_slide')) || 0;
         window.currentIndex = window.savedSlideIndex;
         window.ytState = false; 
@@ -453,23 +412,13 @@
                 }
             });
 
-            document.getElementById('firebase-warning').style.display = 'block';
+            setTimeout(() => { document.getElementById('firebase-warning').style.display = 'none'; }, 3000);
         } catch(e) { console.error("Erro Firebase: ", e); }
 
         window.syncSlideState = function() {
             localStorage.setItem('kumon_v177_slide', window.currentIndex);
             if (db) db.ref("kumon_config/state").set({ currentSlide: window.currentIndex });
         };
-
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'kumon_v177_slide') {
-                const newIndex = parseInt(e.newValue, 10);
-                if (!isNaN(newIndex) && newIndex !== window.currentIndex) {
-                    window.currentIndex = newIndex;
-                    window.renderSlide();
-                }
-            }
-        });
 
         window.saveData = function() {
             localStorage.setItem('kumon_v177_links', JSON.stringify(window.savedLinks));
@@ -480,7 +429,7 @@
             }
         }
 
-        // DADOS REAIS E COMPLETOS
+        // DADOS REAIS
         const slidesData = [
             { id: 'capa', type: 'cover', t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Bem-vindos!", bg: "linear-gradient(135deg, #00AEEF, #004578)" },
             { id: 'origem', type: 'media-left', title: "Toru Kumon: A Origem", icon: "fa-seedling", mediaId: "media_toru", defaultMedia: "https://kumonmalaysia.com/wp-content/uploads/2019/08/1200x630_ToruKumon_1.jpg", items: ["A metodologia Kumon nasceu da imensa dedicação de um pai com a educação de seu filho.", "Foco total e absoluto no desenvolvimento da autonomia.", "Baseado no amor e na consistência inabalável de estudos diários."] },
@@ -504,18 +453,17 @@
 
         window.getMediaTag = function(mediaId, defaultType, defaultMediaUrl) {
             let src = window.savedMedia[mediaId] || defaultMediaUrl;
-            if (!src) return '<div style="color: #94a3b8; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 10px;"></i></div>';
+            if (!src) return `<div style="color: #94a3b8; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 10px;"></i></div>`;
             
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
                 let vid = src.split('v=')[1] || src.split('youtu.be/')[1];
                 if(vid && vid.includes('&')) vid = vid.split('&')[0];
-                return '<iframe src="https://www.youtube.com/embed/' + vid + '?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; border-radius: 14px; background: black;"></iframe>';
+                return `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; background: black;"></iframe>`;
             }
             if (src.endsWith('.mp4') || defaultType === 'video') {
-                return '<video src="' + src + '" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; border-radius: 14px; background: black;"></video>'; 
+                return `<video src="${src}" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; background: black;"></video>`; 
             }
-            
-            return '<img src="' + src + '" alt="Midia" style="width: 100%; height: 100%; object-fit: contain; border-radius: 14px;" onerror="this.onerror=null; this.src=\'https://placehold.co/800x600/e2e8f0/64748b?text=Erro\';" />';
+            return `<img src="${src}" alt="Midia" style="width: 100%; height: 100%; object-fit: contain; background: white;" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e2e8f0/64748b?text=Erro';" />`;
         }
 
         window.renderSlide = function() {
@@ -526,121 +474,173 @@
             const actionBtn = document.getElementById('ar-btn-action');
             let html = '';
 
-            document.body.style.background = data.bg ? data.bg : '#f8fafc';
-            document.getElementById('app-container').style.background = data.bg ? 'transparent' : 'transparent';
+            document.body.style.background = data.bg ? data.bg : '#0f172a';
+            document.getElementById('app-container').style.background = data.bg ? 'transparent' : 'white';
             
-            if (dashName) {
-                dashName.innerHTML = (data.title || data.t || "APRESENTAÇÃO");
-            }
+            if (dashName) dashName.innerHTML = (data.title || data.t || "APRESENTAÇÃO");
 
             let hasAction = false;
-            if (data.mediaId || window.savedMedia[data.mediaId] || data.type === 'media-left' || data.type === 'media-right' || data.type === 'sophia') {
-                hasAction = true;
-            }
-            if (!hasAction) {
-                for (let key in window.savedLinks) {
-                    if (key.startsWith(data.id + "_")) { hasAction = true; break; }
-                }
-            }
-            if (actionBtn) {
-                actionBtn.style.display = hasAction ? 'flex' : 'none';
-            }
+            if (data.mediaId || window.savedMedia[data.mediaId] || data.type === 'media-left' || data.type === 'media-right' || data.type === 'sophia') hasAction = true;
+            if (!hasAction) { for (let key in window.savedLinks) { if (key.startsWith(data.id + "_")) { hasAction = true; break; } } }
+            if (actionBtn) actionBtn.style.display = hasAction ? 'flex' : 'none';
 
             if(data.type === 'cover' || data.type === 'quote' || data.type === 'end') { header.style.display = 'none'; } 
             else {
                 header.style.display = 'flex';
                 document.getElementById('slide-title').innerHTML = data.title;
                 document.getElementById('slide-title').dataset.id = data.id + "_title";
-                document.getElementById('slide-icon').innerHTML = '<i class="fa-solid ' + data.icon + '"></i>';
+                document.getElementById('slide-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
                 document.getElementById('slide-title').style.color = data.bg ? 'white' : 'var(--k-dark)';
             }
 
-            // GERAÇÃO HTML BLINDADA
+            // GERAÇÃO DE HTML (Usando template literals para zero chance de Syntax Error e mantendo VMIN e Layout robusto)
             if (data.type === 'cover') {
-                html = '<div class="layout-col" style="align-items: center; text-align: center;">' +
-                    '<h1 class="txt-mega editable text-white" data-id="' + data.id + '_t" style="text-shadow: 0 10px 20px rgba(0,0,0,0.2);">' + data.t + '</h1>' +
-                    '<div style="width: 120px; height: 8px; background: var(--k-orange); border-radius: 4px; margin: 20px 0; box-shadow: 0 4px 10px rgba(243, 146, 0, 0.4);"></div>' +
-                    '<p class="txt-sub editable text-white" data-id="' + data.id + '_sub" style="margin-bottom: 20px;">' + data.sub + '</p>' +
-                    '<div class="editable" data-id="' + data.id + '_ext" style="margin-top: 40px; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.4); padding: 20px 40px; border-radius: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(5px);">' +
-                        '<p class="txt-body text-white" style="margin:0; font-weight: 800;">' + data.ext + '</p>' +
-                    '</div></div>';
+                html = `
+                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
+                        <h1 class="txt-mega editable text-white" data-id="${data.id}_t" style="text-shadow: 0 1vh 2vh rgba(0,0,0,0.3); color: white;">${data.t}</h1>
+                        <div style="width: 20vw; height: 1vh; background: var(--k-orange); border-radius: 1vh; margin: 2vh 0;"></div>
+                        <p class="txt-sub editable text-white" data-id="${data.id}_sub" style="color: white; margin-bottom: 2vh;">${data.sub}</p>
+                        <div class="editable" data-id="${data.id}_ext" style="margin-top: 4vh; background: rgba(255,255,255,0.15); border: 0.3vh solid rgba(255,255,255,0.3); padding: 2vh 4vw; border-radius: 4vh;">
+                            <p class="txt-body text-white" style="margin:0; font-weight: 800; color: white;">${data.ext}</p>
+                        </div>
+                    </div>`;
             } else if (data.type === 'list') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '"><div style="background: var(--k-light-blue); color: var(--k-blue); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 24px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0;">' + data.items[i] + '</p></div>';
+                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}">
+                        <div style="background: #f0f9ff; color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
+                        <p class="txt-body" style="margin:0;">${data.items[i]}</p>
+                    </div>`;
                 }
-                html = '<div class="layout-col" style="max-width: 1000px; margin: 0 auto; width: 100%;">' + itemsHtml + '</div>';
+                html = `<div class="flex-col-locked" style="width: 100%; max-width: 85vw; margin: auto;">${itemsHtml}</div>`;
             } else if (data.type === 'media-left' || data.type === 'media-right') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '" style="padding: 18px 25px;"><div style="background: var(--k-light-blue); color: var(--k-blue); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px;"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0;">' + data.items[i] + '</p></div>';
+                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}" style="padding: 2vmin;">
+                        <div style="background: #f0f9ff; color: var(--k-blue); width: 4.5vmin; height: 4.5vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
+                        <p class="txt-body" style="margin:0; font-size: 2.2vmin;">${data.items[i]}</p>
+                    </div>`;
                 }
-                const mediaBlock = '<div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1 1 450px; width: 100%; max-width: 100%;"><div class="media-box">' + window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia) + '</div></div>';
-                const listBlock = '<div class="layout-col" style="flex: 1 1 450px;">' + itemsHtml + '</div>';
-                html = '<div class="layout-row">' + (data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock) + '</div>';
+                const mediaBlock = `<div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;"><div class="media-box">${window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia)}</div></div>`;
+                const listBlock = `<div class="flex-col-locked" style="flex: 1.2;">${itemsHtml}</div>`;
+                html = `<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">${data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock}</div>`;
             } else if (data.type === 'quote') {
-                html = '<div class="layout-col" style="align-items: center; text-align: center; max-width: 1100px; margin: 0 auto;"><i class="fa-solid fa-quote-left text-white icon-xl" style="opacity: 0.2; margin-bottom: -20px;"></i><h2 class="txt-title editable" data-id="' + data.id + '_t" style="color: white; font-style: italic; text-transform: none; line-height: 1.3; text-shadow: 0 5px 15px rgba(0,0,0,0.2);">"' + data.text + '"</h2><cite class="txt-sub editable" data-id="' + data.id + '_auth" style="color: white; opacity: 0.9; margin-top: 30px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 10px 30px; border-radius: 30px;">— ' + data.author + '</cite></div>';
+                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 80vw; margin: auto;">
+                    <i class="fa-solid fa-quote-left text-white icon-xl" style="opacity: 0.3;"></i>
+                    <h2 class="txt-title editable" data-id="${data.id}_t" style="color: white; font-style: italic; text-transform: none; line-height: 1.4;">"${data.text}"</h2>
+                    <cite class="txt-sub editable" data-id="${data.id}_auth" style="color: white; opacity: 0.8; margin-top: 3vh;">— ${data.author}</cite>
+                </div>`;
             } else if (data.type === 'grid') {
                 let gridHtml = '';
                 for(let g of data.grid) {
-                    gridHtml += '<div class="grid-card editable" data-id="' + g.id + '"><div style="color: var(--k-orange); background: rgba(243, 146, 0, 0.1); width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;" class="icon-lg"><i class="fa-solid ' + g.i + '"></i></div><h3 class="txt-title" style="margin: 15px 0 15px 0; font-size: clamp(1.4rem, 3.5vw, 2.2rem);">' + g.t + '</h3><p class="txt-body" style="margin:0;">' + g.d + '</p></div>';
+                    gridHtml += `<div class="grid-card editable" data-id="${g.id}">
+                        <div style="color: var(--k-orange);" class="icon-lg"><i class="fa-solid ${g.i}"></i></div>
+                        <h3 class="txt-title" style="margin: 3vh 0 2vh 0; font-size: 3.5vmin;">${g.t}</h3>
+                        <p class="txt-body" style="margin:0; text-align: center;">${g.d}</p>
+                    </div>`;
                 }
-                html = '<div class="grid-cards">' + gridHtml + '</div>';
+                const cols = data.grid.length > 3 ? 'grid-4' : 'grid-2';
+                html = `<div class="grid-locked ${cols} w-full h-full" style="align-items: stretch; padding: 2vh 0;">${gridHtml}</div>`;
             } else if (data.type === 'team') {
                 let groupsHtml = '';
                 for(let gIdx=0; gIdx<data.groups.length; gIdx++) {
                     let grp = data.groups[gIdx];
                     let mHtml = '';
                     for(let mIdx=0; mIdx<grp.m.length; mIdx++) {
-                        let m = grp.m[mIdx];
                         let borderColor = gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)';
-                        mHtml += '<div class="card-box editable" data-id="' + data.id + '_' + gIdx + '_' + mIdx + '" style="border-left-width: 8px; border-left-color: ' + borderColor + '; padding: 20px;"><p class="txt-body" style="margin:0;">' + m + '</p></div>';
+                        mHtml += `<div class="card-box editable" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-width: 1.2vmin; border-left-color: ${borderColor}; padding: 2.5vmin;">
+                            <p class="txt-body" style="margin:0; font-size: 2.6vmin;">${grp.m[mIdx]}</p>
+                        </div>`;
                     }
-                    groupsHtml += '<div class="layout-col" style="justify-content: flex-start;"><div style="background: linear-gradient(135deg, var(--k-dark), var(--k-blue)); color: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1);"><span class="txt-title" style="font-size: clamp(1.4rem, 3vw, 2rem); color: white;">' + grp.t + '</span></div><div class="layout-col" style="gap: 15px; justify-content: flex-start;">' + mHtml + '</div></div>';
+                    groupsHtml += `<div class="flex-col-locked" style="flex: 1; justify-content: flex-start; gap: 2.5vh;">
+                        <div style="background: var(--k-dark); color: white; padding: 2vmin; border-radius: 1.5vmin; text-align: center; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);">
+                            <span class="txt-title" style="font-size: 3.5vmin; color: white;">${grp.t}</span>
+                        </div>
+                        <div class="flex-col-locked" style="gap: 1.5vh; justify-content: flex-start;">${mHtml}</div>
+                    </div>`;
                 }
-                html = '<div class="layout-row" style="align-items: flex-start;">' + groupsHtml + '</div>';
+                html = `<div class="flex-row-locked w-full h-full" style="align-items: flex-start; padding-top: 2vh;">${groupsHtml}</div>`;
             } else if (data.type === 'table') {
                 let rowsHtml = '';
                 for(let i=0; i<data.rows.length; i++) {
                     let r = data.rows[i];
                     let bg = i%2===0 ? '#f8fafc' : 'white';
-                    rowsHtml += '<tr style="background: ' + bg + ';"><td>' + r.mat + '</td><td>' + r.ini + '</td><td style="color: var(--k-orange); font-weight: 900;">' + r.ava + '</td></tr>';
+                    rowsHtml += `<tr style="background: ${bg}; border-bottom: 0.2vmin solid #e2e8f0;">
+                        <td>${r.mat}</td><td>${r.ini}</td><td style="color: var(--k-orange); font-weight: 900;">${r.ava}</td>
+                    </tr>`;
                 }
-                html = '<div class="layout-col" style="justify-content: center; align-items: center; width: 100%;"><div class="table-wrapper"><table style="width: 100%; min-width: 500px;"><thead><tr style="background: var(--k-dark); color: white;"><th>Disciplina</th><th>Orientação Inicial</th><th style="color: var(--k-orange);">Orientação Avançada</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div></div>';
+                html = `<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr style="background: var(--k-dark); color: white;">
+                                    <th style="text-align: left; width: 33%;">Disciplina</th>
+                                    <th style="text-align: center; width: 33%;">Orientação Inicial</th>
+                                    <th style="text-align: center; width: 33%; color: var(--k-orange);">Orientação Avançada</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rowsHtml}</tbody>
+                        </table>
+                    </div>
+                </div>`;
             } else if (data.type === 'stats') {
                 let statsHtml = '';
                 for(let i=0; i<data.stats.length; i++) {
                     let s = data.stats[i];
                     let topColor = i===0 ? 'var(--k-blue)' : 'var(--k-orange)';
-                    statsHtml += '<div class="grid-card editable" data-id="' + data.id + '_s' + i + '" style="border-bottom: none; border-top: 20px solid ' + topColor + '; gap: 20px;"><div class="txt-mega" style="font-size: clamp(5rem, 14vw, 10rem); color: ' + s.color + ';">' + s.val + '</div><div class="txt-title" style="font-size: clamp(1.4rem, 3.5vw, 2.4rem); color: #64748b;">' + s.label + '</div></div>';
+                    statsHtml += `<div class="grid-card editable" data-id="${data.id}_s${i}" style="border-bottom: none; border-top: 2.5vmin solid ${topColor}; justify-content: center; gap: 3vh;">
+                        <div class="txt-mega" style="font-size: 18vmin; color: ${s.color};">${s.val}</div>
+                        <div class="txt-title" style="font-size: 4vmin; color: #94a3b8;">${s.label}</div>
+                    </div>`;
                 }
-                html = '<div class="grid-cards">' + statsHtml + '</div>';
+                html = `<div class="flex-row-locked w-full h-full" style="justify-content: center;">${statsHtml}</div>`;
             } else if (data.type === 'sophia') {
                 let dHtml = '';
                 for(let i=0; i<data.details.length; i++) {
-                    dHtml += '<div style="display: flex; align-items: flex-start; gap: 15px;" class="editable" data-id="' + data.id + '_d' + i + '"><i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 28px; margin-top: 5px;"></i><span class="txt-body">' + data.details[i] + '</span></div>';
+                    dHtml += `<div style="display: flex; align-items: flex-start; gap: 2.5vmin;" class="editable" data-id="${data.id}_d${i}">
+                        <i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 3.5vmin; margin-top: 0.5vmin;"></i>
+                        <span class="txt-body" style="font-size: 3vmin;">${data.details[i]}</span>
+                    </div>`;
                 }
-                html = '<div class="layout-row slide-sophia"><div class="layout-col" style="flex: 1 1 450px; background: white; padding: 40px; border-radius: 25px; border-left: 12px solid var(--k-blue); justify-content: center; box-shadow: 0 15px 40px rgba(0,0,0,0.08);"><div style="background: var(--k-yellow); color: var(--k-dark); padding: 10px 25px; border-radius: 30px; font-weight: 900; align-self: flex-start; box-shadow: 0 5px 15px rgba(255, 183, 3, 0.3);" class="txt-small"><i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO</div><h3 class="txt-mega editable" data-id="' + data.id + '_name" style="margin: 25px 0; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -2px;">' + data.name + '</h3><div class="layout-col" style="gap: 20px; justify-content: flex-start;">' + dHtml + '</div></div><div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1 1 450px; width: 100%; max-width: 100%;"><div class="media-box">' + window.getMediaTag(data.mediaId, 'video', data.defaultMedia) + '</div></div></div>';
+                html = `<div class="flex-row-locked w-full h-full slide-sophia" style="align-items: stretch; padding: 2vh 0;">
+                    <div class="flex-col-locked" style="flex: 1.2; background: #f8fafc; padding: 5vmin; border-radius: 3vmin; border-left: 1.5vmin solid var(--k-blue); justify-content: center;">
+                        <div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);" class="txt-small">
+                            <i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO
+                        </div>
+                        <h3 class="txt-mega editable" data-id="${data.id}_name" style="margin: 3vh 0;">${data.name}</h3>
+                        <div class="flex-col-locked" style="gap: 2.5vh; justify-content: flex-start;">${dHtml}</div>
+                    </div>
+                    <div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;">
+                        <div class="media-box">${window.getMediaTag(data.mediaId, 'video', data.defaultMedia)}</div>
+                    </div>
+                </div>`;
             } else if (data.type === 'end') {
-                html = '<div class="layout-col" style="align-items: center; text-align: center;"><i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 20px;"></i><h2 class="txt-mega editable" data-id="' + data.id + '_t" style="font-size: clamp(3.5rem, 8vw, 7rem);">' + data.title + '</h2><p class="txt-sub editable" data-id="' + data.id + '_sub" style="margin: 20px 0; color: var(--k-dark);">' + data.subtitle + '</p><div class="editable" data-id="' + data.id + '_contact" style="background: var(--k-blue); color: white; padding: 20px 50px; border-radius: 50px; margin-top: 30px; box-shadow: 0 10px 30px rgba(0,174,239,0.3);"><span class="txt-title" style="color: white; text-transform: none; font-size: clamp(1.5rem, 3.5vw, 3rem);">' + data.contact + '</span></div></div>';
+                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
+                    <i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 2vh;"></i>
+                    <h2 class="txt-mega editable" data-id="${data.id}_t" style="font-size: 9vmin;">${data.title}</h2>
+                    <p class="txt-sub editable" data-id="${data.id}_sub" style="margin: 2vh 0; color: var(--k-dark);">${data.subtitle}</p>
+                    <div class="editable" data-id="${data.id}_contact" style="background: var(--k-blue); color: white; padding: 2.5vh 5vw; border-radius: 5vh; margin-top: 3vh; box-shadow: 0 2vmin 4vmin rgba(0,174,239,0.3);">
+                        <span class="txt-title" style="color: white; text-transform: none; font-size: 4vmin;">${data.contact}</span>
+                    </div>
+                </div>`;
             }
 
-            mainContent.innerHTML = '<div class="slide active">' + html + '</div>';
+            mainContent.innerHTML = `<div class="slide active">${html}</div>`;
             mainContent.scrollTop = 0; 
             document.getElementById('progress-bar').style.width = (((window.currentIndex + 1) / slidesData.length) * 100) + '%';
             
             window.setupGestor();
         }
 
-        // V177: AÇÃO REMOTA DE MÍDIA
+        // AÇÃO REMOTA (Controle via Firebase)
         window.triggerRemoteAction = function() {
             if (db) { db.ref("kumon_config/action").set({ type: 'MEDIA_ACTION', ts: Date.now() }); } 
             else { window.executeMediaAction(); }
         };
 
-        // V177: EXECUÇÃO LOCAL APENAS NA TV (O admin não ouve áudio)
+        // EXECUÇÃO LOCAL (TELA DA APRESENTAÇÃO APENAS)
         window.executeMediaAction = function() {
-            if (window.isAdmin) return;
+            if (window.isAdmin) return; // BLOQUEIA O VÍDEO NO CELULAR DO ADMIN
 
             const activeSlide = document.querySelector('.slide.active');
             if (!activeSlide) return;
@@ -665,6 +665,7 @@
             }
         };
 
+        // NAVEGAÇÃO
         window.nextSlide = function() { if (window.currentIndex < slidesData.length - 1) { window.currentIndex++; window.syncSlideState(); window.renderSlide(); } };
         window.prevSlide = function() { if (window.currentIndex > 0) { window.currentIndex--; window.syncSlideState(); window.renderSlide(); } };
 
@@ -686,7 +687,7 @@
             if (e.key === 'f' || e.key === 'F') window.toggleFullScreen();
         });
 
-        // GESTOR MANUAL 
+        // GESTOR MANUAL (Edição de Links via Toque - Sem Gesto Holográfico)
         document.getElementById('logo-btn').addEventListener('click', () => {
             window.adminClicks++;
             if (window.adminClicks === 3) {
@@ -707,14 +708,32 @@
         window.openLinkModal = function(linkId) {
             window.currentEditingId = linkId;
             const currentUrl = (window.savedLinks[linkId]||"").replace(/"/g, '&quot;');
-            overlay.innerHTML = '<div class="admin-modal-content"><h3 style="font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--k-dark); text-align: center;">🔗 Editar Redirecionamento</h3><input type="text" id="link-input" class="admin-input" value="' + currentUrl + '" placeholder="Ex: https://wa.me/..."><div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;"><button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button><button class="admin-btn btn-danger" onclick="delete window.savedLinks[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide();">Remover</button><button class="admin-btn btn-primary" onclick="const v=document.getElementById(\'link-input\').value.trim(); if(v===\'\') delete window.savedLinks[window.currentEditingId]; else window.savedLinks[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide();">Salvar</button></div></div>';
+            overlay.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--k-dark); text-align: center;">🔗 Editar Redirecionamento</h3>
+                    <input type="text" id="link-input" class="admin-input" value="${currentUrl}" placeholder="Ex: https://wa.me/...">
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
+                        <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
+                        <button class="admin-btn btn-danger" onclick="delete window.savedLinks[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide();">Remover</button>
+                        <button class="admin-btn btn-primary" onclick="const v=document.getElementById('link-input').value.trim(); if(v==='') delete window.savedLinks[window.currentEditingId]; else window.savedLinks[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide();">Salvar</button>
+                    </div>
+                </div>`;
             overlay.style.display = 'flex';
         }
 
         window.openMediaModal = function(mediaId) {
             window.currentEditingId = mediaId;
             const currentUrl = (window.savedMedia[mediaId]||"").replace(/"/g, '&quot;');
-            overlay.innerHTML = '<div class="admin-modal-content"><h3 style="font-size: 24px; font-weight: 900; margin-bottom: 10px; color: var(--k-blue); text-align: center;">📸 Enviar ou Alterar Mídia</h3><input type="text" id="media-link-input" class="admin-input" value="' + currentUrl + '" placeholder="Ex: https://youtu.be/... ou arquivo.mp4"><div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;"><button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button><button class="admin-btn btn-danger" onclick="delete window.savedMedia[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide();">Restaurar</button><button class="admin-btn btn-primary" onclick="const v=document.getElementById(\'media-link-input\').value.trim(); if(v===\'\') delete window.savedMedia[window.currentEditingId]; else window.savedMedia[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide();">Salvar</button></div></div>';
+            overlay.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 10px; color: var(--k-blue); text-align: center;">📸 Enviar ou Alterar Mídia</h3>
+                    <input type="text" id="media-link-input" class="admin-input" value="${currentUrl}" placeholder="Ex: https://youtu.be/... ou arquivo.mp4">
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
+                        <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
+                        <button class="admin-btn btn-danger" onclick="delete window.savedMedia[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide();">Restaurar</button>
+                        <button class="admin-btn btn-primary" onclick="const v=document.getElementById('media-link-input').value.trim(); if(v==='') delete window.savedMedia[window.currentEditingId]; else window.savedMedia[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide();">Salvar</button>
+                    </div>
+                </div>`;
             overlay.style.display = 'flex';
         }
 
@@ -736,12 +755,21 @@
         document.getElementById('btn-config-cloudinary').addEventListener('click', () => {
             const cName = window.cloudinaryConfig.cloudName;
             const cPreset = window.cloudinaryConfig.preset;
-            overlay.innerHTML = '<div class="admin-modal-content"><h3 style="font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--k-dark);">⚙️ Configuração Cloudinary</h3><input type="text" id="cfg-cloudname" class="admin-input" value="' + cName + '" placeholder="Cloud Name"><input type="text" id="cfg-preset" class="admin-input" value="' + cPreset + '" placeholder="Upload Preset"><div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;"><button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button><button class="admin-btn btn-primary" onclick="window.cloudinaryConfig.cloudName=document.getElementById(\'cfg-cloudname\').value.trim(); window.cloudinaryConfig.preset=document.getElementById(\'cfg-preset\').value.trim(); window.saveData(); window.closeAdminModal();">Guardar</button></div></div>';
+            overlay.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--k-dark);">⚙️ Configuração Cloudinary</h3>
+                    <input type="text" id="cfg-cloudname" class="admin-input" value="${cName}" placeholder="Cloud Name">
+                    <input type="text" id="cfg-preset" class="admin-input" value="${cPreset}" placeholder="Upload Preset">
+                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
+                        <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
+                        <button class="admin-btn btn-primary" onclick="window.cloudinaryConfig.cloudName=document.getElementById('cfg-cloudname').value.trim(); window.cloudinaryConfig.preset=document.getElementById('cfg-preset').value.trim(); window.saveData(); window.closeAdminModal();">Guardar</button>
+                    </div>
+                </div>`;
             overlay.style.display = 'flex';
         });
 
         // =========================================================================
-        // MÓDULO AR V177: KINETIC MAPPING & TWO-STEP VERIFICATION
+        // MÓDULO AR V177: TWO-STEP VERIFICATION & KINETIC MAPPING
         // =========================================================================
         
         window.triggerARConfirm = function(actionType) {
@@ -759,9 +787,7 @@
         };
 
         window.executeARConfirm = function() {
-            if (window.arPendingAction) {
-                window.arPendingAction();
-            }
+            if (window.arPendingAction) window.arPendingAction();
             window.cancelARConfirm(); 
         };
 
@@ -789,13 +815,13 @@
             async start() {
                 try {
                     if (typeof tf === 'undefined' || typeof poseDetection === 'undefined') {
-                        alert("As bibliotecas de Inteligência Artificial ainda estão a carregar. Verifique a sua internet.");
+                        alert("As bibliotecas de IA estão a carregar. Verifique a internet.");
                         document.getElementById('ar-status-warning').style.display = 'none';
                         return;
                     }
 
                     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                        alert("O seu navegador bloqueou o acesso à câmera. É obrigatório usar um link 'https://'.");
+                        alert("Câmera bloqueada. O link precisa ser https://");
                         document.getElementById('ar-status-warning').style.display = 'none';
                         return;
                     }
