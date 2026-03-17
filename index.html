@@ -144,26 +144,31 @@
             border: none; box-shadow: 0 1vh 2vh rgba(0,174,239,0.3); transition: 0.2s;
         }
 
-        /* MODO GESTOR (*177) */
+        /* ==========================================
+           MODO GESTOR (*177) - DISTINÇÃO CLARA
+           ========================================== */
+           
+        /* 1. Blocos de Texto (Laranja) -> Para LINKS */
         .admin-mode .editable {
             outline: 0.4vmin dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 1vmin;
             transition: background 0.2s;
         }
         .admin-mode .editable:hover { background: rgba(243, 146, 0, 0.1); }
         .admin-mode .editable::before {
-            content: '🔗 LINK'; position: absolute; top: -2.5vmin; left: 0; background: var(--k-orange); color: white;
+            content: '🔗 ADD LINK'; position: absolute; top: -2.5vmin; left: 0; background: var(--k-orange); color: white;
             font-size: 1.5vmin; font-weight: bold; padding: 0.2vmin 1vmin; border-radius: 0.5vmin; z-index: 100;
         }
         
+        /* 2. Áreas de Imagem/Vídeo (Azul) -> Para UPLOAD CLOUDINARY */
         .admin-mode .editable-media { 
-            outline: 0.5vmin dashed var(--k-blue); 
+            outline: 0.6vmin dashed var(--k-blue); 
             cursor: pointer; 
             position: relative;
         }
         .admin-mode .editable-media::after {
-            content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(0,174,239,0.95); color: white; padding: 1.5vmin 3vmin; border-radius: 1vmin; font-size: 2.5vmin; font-weight: bold;
-            pointer-events: none;
+            content: '📸 ENVIAR VÍDEO/FOTO'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,174,239,0.95); color: white; padding: 2vmin 4vmin; border-radius: 1vmin; font-size: 3vmin; font-weight: bold;
+            pointer-events: none; text-align: center; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.5);
         }
         .admin-mode .editable-media > * { pointer-events: none !important; }
 
@@ -175,24 +180,25 @@
         td { padding: 1.5vmin; text-align: center; font-size: 2vmin; font-weight: 600; color: var(--txt-main); border-bottom: 0.2vmin solid #f1f5f9; }
         td:first-child { background: #f8fafc; text-align: left; color: var(--k-dark); font-weight: 800; }
 
-        /* MODAL CUSTOMIZADO (Gestor e Cloudinary) */
+        /* MODAIS CUSTOMIZADOS PROFISSIONAIS */
         #admin-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8);
             z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
         }
         .admin-modal-content {
-            background: white; padding: 4vmin; border-radius: 2vmin; width: 80vw; max-width: 500px;
+            background: white; padding: 4vmin; border-radius: 2vmin; width: 85vw; max-width: 600px;
             box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;
         }
         .admin-input { 
-            width: 100%; padding: 1.5vmin; border: 0.2vmin solid #cbd5e1; border-radius: 1vmin; 
-            font-size: 2vmin; margin-bottom: 2vmin; font-family: 'Poppins', sans-serif; color: #1e293b;
+            width: 100%; padding: 2vmin; border: 0.2vmin solid #cbd5e1; border-radius: 1vmin; 
+            font-size: 2.2vmin; margin-bottom: 2vmin; font-family: 'Poppins', sans-serif; color: #1e293b;
         }
         .admin-input:focus { outline: 0.2vmin solid var(--k-blue); }
-        .admin-btn { padding: 1.5vmin 2.5vmin; border: none; border-radius: 1vmin; font-weight: 700; font-size: 2vmin; cursor: pointer; transition: 0.2s; }
+        .admin-btn { padding: 2vmin 3vmin; border: none; border-radius: 1vmin; font-weight: 700; font-size: 2.2vmin; cursor: pointer; transition: 0.2s; }
         .btn-primary { background: var(--k-blue); color: white; }
         .btn-secondary { background: #e2e8f0; color: var(--txt-main); }
-        .btn-upload { background: var(--k-orange); color: white; width: 100%; margin-bottom: 2vmin;}
+        .btn-upload { background: var(--k-orange); color: white; width: 100%; margin-bottom: 2vmin; font-size: 2.5vmin !important; padding: 2.5vmin !important;}
+        .btn-danger { background: #ef4444; color: white; }
     </style>
 </head>
 <body>
@@ -200,7 +206,7 @@
     <div id="app-container">
         <div class="progress-bar" id="progress-bar"></div>
 
-        <!-- HEADER TOTALMENTE FIXO NO TOPO -->
+        <!-- HEADER -->
         <header class="header-area" id="main-header">
             <div style="display: flex; align-items: center; gap: 3vmin; width: 100%;">
                 <div id="slide-icon" style="width: 7vh; height: 7vh; background: var(--k-blue); color: white; border-radius: 1.5vh; display: flex; align-items: center; justify-content: center;" class="icon-md">
@@ -210,21 +216,20 @@
             </div>
         </header>
 
-        <!-- MAIN RESPEITA O ESPAÇO ABSOLUTO -->
+        <!-- MAIN -->
         <main class="main-area bg-blobs" id="main-content">
             <!-- Os slides são injetados aqui -->
         </main>
 
-        <!-- FOOTER TOTALMENTE FIXO NO FUNDO (Position Absolute) -->
+        <!-- FOOTER -->
         <footer class="footer-area">
             <div style="display: flex; gap: 2vw; align-items: center;">
-                <!-- Usamos IDs p/ anexar eventos via JS de forma segura -->
                 <button id="btn-prev" class="btn-nav"><i class="fa-solid fa-chevron-left"></i></button>
                 <button id="logo-btn" class="btn-logo" title="Gestor: 3 Cliques">K</button>
                 <button id="btn-next" class="btn-nav"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
 
-            <!-- Botões Modo Gestor (Apenas Visíveis no Modo Admin) -->
+            <!-- Botões Modo Gestor -->
             <div id="admin-actions" style="display: none; position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 1vw;">
                 <button id="btn-config-cloudinary" style="display: none; background: var(--k-orange); color: white; border: none; padding: 1.5vh 2vw; border-radius: 3vh; font-weight: 800; font-size: 2vh; cursor: pointer; box-shadow: 0 1vh 2vh rgba(243, 146, 0, 0.4); z-index: 1000;">
                     <i class="fa-solid fa-gear"></i> Cloudinary
@@ -241,34 +246,37 @@
         </footer>
     </div>
 
-    <!-- MODAL DO GESTOR (Isolado no final do DOM) -->
-    <div id="admin-modal-overlay">
-        <!-- O conteúdo do modal é injetado via JS -->
-    </div>
+    <!-- OVERLAY MODAL GESTOR -->
+    <div id="admin-modal-overlay"></div>
 
-    <!-- LÓGICA DO SISTEMA -->
     <script>
-        // ESTADO GLOBAL SEGURO
+        // CONFIGURAÇÕES BASE E PREVENÇÃO DE FALHAS
+        function safeParseJSON(key, defaultObj) {
+            try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : defaultObj;
+            } catch (e) {
+                console.error('Erro na leitura da cache:', e);
+                return defaultObj;
+            }
+        }
+
         let currentIndex = 0;
         let isAdmin = false;
         let adminClicks = 0;
-        let currentEditingMediaId = null;
+        let currentEditingId = null;
+        let currentEditingType = null; // 'link' ou 'media'
 
-        // Recuperar Configurações Iniciais (Local Storage como Base de Segurança)
-        let savedLinks = JSON.parse(localStorage.getItem('kumon_v177_links') || '{}');
-        let savedMedia = JSON.parse(localStorage.getItem('kumon_v177_media') || '{}');
-        let cloudinaryConfig = JSON.parse(localStorage.getItem('kumon_v177_cloud') || '{"cloudName":"", "preset":""}');
-        let firebaseCfg = JSON.parse(localStorage.getItem('kumon_v177_firebase') || '{"apiKey":"", "projectId":""}');
+        let savedLinks = safeParseJSON('kumon_v177_links', {});
+        let savedMedia = safeParseJSON('kumon_v177_media', {});
+        let cloudinaryConfig = safeParseJSON('kumon_v177_cloud', {cloudName: "", preset: ""});
+        let firebaseCfg = safeParseJSON('kumon_v177_firebase', {apiKey: "", projectId: ""});
 
-        // Inicialização do Banco de Dados Firebase (Se configurado)
         let db = null;
         if (firebaseCfg.apiKey && firebaseCfg.projectId) {
             try {
                 firebase.initializeApp(firebaseCfg);
                 db = firebase.firestore();
-                console.log("Firebase ativado.");
-                
-                // Lendo da Nuvem em tempo real
                 db.collection("kumon_config").doc("settings").onSnapshot((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
@@ -277,25 +285,20 @@
                         renderSlide();
                     }
                 });
-            } catch(e) {
-                console.error("Erro na inicialização do Firebase: ", e);
-            }
+            } catch(e) { console.error("Erro Firebase: ", e); }
         }
 
-        // Função para Salvar (Local e Nuvem se ativado)
         function saveData() {
             localStorage.setItem('kumon_v177_links', JSON.stringify(savedLinks));
             localStorage.setItem('kumon_v177_media', JSON.stringify(savedMedia));
-            
             if (db) {
                 db.collection("kumon_config").doc("settings").set({
-                    links: savedLinks,
-                    media: savedMedia
-                }, { merge: true }).catch(e => console.error("Erro ao salvar no Firebase:", e));
+                    links: savedLinks, media: savedMedia
+                }, { merge: true }).catch(e => console.error(e));
             }
         }
 
-        // BANCO DE DADOS: DADOS 100% REAIS (NUNCA ALUCINADOS)
+        // DADOS 100% REAIS (Slides)
         const slidesData = [
             { id: 'capa', type: 'cover', t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Bem-vindos!", bg: "linear-gradient(135deg, #00AEEF, #004578)" },
             { id: 'origem', type: 'list', title: "Toru Kumon: A Origem", icon: "fa-seedling", 
@@ -322,16 +325,16 @@
             { id: 'indicadores', type: 'stats', title: "Nossos Indicadores", icon: "fa-chart-pie", stats: [
                 { label: "Total de Alunos", val: "364", color: "var(--k-blue)" }, { label: "Acima da Série Escolar", val: "197", color: "var(--k-orange)" }
             ]},
-            { id: 'baby', type: 'list', title: "Kumon Baby", icon: "fa-baby-carriage",
+            { id: 'baby', type: 'media-left', title: "Kumon Baby", icon: "fa-baby-carriage", mediaId: "media_baby",
               items: ["Atendimento especial a partir de 6 meses de idade.", "Estímulos focados desde a primeira infância, com foco motor e cognitivo.", "Construção de uma base sólida para o aprendizado futuro.", "Ambiente lúdico, seguro e extremamente acolhedor para os pequenos."] },
             { id: 'frase2', type: 'quote', text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?", author: "Reflexão para o Futuro", bg: "#004578" },
-            { id: 'complemento', type: 'list', title: "Complemento Escolar", icon: "fa-plus",
+            { id: 'complemento', type: 'media-right', title: "Complemento Escolar", icon: "fa-plus", mediaId: "media_escola",
               items: ["Preenche possíveis lacunas deixadas pelo ensino tradicional.", "Fortalece ativamente a base de aprendizado escolar.", "Desenvolve o tão importante hábito de estudo diário.", "Aumenta a confiança, reduzindo a ansiedade e preparando com autonomia."] },
-            { id: 'inclusao', type: 'media-left', title: "TDAH, TDA e Dislexia", icon: "fa-brain", mediaId: "video_tdah", mediaType: "video",
+            { id: 'inclusao', type: 'media-left', title: "TDAH, TDA e Dislexia", icon: "fa-brain", mediaId: "media_tdah", mediaType: "video",
               items: ["Acompanhamento focado no desenvolvimento individual de cada aluno.", "Respeito absoluto ao ritmo e à forma de aprendizado única de cada criança.", "Apoio e direcionamento da nossa psicóloga, Maria Carolina, atuando junto à equipe.", "Material didático que permite o aumento da capacidade de concentração de forma gradativa.", "Parceria e comunicação contínua entre a unidade Kumon, a escola regular e a família."] },
-            { id: 'sophia', type: 'sophia', title: "Aluna Destaque", name: "Sophia Sangolete", mediaId: "video_sophia",
+            { id: 'sophia', type: 'sophia', title: "Aluna Destaque", name: "Sophia Sangolete", mediaId: "media_sophia",
               details: ["Início: 16/06/2016 (Matemática).", "Atual: Matemática Estágio M 111.", "Concluinte das disciplinas de Português e Inglês."] },
-            { id: 'connect', type: 'list', title: "Kumon Connect", icon: "fa-tablet-screen-button",
+            { id: 'connect', type: 'media-right', title: "Kumon Connect", icon: "fa-tablet-screen-button", mediaId: "media_connect",
               items: ["A evolução do nosso método tradicional para o formato digital.", "Estudo diário realizado através de tablets e canetas interativas.", "Correção ágil e acompanhamento da evolução em tempo real.", "Sustentabilidade e inovação educacional na palma da mão."] },
             { id: 'triade', type: 'grid', title: "A Tríade Kumon", icon: "fa-circle-nodes", grid: [
                 { id: 'tr1', t: "A Unidade", d: "Responsável pelo planejamento adequado, orientação individual e motivação constante do aluno.", i: "fa-school" },
@@ -342,10 +345,14 @@
             { id: 'fim', type: 'end', title: "MUITO OBRIGADO!", subtitle: "Unidade Kumon Rio Preto Shopping", contact: "Tel: 3227-0644" }
         ];
 
-        // GESTÃO DE MÍDIA INTELIGENTE
+        // GESTÃO DE MÍDIA RENDERIZADOR
         function getMediaTag(mediaId, defaultType) {
             let src = savedMedia[mediaId];
-            if (!src) return `<div style="color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; opacity: 0.5;"><i class="fa-solid fa-play-circle icon-xl"></i><br><span class="txt-small" style="color: white; margin-top: 1vh;">Área de Mídia (Vídeo/Imagem)</span></div>`;
+            if (!src) return `
+                <div style="color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; opacity: 0.5;">
+                    <i class="fa-solid fa-video icon-xl" style="margin-bottom: 1vh;"></i>
+                    <span class="txt-title" style="color: white; font-size: 3vmin;">Área de Vídeo / Imagem</span>
+                </div>`;
             
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
                 let vid = src.split('v=')[1] || src.split('youtu.be/')[1];
@@ -353,11 +360,10 @@
                 return `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0" allowfullscreen></iframe>`;
             }
             if (src.endsWith('.mp4') || defaultType === 'video') return `<video src="${src}" controls></video>`;
-            
             return `<img src="${src}" alt="Midia" />`;
         }
 
-        // MOTOR DE RENDERIZAÇÃO
+        // MOTOR RENDER
         function renderSlide() {
             const data = slidesData[currentIndex];
             const mainContent = document.getElementById('main-content');
@@ -374,152 +380,50 @@
                 document.getElementById('slide-title').innerHTML = data.title;
                 document.getElementById('slide-title').dataset.id = `${data.id}_title`;
                 document.getElementById('slide-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
-                const isDark = data.bg ? true : false;
-                document.getElementById('slide-title').style.color = isDark ? 'white' : 'var(--k-dark)';
+                document.getElementById('slide-title').style.color = data.bg ? 'white' : 'var(--k-dark)';
             }
 
+            // HTML INJECTIONS
             if (data.type === 'cover') {
-                html = `
-                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                        <h1 class="txt-mega editable text-white" data-id="${data.id}_t" style="text-shadow: 0 1vh 2vh rgba(0,0,0,0.3); color: white;">${data.t}</h1>
-                        <div style="width: 20vw; height: 1vh; background: var(--k-orange); border-radius: 1vh;"></div>
-                        <p class="txt-sub editable text-white" data-id="${data.id}_sub" style="color: white; margin-top: 2vh;">${data.sub}</p>
-                        <div class="editable" data-id="${data.id}_ext" style="margin-top: 4vh; background: rgba(255,255,255,0.15); border: 0.3vh solid rgba(255,255,255,0.3); padding: 2vh 4vw; border-radius: 4vh;">
-                            <p class="txt-body text-white" style="margin:0; color: white; font-weight: 800; font-size: 3vmin;">${data.ext}</p>
-                        </div>
-                    </div>`;
+                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
+                    <h1 class="txt-mega editable text-white" data-id="${data.id}_t" style="text-shadow: 0 1vh 2vh rgba(0,0,0,0.3); color: white;">${data.t}</h1>
+                    <div style="width: 20vw; height: 1vh; background: var(--k-orange); border-radius: 1vh;"></div>
+                    <p class="txt-sub editable text-white" data-id="${data.id}_sub" style="color: white; margin-top: 2vh;">${data.sub}</p>
+                    <div class="editable" data-id="${data.id}_ext" style="margin-top: 4vh; background: rgba(255,255,255,0.15); border: 0.3vh solid rgba(255,255,255,0.3); padding: 2vh 4vw; border-radius: 4vh;">
+                        <p class="txt-body text-white" style="margin:0; color: white; font-weight: 800; font-size: 3vmin;">${data.ext}</p>
+                    </div></div>`;
             } 
             else if (data.type === 'list') {
-                html = `
-                    <div class="flex-col-locked" style="width: 100%; max-width: 85vw; margin: auto;">
-                        ${data.items.map((item, i) => `
-                            <div class="card-box editable" data-id="${data.id}_i${i}" style="border-left-width: 1vmin;">
-                                <div style="background: #f0f9ff; color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                                <p class="txt-body" style="margin:0;">${item}</p>
-                            </div>
-                        `).join('')}
-                    </div>`;
+                html = `<div class="flex-col-locked" style="width: 100%; max-width: 85vw; margin: auto;">
+                    ${data.items.map((item, i) => `<div class="card-box editable" data-id="${data.id}_i${i}" style="border-left-width: 1vmin;"><div style="background: #f0f9ff; color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0;">${item}</p></div>`).join('')}
+                </div>`;
             }
             else if (data.type === 'media-left' || data.type === 'media-right') {
                 const mediaBlock = `<div class="media-box editable-media" data-media-id="${data.mediaId}" style="flex: 1; border: 0.8vmin solid #e2e8f0;">${getMediaTag(data.mediaId, data.mediaType)}</div>`;
-                const listBlock = `<div class="flex-col-locked" style="flex: 1.2;">
-                    ${data.items.map((item, i) => `
-                        <div class="card-box editable" data-id="${data.id}_i${i}" style="padding: 2vmin; border-left-width: 0.8vmin;">
-                            <div style="background: #f0f9ff; color: var(--k-blue); width: 4.5vmin; height: 4.5vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                            <p class="txt-body" style="margin:0; font-size: 2.2vmin;">${item}</p>
-                        </div>
-                    `).join('')}</div>`;
+                const listBlock = `<div class="flex-col-locked" style="flex: 1.2;">${data.items.map((item, i) => `<div class="card-box editable" data-id="${data.id}_i${i}" style="padding: 2vmin; border-left-width: 0.8vmin;"><div style="background: #f0f9ff; color: var(--k-blue); width: 4.5vmin; height: 4.5vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0; font-size: 2.2vmin;">${item}</p></div>`).join('')}</div>`;
                 html = `<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">${data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock}</div>`;
             }
             else if (data.type === 'quote') {
-                html = `
-                    <div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 80vw; margin: auto;">
-                        <i class="fa-solid fa-quote-left text-white icon-xl" style="opacity: 0.3;"></i>
-                        <h2 class="txt-title editable" data-id="${data.id}_t" style="color: white; font-style: italic; text-transform: none; line-height: 1.4;">"${data.text}"</h2>
-                        <cite class="txt-sub editable" data-id="${data.id}_auth" style="color: white; opacity: 0.8; margin-top: 3vh;">— ${data.author}</cite>
-                    </div>`;
+                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 80vw; margin: auto;"><i class="fa-solid fa-quote-left text-white icon-xl" style="opacity: 0.3;"></i><h2 class="txt-title editable" data-id="${data.id}_t" style="color: white; font-style: italic; text-transform: none; line-height: 1.4;">"${data.text}"</h2><cite class="txt-sub editable" data-id="${data.id}_auth" style="color: white; opacity: 0.8; margin-top: 3vh;">— ${data.author}</cite></div>`;
             }
             else if (data.type === 'grid') {
                 const cols = data.grid.length > 3 ? 'grid-4' : 'grid-2';
-                html = `
-                    <div class="grid-locked ${cols} w-full h-full" style="align-items: stretch; padding: 2vh 0;">
-                        ${data.grid.map(g => `
-                            <div class="grid-card editable" data-id="${g.id}" style="justify-content: flex-start; padding-top: 4vh;">
-                                <div style="color: var(--k-orange);" class="icon-lg"><i class="fa-solid ${g.i}"></i></div>
-                                <h3 class="txt-title" style="margin: 3vh 0 2vh 0; font-size: 3.5vmin;">${g.t}</h3>
-                                <p class="txt-body" style="margin:0; text-align: center;">${g.d}</p>
-                            </div>
-                        `).join('')}
-                    </div>`;
+                html = `<div class="grid-locked ${cols} w-full h-full" style="align-items: stretch; padding: 2vh 0;">${data.grid.map(g => `<div class="grid-card editable" data-id="${g.id}" style="justify-content: flex-start; padding-top: 4vh;"><div style="color: var(--k-orange);" class="icon-lg"><i class="fa-solid ${g.i}"></i></div><h3 class="txt-title" style="margin: 3vh 0 2vh 0; font-size: 3.5vmin;">${g.t}</h3><p class="txt-body" style="margin:0; text-align: center;">${g.d}</p></div>`).join('')}</div>`;
             }
             else if (data.type === 'team') {
-                html = `
-                    <div class="flex-row-locked w-full h-full" style="align-items: flex-start; padding-top: 2vh;">
-                        ${data.groups.map((grp, gIdx) => `
-                            <div class="flex-col-locked" style="flex: 1; justify-content: flex-start; gap: 2.5vh;">
-                                <div style="background: var(--k-dark); color: white; padding: 2vmin; border-radius: 1.5vmin; text-align: center; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);">
-                                    <span class="txt-title" style="font-size: 3.5vmin; color: white;">${grp.t}</span>
-                                </div>
-                                <div class="flex-col-locked" style="gap: 1.5vh; justify-content: flex-start;">
-                                    ${grp.m.map((m, mIdx) => `
-                                        <div class="card-box editable" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-width: 1.2vmin; border-left-color: ${gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)'}; padding: 2.5vmin;">
-                                            <p class="txt-body" style="margin:0; font-size: 2.6vmin;">${m}</p>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>`;
+                html = `<div class="flex-row-locked w-full h-full" style="align-items: flex-start; padding-top: 2vh;">${data.groups.map((grp, gIdx) => `<div class="flex-col-locked" style="flex: 1; justify-content: flex-start; gap: 2.5vh;"><div style="background: var(--k-dark); color: white; padding: 2vmin; border-radius: 1.5vmin; text-align: center; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);"><span class="txt-title" style="font-size: 3.5vmin; color: white;">${grp.t}</span></div><div class="flex-col-locked" style="gap: 1.5vh; justify-content: flex-start;">${grp.m.map((m, mIdx) => `<div class="card-box editable" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-width: 1.2vmin; border-left-color: ${gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)'}; padding: 2.5vmin;"><p class="txt-body" style="margin:0; font-size: 2.6vmin;">${m}</p></div>`).join('')}</div></div>`).join('')}</div>`;
             }
             else if (data.type === 'table') {
-                html = `
-                    <div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;">
-                        <div style="width: 100%; max-width: 90vw; background: white; border-radius: 3vmin; overflow: hidden; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.1); border: 0.2vmin solid #e2e8f0;">
-                            <table style="width: 100%; border-collapse: collapse;">
-                                <thead>
-                                    <tr style="background: var(--k-dark); color: white;">
-                                        <th style="padding: 4vmin; font-size: 3.5vmin; text-align: left; width: 33%; font-family: 'Nunito', sans-serif;">Disciplina</th>
-                                        <th style="padding: 4vmin; font-size: 3.5vmin; text-align: center; width: 33%; font-family: 'Nunito', sans-serif;">Orientação Inicial</th>
-                                        <th style="padding: 4vmin; font-size: 3.5vmin; text-align: center; width: 33%; color: var(--k-orange); font-family: 'Nunito', sans-serif;">Orientação Avançada</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${data.rows.map((r, i) => `
-                                        <tr style="border-bottom: 0.2vmin solid #e2e8f0; background: ${i%2===0?'#f8fafc':'white'};">
-                                            <td style="padding: 4vmin; font-size: 3vmin; font-weight: 800; color: var(--k-dark); text-align: left;">${r.mat}</td>
-                                            <td style="padding: 4vmin; font-size: 2.8vmin; font-weight: 600; color: var(--txt-main); text-align: center;">${r.ini}</td>
-                                            <td style="padding: 4vmin; font-size: 3vmin; font-weight: 900; color: var(--k-orange); text-align: center;">${r.ava}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>`;
+                html = `<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;"><div style="width: 100%; max-width: 90vw; background: white; border-radius: 3vmin; overflow: hidden; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.1); border: 0.2vmin solid #e2e8f0;"><table style="width: 100%; border-collapse: collapse;"><thead><tr style="background: var(--k-dark); color: white;"><th style="padding: 4vmin; font-size: 3.5vmin; text-align: left; width: 33%; font-family: 'Nunito', sans-serif;">Disciplina</th><th style="padding: 4vmin; font-size: 3.5vmin; text-align: center; width: 33%; font-family: 'Nunito', sans-serif;">Orientação Inicial</th><th style="padding: 4vmin; font-size: 3.5vmin; text-align: center; width: 33%; color: var(--k-orange); font-family: 'Nunito', sans-serif;">Orientação Avançada</th></tr></thead><tbody>${data.rows.map((r, i) => `<tr style="border-bottom: 0.2vmin solid #e2e8f0; background: ${i%2===0?'#f8fafc':'white'};"><td style="padding: 4vmin; font-size: 3vmin; font-weight: 800; color: var(--k-dark); text-align: left;">${r.mat}</td><td style="padding: 4vmin; font-size: 2.8vmin; font-weight: 600; color: var(--txt-main); text-align: center;">${r.ini}</td><td style="padding: 4vmin; font-size: 3vmin; font-weight: 900; color: var(--k-orange); text-align: center;">${r.ava}</td></tr>`).join('')}</tbody></table></div></div>`;
             }
             else if (data.type === 'stats') {
-                html = `
-                    <div class="flex-row-locked w-full h-full" style="justify-content: center;">
-                        ${data.stats.map((s, i) => `
-                            <div class="grid-card editable" data-id="${data.id}_s${i}" style="border-bottom: none; border-top: 2.5vmin solid ${i===0 ? 'var(--k-blue)' : 'var(--k-orange)'}; justify-content: center; gap: 3vh;">
-                                <div class="txt-mega" style="font-size: 18vmin; color: ${s.color};">${s.val}</div>
-                                <div class="txt-title" style="font-size: 4vmin; color: #94a3b8;">${s.label}</div>
-                            </div>
-                        `).join('')}
-                    </div>`;
+                html = `<div class="flex-row-locked w-full h-full" style="justify-content: center;">${data.stats.map((s, i) => `<div class="grid-card editable" data-id="${data.id}_s${i}" style="border-bottom: none; border-top: 2.5vmin solid ${i===0 ? 'var(--k-blue)' : 'var(--k-orange)'}; justify-content: center; gap: 3vh;"><div class="txt-mega" style="font-size: 18vmin; color: ${s.color};">${s.val}</div><div class="txt-title" style="font-size: 4vmin; color: #94a3b8;">${s.label}</div></div>`).join('')}</div>`;
             }
             else if (data.type === 'sophia') {
-                html = `
-                    <div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">
-                        <div class="flex-col-locked" style="flex: 1.2; background: #f8fafc; padding: 5vmin; border-radius: 3vmin; border-left: 1.5vmin solid var(--k-blue); justify-content: center;">
-                            <div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);" class="txt-small"><i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO</div>
-                            
-                            <h3 class="txt-mega editable" data-id="${data.id}_name" style="margin: 3vh 0;">${data.name}</h3>
-                            
-                            <div class="flex-col-locked" style="gap: 2.5vh; justify-content: flex-start;">
-                                ${data.details.map((d, i) => `
-                                    <div style="display: flex; align-items: flex-start; gap: 2.5vmin;" class="editable" data-id="${data.id}_d${i}">
-                                        <i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 3.5vmin; margin-top: 0.5vmin;"></i>
-                                        <span class="txt-body" style="font-size: 3vmin;">${d}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="media-box editable-media" data-media-id="${data.mediaId}" style="flex: 1; border: 0.8vmin solid #e2e8f0; background: black;">
-                            ${getMediaTag(data.mediaId, 'video')}
-                        </div>
-                    </div>`;
+                html = `<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;"><div class="flex-col-locked" style="flex: 1.2; background: #f8fafc; padding: 5vmin; border-radius: 3vmin; border-left: 1.5vmin solid var(--k-blue); justify-content: center;"><div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);" class="txt-small"><i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO</div><h3 class="txt-mega editable" data-id="${data.id}_name" style="margin: 3vh 0;">${data.name}</h3><div class="flex-col-locked" style="gap: 2.5vh; justify-content: flex-start;">${data.details.map((d, i) => `<div style="display: flex; align-items: flex-start; gap: 2.5vmin;" class="editable" data-id="${data.id}_d${i}"><i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 3.5vmin; margin-top: 0.5vmin;"></i><span class="txt-body" style="font-size: 3vmin;">${d}</span></div>`).join('')}</div></div><div class="media-box editable-media" data-media-id="${data.mediaId}" style="flex: 1; border: 0.8vmin solid #e2e8f0; background: black;">${getMediaTag(data.mediaId, 'video')}</div></div>`;
             }
             else if (data.type === 'end') {
-                html = `
-                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                        <i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 2vh;"></i>
-                        <h2 class="txt-mega editable" data-id="${data.id}_t" style="font-size: 9vmin;">${data.title}</h2>
-                        <p class="txt-sub editable" data-id="${data.id}_sub" style="margin: 2vh 0; color: var(--k-dark);">${data.subtitle}</p>
-                        <div class="editable" data-id="${data.id}_contact" style="background: var(--k-blue); color: white; padding: 2.5vh 5vw; border-radius: 5vh; margin-top: 3vh; box-shadow: 0 2vmin 4vmin rgba(0,174,239,0.3);">
-                            <span class="txt-title" style="color: white; text-transform: none; font-size: 4vmin;">${data.contact}</span>
-                        </div>
-                    </div>`;
+                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;"><i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 2vh;"></i><h2 class="txt-mega editable" data-id="${data.id}_t" style="font-size: 9vmin;">${data.title}</h2><p class="txt-sub editable" data-id="${data.id}_sub" style="margin: 2vh 0; color: var(--k-dark);">${data.subtitle}</p><div class="editable" data-id="${data.id}_contact" style="background: var(--k-blue); color: white; padding: 2.5vh 5vw; border-radius: 5vh; margin-top: 3vh; box-shadow: 0 2vmin 4vmin rgba(0,174,239,0.3);"><span class="txt-title" style="color: white; text-transform: none; font-size: 4vmin;">${data.contact}</span></div></div>`;
             }
 
             mainContent.innerHTML = `<div class="slide active w-full h-full">${html}</div>`;
@@ -527,23 +431,17 @@
             setupGestor();
         }
 
-        // ==========================================
-        // LÓGICA DE EVENTOS (NÃO BLOQUEÁVEL POR C.S.P)
-        // ==========================================
-        
-        // 1. Navegação
-        function nextSlide() { if (currentIndex < slidesData.length - 1) { currentIndex++; renderSlide(); } }
-        function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(); } }
-
-        document.getElementById('btn-next').addEventListener('click', nextSlide);
-        document.getElementById('btn-prev').addEventListener('click', prevSlide);
-
+        // EVENTOS NAVEGAÇÃO
+        document.getElementById('btn-next').addEventListener('click', () => { if (currentIndex < slidesData.length - 1) { currentIndex++; renderSlide(); } });
+        document.getElementById('btn-prev').addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderSlide(); } });
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') nextSlide();
-            if (e.key === 'ArrowLeft' || e.key === 'Backspace') prevSlide();
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { if (currentIndex < slidesData.length - 1) { currentIndex++; renderSlide(); } }
+            if (e.key === 'ArrowLeft' || e.key === 'Backspace') { if (currentIndex > 0) { currentIndex--; renderSlide(); } }
         });
 
-        // 2. Os 3 Cliques do Gestor
+        // ==========================================
+        // GESTOR (MODAIS E LÓGICA V177)
+        // ==========================================
         document.getElementById('logo-btn').addEventListener('click', () => {
             adminClicks++;
             if (adminClicks === 3) {
@@ -553,199 +451,199 @@
                     document.body.classList.add('admin-mode');
                     document.getElementById('btn-config-cloudinary').style.display = 'block';
                     document.getElementById('btn-config-firebase').style.display = 'block';
-                    alert("Painel Gestor Ativado!\n\n1. O Rodapé agora possui botões de Cloudinary e Firebase.\n2. Para salvar na Nuvem em tempo real (GitHub Pages), você precisa preencher o botão azul do Firebase.\n3. O Cloudinary armazena suas fotos/vídeos.");
                     renderSlide(); 
-                } else {
-                    alert("Senha Incorreta.");
-                }
+                } else { alert("Senha Incorreta."); }
                 adminClicks = 0;
             }
         });
 
-        // ==========================================
-        // GESTÃO DE MODAIS E CONFIGURAÇÕES
-        // ==========================================
-        function closeAdminModal() {
-            document.getElementById('admin-modal-overlay').style.display = 'none';
+        // Fechar Modal
+        const overlay = document.getElementById('admin-modal-overlay');
+        function closeAdminModal() { overlay.style.display = 'none'; }
+        overlay.addEventListener('click', function(e) { if (e.target === this) closeAdminModal(); });
+
+        // Modal Cloudinary / Firebase omitidos aqui do escopo da análise rápida de UI pois já estavam funcionais
+        // (O foco do usuário é: como enviar vídeo pro Cloudinary quando clica na imagem/link).
+
+        // MODAL 1: Links Comuns (Textos Laranjas)
+        function openLinkModal(linkId) {
+            currentEditingId = linkId;
+            currentEditingType = 'link';
+            const currentUrl = savedLinks[linkId] || "";
+            
+            overlay.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vmin; color: var(--k-dark); text-align: center;">🔗 Editar Redirecionamento</h3>
+                    <p style="font-size: 1.8vmin; color: #64748b; margin-bottom: 2vmin; text-align: center;">Cole o link que deve abrir quando clicarem neste texto.</p>
+                    <input type="text" id="link-input" class="admin-input" value="${currentUrl.replace(/"/g, '&quot;')}" placeholder="Ex: https://wa.me/...">
+                    <div style="display: flex; gap: 2vmin; justify-content: center; margin-top: 2vmin;">
+                        <button class="admin-btn btn-secondary" id="btn-cancel-modal">Cancelar</button>
+                        <button class="admin-btn btn-danger" id="btn-remove-link">Remover</button>
+                        <button class="admin-btn btn-primary" id="btn-save-link">Salvar Link</button>
+                    </div>
+                </div>
+            `;
+            overlay.style.display = 'flex';
+            
+            document.getElementById('btn-cancel-modal').addEventListener('click', closeAdminModal);
+            document.getElementById('btn-remove-link').addEventListener('click', () => {
+                delete savedLinks[currentEditingId];
+                saveData(); closeAdminModal(); renderSlide();
+            });
+            document.getElementById('btn-save-link').addEventListener('click', () => {
+                const val = document.getElementById('link-input').value.trim();
+                if (val === "") delete savedLinks[currentEditingId]; else savedLinks[currentEditingId] = val;
+                saveData(); closeAdminModal(); renderSlide();
+            });
         }
 
-        document.getElementById('admin-modal-overlay').addEventListener('click', function(e) {
-            if (e.target === this) closeAdminModal();
-        });
-
-        // Modal Cloudinary
-        document.getElementById('btn-config-cloudinary').addEventListener('click', () => {
-            const modal = document.getElementById('admin-modal-overlay');
-            modal.innerHTML = `
-                <div class="admin-modal-content">
-                    <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vmin; color: var(--k-dark);">⚙️ Configuração Cloudinary</h3>
-                    <p style="font-size: 1.8vmin; color: #64748b; margin-bottom: 2vmin;">Insira os dados para ativar o upload direto de imagens e vídeos no seu GitHub.</p>
-                    
-                    <label style="font-weight: bold; font-size: 1.8vmin;">Cloud Name:</label>
-                    <input type="text" id="cfg-cloudname" class="admin-input" value="${cloudinaryConfig.cloudName}" placeholder="Ex: dxkxvxyz">
-                    
-                    <label style="font-weight: bold; font-size: 1.8vmin;">Upload Preset (Unsigned):</label>
-                    <input type="text" id="cfg-preset" class="admin-input" value="${cloudinaryConfig.preset}" placeholder="Ex: my_preset">
-                    
-                    <div style="display: flex; gap: 2vmin; justify-content: flex-end; margin-top: 2vmin;">
-                        <button class="admin-btn btn-secondary" id="btn-cancel-cfg">Cancelar</button>
-                        <button class="admin-btn btn-primary" id="btn-save-cfg">Guardar Configuração</button>
-                    </div>
-                </div>
-            `;
-            modal.style.display = 'flex';
-            
-            document.getElementById('btn-cancel-cfg').addEventListener('click', closeAdminModal);
-            document.getElementById('btn-save-cfg').addEventListener('click', () => {
-                cloudinaryConfig.cloudName = document.getElementById('cfg-cloudname').value.trim();
-                cloudinaryConfig.preset = document.getElementById('cfg-preset').value.trim();
-                localStorage.setItem('kumon_v177_cloud', JSON.stringify(cloudinaryConfig));
-                alert("Configurações do Cloudinary salvas localmente!");
-                closeAdminModal();
-            });
-        });
-
-        // Modal Firebase (Banco de Dados em Tempo Real)
-        document.getElementById('btn-config-firebase').addEventListener('click', () => {
-            const modal = document.getElementById('admin-modal-overlay');
-            modal.innerHTML = `
-                <div class="admin-modal-content">
-                    <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vmin; color: var(--k-dark);">☁️ Configuração Banco de Dados (Firebase)</h3>
-                    <p style="font-size: 1.8vmin; color: #64748b; margin-bottom: 2vmin;">Para que as alterações de links e vídeos sejam salvas no Github Pages para todos, insira o seu projeto do Firebase.</p>
-                    
-                    <label style="font-weight: bold; font-size: 1.8vmin;">API Key:</label>
-                    <input type="text" id="cfg-fb-key" class="admin-input" value="${firebaseCfg.apiKey}" placeholder="Ex: AIzaSyB...">
-                    
-                    <label style="font-weight: bold; font-size: 1.8vmin;">Project ID:</label>
-                    <input type="text" id="cfg-fb-pid" class="admin-input" value="${firebaseCfg.projectId}" placeholder="Ex: meu-projeto-123">
-                    
-                    <div style="display: flex; gap: 2vmin; justify-content: flex-end; margin-top: 2vmin;">
-                        <button class="admin-btn btn-secondary" id="btn-cancel-fb">Cancelar</button>
-                        <button class="admin-btn btn-primary" id="btn-save-fb">Salvar e Conectar</button>
-                    </div>
-                </div>
-            `;
-            modal.style.display = 'flex';
-            
-            document.getElementById('btn-cancel-fb').addEventListener('click', closeAdminModal);
-            document.getElementById('btn-save-fb').addEventListener('click', () => {
-                firebaseCfg.apiKey = document.getElementById('cfg-fb-key').value.trim();
-                firebaseCfg.projectId = document.getElementById('cfg-fb-pid').value.trim();
-                localStorage.setItem('kumon_v177_firebase', JSON.stringify(firebaseCfg));
-                alert("Firebase Configurado! A página será recarregada para aplicar a conexão com a nuvem.");
-                location.reload();
-            });
-        });
-
-        // Modal de Mídia
+        // MODAL 2: Mídia (Vídeos e Fotos - Caixas Azuis)
         function openMediaModal(mediaId) {
-            currentEditingMediaId = mediaId;
+            currentEditingId = mediaId;
+            currentEditingType = 'media';
             const currentUrl = savedMedia[mediaId] || "";
-            const modal = document.getElementById('admin-modal-overlay');
-            const safeUrl = currentUrl.replace(/"/g, '&quot;');
             
-            modal.innerHTML = `
+            overlay.innerHTML = `
                 <div class="admin-modal-content">
-                    <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vmin; color: var(--k-dark); text-align: center;">📸 Gestor de Mídia</h3>
+                    <h3 style="font-size: 3.5vmin; font-weight: 900; margin-bottom: 1vmin; color: var(--k-blue); text-align: center;">📸 Enviar ou Alterar Mídia</h3>
+                    <p style="font-size: 2vmin; color: var(--txt-main); margin-bottom: 3vmin; text-align: center; font-weight: 600;">Deseja exibir um Vídeo ou Foto aqui?</p>
                     
                     <button class="admin-btn btn-upload" id="btn-upload-media">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> Fazer Upload Local (Cloudinary)
+                        <i class="fa-solid fa-cloud-arrow-up"></i> ENVIAR ARQUIVO (Cloudinary)
                     </button>
                     
-                    <div style="text-align: center; margin: 2vmin 0; font-weight: bold; color: #94a3b8; font-size: 1.8vmin;">OU</div>
+                    <div style="text-align: center; margin: 3vmin 0; font-weight: bold; color: #94a3b8; font-size: 2vmin;">OU</div>
                     
-                    <label style="font-weight: bold; font-size: 1.8vmin;">Colar Link Externo (YouTube / MP4 / JPG):</label>
-                    <input type="text" id="media-link-input" class="admin-input" value="${safeUrl}" placeholder="Ex: video_sophia.mp4 ou https://youtu.be/...">
+                    <label style="font-weight: bold; font-size: 1.8vmin; color: var(--k-dark);">Colar Link Externo (YouTube / Link .mp4 / .jpg):</label>
+                    <input type="text" id="media-link-input" class="admin-input" value="${currentUrl.replace(/"/g, '&quot;')}" placeholder="Ex: https://youtu.be/... ou foto.jpg">
                     
                     <div style="display: flex; gap: 2vmin; justify-content: center; margin-top: 2vmin;">
                         <button class="admin-btn btn-secondary" id="btn-cancel-media">Cancelar</button>
-                        <button class="admin-btn btn-primary" id="btn-save-media">Guardar Mídia</button>
+                        <button class="admin-btn btn-danger" id="btn-remove-media">Apagar</button>
+                        <button class="admin-btn btn-primary" id="btn-save-media">Salvar Mídia</button>
                     </div>
                 </div>
             `;
-            modal.style.display = 'flex';
+            overlay.style.display = 'flex';
             
             document.getElementById('btn-cancel-media').addEventListener('click', closeAdminModal);
             
+            document.getElementById('btn-remove-media').addEventListener('click', () => {
+                delete savedMedia[currentEditingId];
+                saveData(); closeAdminModal(); renderSlide();
+            });
+
             document.getElementById('btn-save-media').addEventListener('click', () => {
                 const val = document.getElementById('media-link-input').value.trim();
-                if (val === "") {
-                    delete savedMedia[currentEditingMediaId];
-                } else {
-                    savedMedia[currentEditingMediaId] = val;
-                }
-                saveData();
-                closeAdminModal();
-                renderSlide();
+                if (val === "") delete savedMedia[currentEditingId]; else savedMedia[currentEditingId] = val;
+                saveData(); closeAdminModal(); renderSlide();
             });
 
             document.getElementById('btn-upload-media').addEventListener('click', () => {
-                if(typeof cloudinary === 'undefined') {
-                    alert("Aviso: O motor do Cloudinary não foi carregado. Verifique a internet.");
-                    return;
-                }
-
+                if(typeof cloudinary === 'undefined') { alert("O script do Cloudinary não carregou."); return; }
                 if(!cloudinaryConfig.cloudName || !cloudinaryConfig.preset) {
-                    alert("Configure os dados da sua conta Cloudinary no botão Laranja ⚙️ no rodapé primeiro!");
-                    closeAdminModal();
-                    return;
+                    alert("Por favor, configure o Cloudinary no botão Laranja ⚙️ no rodapé primeiro!");
+                    closeAdminModal(); return;
                 }
                 
                 var myWidget = cloudinary.createUploadWidget({
                     cloudName: cloudinaryConfig.cloudName,
                     uploadPreset: cloudinaryConfig.preset,
                     sources: ['local', 'url', 'camera'],
-                    multiple: false
+                    multiple: false,
+                    clientAllowedFormats: ['image', 'video'], // ACEITA VÍDEO E FOTO ESTATICO EXPLICITAMENTE
+                    maxFileSize: 104857600 // 100MB max limit
                 }, (error, result) => {
                     if (!error && result && result.event === "success") {
-                        savedMedia[currentEditingMediaId] = result.info.secure_url;
-                        saveData();
-                        closeAdminModal();
-                        renderSlide();
+                        savedMedia[currentEditingId] = result.info.secure_url;
+                        saveData(); closeAdminModal(); renderSlide();
                     }
                 });
                 myWidget.open();
             });
         }
 
-        // ASSOCIAÇÃO DE LINKS EDITÁVEIS
+        // BIND DOS CLIQUES (A Mágica da UI do Administrador)
         function setupGestor() {
-            // Textos: Editar Link
+            // Textos normais (Laranja) -> LINK
             document.querySelectorAll('.editable').forEach(el => {
                 const id = el.dataset.id;
                 if (savedLinks[id]) el.classList.add('has-link'); else el.classList.remove('has-link');
                 
-                el.onclick = null; // Limpa eventos duplos
+                el.onclick = null; 
                 el.onclick = (e) => {
                     if (isAdmin) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        const val = prompt(`Definir URL de destino (Link) para o bloco:\n\nDica: Se quiser remover o link, deixe em branco.`, savedLinks[id] || "");
-                        if (val !== null) { 
-                            if (val.trim() === "") delete savedLinks[id]; else savedLinks[id] = val.trim();
-                            saveData(); 
-                            renderSlide(); 
-                        }
+                        e.stopPropagation(); e.preventDefault();
+                        openLinkModal(id);
                     } else if (savedLinks[id]) { 
                         e.stopPropagation(); e.preventDefault(); window.open(savedLinks[id], '_blank'); 
                     }
                 };
             });
 
-            // Mídias: Abrir Modal
+            // Mídias e Blocos de Imagem (Azul) -> FOTO E VÍDEO
             if (isAdmin) {
                 document.querySelectorAll('.editable-media').forEach(box => {
                     box.onclick = null;
                     box.onclick = (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
+                        e.stopPropagation(); e.preventDefault();
                         openMediaModal(box.dataset.mediaId);
                     };
                 });
             }
         }
 
-        // INÍCIO DO SISTEMA
+        // (LÓGICA DE CLOUDINARY E FIREBASE MODAL DE CONFIGURAÇÃO FICA AQUI)
+        document.getElementById('btn-config-cloudinary').addEventListener('click', () => {
+            overlay.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vmin; color: var(--k-dark);">⚙️ Configuração Cloudinary</h3>
+                    <p style="font-size: 1.8vmin; color: #64748b; margin-bottom: 2vmin;">Insira os dados para ativar o upload de imagens e vídeos no seu GitHub.</p>
+                    <label style="font-weight: bold; font-size: 1.8vmin;">Cloud Name:</label>
+                    <input type="text" id="cfg-cloudname" class="admin-input" value="${cloudinaryConfig.cloudName}" placeholder="Ex: dxkxvxyz">
+                    <label style="font-weight: bold; font-size: 1.8vmin;">Upload Preset (Unsigned):</label>
+                    <input type="text" id="cfg-preset" class="admin-input" value="${cloudinaryConfig.preset}" placeholder="Ex: my_preset">
+                    <div style="display: flex; gap: 2vmin; justify-content: flex-end; margin-top: 2vmin;">
+                        <button class="admin-btn btn-secondary" id="btn-cancel-cfg">Cancelar</button>
+                        <button class="admin-btn btn-primary" id="btn-save-cfg">Guardar Configuração</button>
+                    </div>
+                </div>
+            `;
+            overlay.style.display = 'flex';
+            document.getElementById('btn-cancel-cfg').addEventListener('click', closeAdminModal);
+            document.getElementById('btn-save-cfg').addEventListener('click', () => {
+                cloudinaryConfig.cloudName = document.getElementById('cfg-cloudname').value.trim();
+                cloudinaryConfig.preset = document.getElementById('cfg-preset').value.trim();
+                localStorage.setItem('kumon_v177_cloud', JSON.stringify(cloudinaryConfig));
+                alert("Configurações do Cloudinary salvas localmente!"); closeAdminModal();
+            });
+        });
+
+        document.getElementById('btn-config-firebase').addEventListener('click', () => {
+            overlay.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vmin; color: var(--k-dark);">☁️ Configuração Firebase (Database)</h3>
+                    <p style="font-size: 1.8vmin; color: #64748b; margin-bottom: 2vmin;">Para salvar em tempo real no Github Pages, insira o seu projeto.</p>
+                    <label style="font-weight: bold; font-size: 1.8vmin;">API Key:</label>
+                    <input type="text" id="cfg-fb-key" class="admin-input" value="${firebaseCfg.apiKey}" placeholder="Ex: AIzaSyB...">
+                    <label style="font-weight: bold; font-size: 1.8vmin;">Project ID:</label>
+                    <input type="text" id="cfg-fb-pid" class="admin-input" value="${firebaseCfg.projectId}" placeholder="Ex: meu-projeto-123">
+                    <div style="display: flex; gap: 2vmin; justify-content: flex-end; margin-top: 2vmin;">
+                        <button class="admin-btn btn-secondary" id="btn-cancel-fb">Cancelar</button>
+                        <button class="admin-btn btn-primary" id="btn-save-fb">Salvar e Conectar</button>
+                    </div>
+                </div>
+            `;
+            overlay.style.display = 'flex';
+            document.getElementById('btn-cancel-fb').addEventListener('click', closeAdminModal);
+            document.getElementById('btn-save-fb').addEventListener('click', () => {
+                firebaseCfg.apiKey = document.getElementById('cfg-fb-key').value.trim();
+                firebaseCfg.projectId = document.getElementById('cfg-fb-pid').value.trim();
+                localStorage.setItem('kumon_v177_firebase', JSON.stringify(firebaseCfg));
+                alert("Firebase Configurado! A página será recarregada."); location.reload();
+            });
+        });
+
         window.onload = renderSlide;
     </script>
 </body>
