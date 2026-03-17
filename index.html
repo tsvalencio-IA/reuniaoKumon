@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -199,6 +199,7 @@
         .btn-secondary { background: #e2e8f0; color: var(--txt-main); }
         .btn-upload { background: var(--k-orange); color: white; width: 100%; margin-bottom: 2vmin; font-size: 2.5vmin !important; padding: 2.5vmin !important;}
         .btn-danger { background: #ef4444; color: white; }
+        .warning-box { background: #fef2f2; border-left: 0.5vmin solid #ef4444; padding: 1.5vmin; color: #b91c1c; font-size: 1.6vmin; margin-bottom: 2vmin; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -380,7 +381,8 @@
                 document.getElementById('slide-title').innerHTML = data.title;
                 document.getElementById('slide-title').dataset.id = `${data.id}_title`;
                 document.getElementById('slide-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
-                document.getElementById('slide-title').style.color = data.bg ? 'white' : 'var(--k-dark)';
+                const isDark = data.bg ? true : false;
+                document.getElementById('slide-title').style.color = isDark ? 'white' : 'var(--k-dark)';
             }
 
             // HTML INJECTIONS
@@ -508,6 +510,10 @@
                     <h3 style="font-size: 3.5vmin; font-weight: 900; margin-bottom: 1vmin; color: var(--k-blue); text-align: center;">📸 Enviar ou Alterar Mídia</h3>
                     <p style="font-size: 2vmin; color: var(--txt-main); margin-bottom: 3vmin; text-align: center; font-weight: 600;">Deseja exibir um Vídeo ou Foto aqui?</p>
                     
+                    <div class="warning-box">
+                        <i class="fa-solid fa-triangle-exclamation"></i> IMPORTANTE: A sua conta Cloudinary (Upload Preset) DEVE estar configurada como "Unsigned" (Não assinado) nas definições de upload do Cloudinary.
+                    </div>
+
                     <button class="admin-btn btn-upload" id="btn-upload-media">
                         <i class="fa-solid fa-cloud-arrow-up"></i> ENVIAR ARQUIVO (Cloudinary)
                     </button>
@@ -599,6 +605,11 @@
                 <div class="admin-modal-content">
                     <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vmin; color: var(--k-dark);">⚙️ Configuração Cloudinary</h3>
                     <p style="font-size: 1.8vmin; color: #64748b; margin-bottom: 2vmin;">Insira os dados para ativar o upload de imagens e vídeos no seu GitHub.</p>
+                    
+                    <div class="warning-box">
+                        <i class="fa-solid fa-triangle-exclamation"></i> O seu "Upload Preset" DEVE estar configurado como "Unsigned" nas configurações do Cloudinary.
+                    </div>
+
                     <label style="font-weight: bold; font-size: 1.8vmin;">Cloud Name:</label>
                     <input type="text" id="cfg-cloudname" class="admin-input" value="${cloudinaryConfig.cloudName}" placeholder="Ex: dxkxvxyz">
                     <label style="font-weight: bold; font-size: 1.8vmin;">Upload Preset (Unsigned):</label>
