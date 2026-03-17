@@ -27,8 +27,9 @@
         
         body, html {
             width: 100vw; height: 100vh;
-            overflow: hidden; /* Fixo para manter a escala perfeita do telão */
-            background-color: #f8fafc;
+            overflow: hidden; 
+            /* V177: FUNDO DARK PREMIUM DEFINITIVO PARA O TELÃO */
+            background-color: #0b0f19; 
             font-family: 'Poppins', sans-serif;
             touch-action: none;
         }
@@ -39,14 +40,15 @@
             background-color: transparent; position: relative;
         }
 
+        /* Efeitos Neon no Fundo Escuro */
         .bg-blobs::before {
-            content: ''; position: absolute; top: -10vh; right: -5vw; width: 40vmin; height: 40vmin;
-            background: radial-gradient(circle, rgba(0, 174, 239, 0.1) 0%, transparent 70%);
+            content: ''; position: absolute; top: -10vh; right: -5vw; width: 50vmin; height: 50vmin;
+            background: radial-gradient(circle, rgba(0, 174, 239, 0.15) 0%, transparent 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
         .bg-blobs::after {
-            content: ''; position: absolute; bottom: -10vh; left: -5vw; width: 50vmin; height: 50vmin;
-            background: radial-gradient(circle, rgba(243, 146, 0, 0.08) 0%, transparent 70%);
+            content: ''; position: absolute; bottom: -10vh; left: -5vw; width: 60vmin; height: 60vmin;
+            background: radial-gradient(circle, rgba(243, 146, 0, 0.12) 0%, transparent 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
 
@@ -55,25 +57,28 @@
             --k-dark: #004578;
             --k-orange: #F39200;
             --k-yellow: #FFB703;
-            --txt-main: #1e293b;
-            --txt-muted: #64748b;
+            /* V177: Cores de texto ajustadas para máximo contraste no Dark Mode */
+            --txt-main: #f1f5f9; 
+            --txt-muted: #94a3b8;
+            --bg-card: rgba(20, 30, 48, 0.8);
+            --border-card: rgba(255, 255, 255, 0.1);
         }
 
         /* =========================================================================
-           2. TIPOGRAFIA MATEMÁTICA (ESCALA VMIN - PERFEITA PARA TELÃO)
+           2. TIPOGRAFIA MATEMÁTICA (GIGANTE PARA TELÃO - ALTA LEGIBILIDADE)
            ========================================================================= */
-        .txt-mega { font-family: 'Nunito', sans-serif; font-size: 7.5vmin; font-weight: 900; line-height: 1.1; color: var(--k-dark); text-transform: uppercase; letter-spacing: -0.2vmin; }
-        .txt-title { font-family: 'Nunito', sans-serif; font-size: 4.5vmin; font-weight: 900; color: var(--k-dark); text-transform: uppercase; }
-        .txt-sub { font-size: 2.8vmin; font-weight: 700; letter-spacing: 0.2vmin; color: var(--k-blue); text-transform: uppercase; }
-        .txt-body { font-size: 2.2vmin; font-weight: 600; color: var(--txt-main); line-height: 1.4; }
-        .txt-small { font-size: 1.4vmin; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.1vmin; }
+        .txt-mega { font-family: 'Nunito', sans-serif; font-size: 10vmin; font-weight: 900; line-height: 1.1; color: white; text-transform: uppercase; letter-spacing: -0.2vmin; }
+        .txt-title { font-family: 'Nunito', sans-serif; font-size: 6.5vmin; font-weight: 900; color: white; text-transform: uppercase; }
+        .txt-sub { font-size: 4vmin; font-weight: 700; letter-spacing: 0.2vmin; color: var(--k-blue); text-transform: uppercase; }
+        .txt-body { font-size: 3.5vmin; font-weight: 600; color: var(--txt-main); line-height: 1.5; }
+        .txt-small { font-size: 2vmin; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.1vmin; }
         
-        .icon-xl { font-size: 10vmin; }
-        .icon-lg { font-size: 5.5vmin; }
-        .icon-md { font-size: 3.5vmin; }
+        .icon-xl { font-size: 14vmin; }
+        .icon-lg { font-size: 8vmin; }
+        .icon-md { font-size: 5vmin; }
 
         /* =========================================================================
-           3. ÁREAS DA TELA (ALTURA 100VH ESTRITA)
+           3. ÁREAS DA TELA 
            ========================================================================= */
         .progress-bar { 
             position: absolute; top: 0; left: 0; height: 1vh; width: 0%; 
@@ -82,8 +87,8 @@
         
         .header-area {
             height: 12vh; width: 100%; display: flex; align-items: center;
-            padding: 0 5vw; border-bottom: 0.2vh solid rgba(0,0,0,0.05); z-index: 100;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+            padding: 0 5vw; border-bottom: 0.1vh solid rgba(255,255,255,0.05); z-index: 100;
+            background: rgba(11, 15, 25, 0.8); backdrop-filter: blur(10px);
         }
         
         .main-area {
@@ -93,51 +98,53 @@
         
         .footer-area {
             height: 12vh; width: 100%; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 5vw; border-top: 0.2vh solid rgba(0,0,0,0.05); z-index: 100; background: rgba(255,255,255,0.95);
+            padding: 0 5vw; border-top: 0.1vh solid rgba(255,255,255,0.05); z-index: 100; background: rgba(11, 15, 25, 0.95);
         }
 
         /* =========================================================================
-           4. LAYOUTS INTERNOS DOS SLIDES
+           4. LAYOUTS INTERNOS DOS SLIDES (DARK MODE PREMIUM)
            ========================================================================= */
         .slide { display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; }
         .slide.active { display: flex; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
         .flex-row-locked { display: flex; flex-direction: row; gap: 4vw; height: 100%; align-items: center; justify-content: center; }
-        .flex-col-locked { display: flex; flex-direction: column; gap: 2vh; height: 100%; justify-content: center; }
+        .flex-col-locked { display: flex; flex-direction: column; gap: 3vh; height: 100%; justify-content: center; }
         
-        .grid-locked { display: grid; gap: 3vmin; height: 100%; }
+        .grid-locked { display: grid; gap: 4vmin; height: 100%; }
         .grid-2 { grid-template-columns: 1fr 1fr; }
         .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
+        /* CARDS NO MODO ESCURO */
         .card-box {
-            background: white; padding: 2vmin 3vmin; border-radius: 2vmin;
-            box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.05); border-left: 1vmin solid var(--k-blue);
-            display: flex; align-items: center; gap: 3vmin; flex: 1; min-height: 0;
+            background: var(--bg-card); padding: 3vmin 4vmin; border-radius: 2vmin;
+            box-shadow: 0 2vmin 4vmin rgba(0,0,0,0.3); border-left: 1.5vmin solid var(--k-blue); border-top: 0.2vmin solid var(--border-card); border-right: 0.2vmin solid var(--border-card); border-bottom: 0.2vmin solid var(--border-card);
+            display: flex; align-items: center; gap: 4vmin; flex: 1; min-height: 0;
         }
         
         .grid-card {
-            background: white; padding: 3vmin; border-radius: 3vmin;
-            box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.05); border-bottom: 1vmin solid var(--k-orange);
+            background: var(--bg-card); padding: 4vmin; border-radius: 3vmin;
+            box-shadow: 0 2vmin 4vmin rgba(0,0,0,0.3); border-bottom: 1.5vmin solid var(--k-orange); border-top: 0.2vmin solid var(--border-card); border-left: 0.2vmin solid var(--border-card); border-right: 0.2vmin solid var(--border-card);
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex: 1; min-height: 0;
         }
 
-        /* MÍDIA BOX BLINDADA: NUNCA CORTA A IMAGEM */
+        /* MÍDIA BOX (NUNCA CORTA) */
         .media-box {
-            background: white; border-radius: 3vmin; overflow: hidden;
-            width: 100%; height: 100%; border: 0.5vmin solid #e2e8f0; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.1);
+            background: #000; border-radius: 3vmin; overflow: hidden;
+            width: 100%; height: 100%; border: 0.5vmin solid rgba(255,255,255,0.2); box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.5);
             position: relative; display: flex; align-items: center; justify-content: center;
-            padding: 1vmin;
+            padding: 0;
         }
-        .media-box img { width: 100%; height: 100%; object-fit: contain; border-radius: 2vmin; }
-        .media-box video, .media-box iframe { width: 100%; height: 100%; object-fit: contain; border: none; background: black; border-radius: 2vmin; }
+        .media-box img { width: 100%; height: 100%; object-fit: contain; border-radius: 2.5vmin; background: transparent; }
+        .media-box video, .media-box iframe { width: 100%; height: 100%; object-fit: contain; border: none; background: black; border-radius: 2.5vmin; }
 
-        /* TABELA PREMIUM */
-        .table-container { width: 100%; max-width: 90vw; background: white; border-radius: 2vmin; overflow: hidden; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.08); border: 0.2vmin solid #e2e8f0; }
+        /* TABELA PREMIUM ESCURA */
+        .table-container { width: 100%; max-width: 95vw; background: var(--bg-card); border-radius: 3vmin; overflow: hidden; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.3); border: 0.2vmin solid var(--border-card); }
         table { width: 100%; border-collapse: collapse; }
-        th { background: var(--k-dark); color: white; padding: 2.5vmin; font-size: 2.5vmin; text-align: center; }
-        td { padding: 2.5vmin; text-align: center; font-size: 2.2vmin; font-weight: 600; color: var(--txt-main); border-bottom: 0.2vmin solid #f1f5f9; }
-        td:first-child { background: #f8fafc; text-align: left; color: var(--k-dark); font-weight: 800; }
+        th { background: rgba(0, 174, 239, 0.2); color: var(--k-blue); padding: 4vmin; font-size: 3.5vmin; font-family: 'Nunito', sans-serif; text-transform: uppercase; }
+        td { padding: 4vmin; font-size: 3vmin; font-weight: 600; color: var(--txt-main); border-bottom: 0.2vmin solid rgba(255,255,255,0.05); }
+        td:first-child { background: rgba(255,255,255,0.02); text-align: left; color: white; font-weight: 800; }
+        tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
 
         /* =========================================================================
            5. BOTÕES DO RODAPÉ
@@ -145,9 +152,9 @@
         .nav-controls { display: flex; gap: 2vw; align-items: center; }
 
         .btn-nav {
-            height: 8vh; width: 8vh; border-radius: 50%; background: white; color: var(--k-dark);
+            height: 8vh; width: 8vh; border-radius: 50%; background: rgba(255,255,255,0.1); color: white;
             display: flex; align-items: center; justify-content: center; font-size: 3vh; 
-            cursor: pointer; border: 0.2vh solid #e2e8f0; transition: 0.2s; box-shadow: 0 0.5vh 1.5vh rgba(0,0,0,0.05);
+            cursor: pointer; border: 0.2vh solid rgba(255,255,255,0.2); transition: 0.2s;
         }
         .btn-nav:active { transform: scale(0.9); }
         
@@ -158,45 +165,45 @@
         }
 
         .btn-extras {
-            background: none; border: none; color: var(--k-dark); cursor: pointer;
-            font-size: 4vh; margin-right: 2vw; opacity: 0.5; transition: 0.3s;
+            background: none; border: none; color: var(--txt-muted); cursor: pointer;
+            font-size: 4vh; margin-right: 1.5vw; transition: 0.3s;
         }
-        .btn-extras:hover, .btn-extras.active-ar { opacity: 1; color: var(--k-blue); }
+        .btn-extras:hover, .btn-extras.active-ar { color: var(--k-blue); }
         .btn-extras.active-ar { color: #00ff66; text-shadow: 0 0 1vh #00ff66; }
 
-        /* MODO CINEMA: ESCONDE BOTÕES EM TELA CHEIA */
+        /* MODO CINEMA: ESCONDE BOTÕES EM TELA CHEIA NA TV */
         :fullscreen .nav-controls, :fullscreen .btn-extras { display: none !important; }
         :-webkit-full-screen .nav-controls, :-webkit-full-screen .btn-extras { display: none !important; }
         :-ms-fullscreen .nav-controls, :-ms-fullscreen .btn-extras { display: none !important; }
 
         /* =========================================================================
-           6. MODO GESTOR TÁTIL
+           6. MODO GESTOR TÁTIL E MODAIS
            ========================================================================= */
-        .admin-mode .editable { outline: 0.4vmin dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 1vmin; transition: background 0.2s; }
-        .admin-mode .editable:hover { background: rgba(243, 146, 0, 0.1); }
-        .admin-mode .editable::before { content: '🔗 LINK'; position: absolute; top: -2.5vmin; left: 0; background: var(--k-orange); color: white; font-size: 1.5vmin; font-weight: bold; padding: 0.2vmin 1vmin; border-radius: 0.5vmin; z-index: 100; }
+        .admin-mode .editable { outline: 0.4vmin dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 1vmin; }
+        .admin-mode .editable:hover { background: rgba(243, 146, 0, 0.2); }
+        .admin-mode .editable::before { content: '🔗 LINK'; position: absolute; top: -3vmin; left: 0; background: var(--k-orange); color: white; font-size: 2vmin; font-weight: bold; padding: 0.5vmin 1.5vmin; border-radius: 0.5vmin; z-index: 100; }
         .admin-mode .editable-media { outline: 0.5vmin dashed var(--k-blue); cursor: pointer; position: relative; }
-        .admin-mode .editable-media::after { content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,174,239,0.95); color: white; padding: 1.5vmin 3vmin; border-radius: 1vmin; font-size: 2.5vmin; font-weight: bold; pointer-events: none; }
-        .has-link:not(.editable) { cursor: pointer; border-bottom: 0.3vmin solid var(--k-blue); }
+        .admin-mode .editable-media::after { content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,174,239,0.95); color: white; padding: 2vmin 4vmin; border-radius: 1vmin; font-size: 3vmin; font-weight: bold; pointer-events: none; }
+        .has-link:not(.editable) { cursor: pointer; border-bottom: 0.4vmin solid var(--k-blue); }
 
         #admin-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8);
-            z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9);
+            z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px);
         }
         .admin-modal-content {
-            background: white; padding: 4vmin; border-radius: 2vmin; width: 80vw; max-width: 600px;
-            box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;
+            background: #1e293b; padding: 5vmin; border-radius: 3vmin; width: 85vw; max-width: 600px;
+            box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
         }
-        .admin-input { width: 100%; padding: 1.5vmin; border: 0.2vmin solid #cbd5e1; border-radius: 1vmin; font-size: 2vmin; margin-bottom: 2vmin; font-family: 'Poppins', sans-serif; color: #1e293b; }
-        .admin-btn { padding: 1.5vmin 2.5vmin; border: none; border-radius: 1vmin; font-weight: 700; font-size: 2vmin; cursor: pointer; transition: 0.2s; }
+        .admin-input { width: 100%; padding: 2vmin; border: 0.2vmin solid #334155; border-radius: 1vmin; font-size: 2.5vmin; margin-bottom: 3vmin; font-family: 'Poppins', sans-serif; background: #0f172a; color: white; }
+        .admin-btn { padding: 2vmin 3.5vmin; border: none; border-radius: 1vmin; font-weight: 700; font-size: 2.5vmin; cursor: pointer; transition: 0.2s; }
         .btn-primary { background: var(--k-blue); color: white; }
-        .btn-secondary { background: #e2e8f0; color: var(--txt-main); }
+        .btn-secondary { background: #334155; color: white; }
         .btn-danger { background: #ef4444; color: white; }
         
         .status-warning {
             position: fixed; top: 2vh; right: 2vw; background: #22c55e; color: white;
-            padding: 1vmin 2vmin; border-radius: 1vmin; font-size: 1.5vmin; font-weight: bold;
-            z-index: 9999; display: none; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.2);
+            padding: 1.5vmin 3vmin; border-radius: 1vmin; font-size: 2vmin; font-weight: bold;
+            z-index: 9999; display: none; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.5);
         }
         .fade-out { animation: fadeOut 5s forwards; animation-delay: 3s; }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; display: none; } }
@@ -204,8 +211,7 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* =========================================================================
-           7. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD)
-           - Física de 2 cliques e botões separados para precisão
+           8. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD)
            ========================================================================= */
         #ar-dashboard {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -215,8 +221,6 @@
         
         #ar-main-buttons { display: flex; flex-direction: column; width: 90vw; gap: 4vh; align-items: center; margin-top: 8vh; }
         .ar-row-buttons { display: flex; width: 100%; justify-content: space-between; height: 25vh; }
-        
-        /* Botões de confirmação ocupam posições extremas verticais para evitar clique acidental */
         #ar-confirm-buttons { display: none; flex-direction: column; width: 90vw; height: 60vh; justify-content: space-between; align-items: center; margin-top: 5vh; }
 
         .ar-control-btn {
@@ -224,24 +228,18 @@
             border-radius: 4vmin; color: white; font-size: 4.5vmin; font-weight: 900;
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vmin;
             transition: 0.3s; box-shadow: 0 0 4vmin rgba(0, 174, 239, 0.1) inset; cursor: none;
-            width: 40vw; /* Botões laterais */
+            width: 40vw; 
         }
         .ar-control-btn i { font-size: 9vmin; color: var(--k-blue); }
         .ar-control-btn.orange { border-color: rgba(243, 146, 0, 0.4); box-shadow: 0 0 4vmin rgba(243, 146, 0, 0.1) inset; }
         .ar-control-btn.orange i { color: var(--k-orange); }
         
-        /* Botões de Confirmação (Largos e Centrais) */
         .ar-control-btn.green { border-color: rgba(0, 255, 102, 0.5); box-shadow: 0 0 5vmin rgba(0, 255, 102, 0.2) inset; width: 85vw; height: 22vh; flex-direction: row; gap: 4vw;}
         .ar-control-btn.green i { color: #00ff66; }
         .ar-control-btn.red { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 5vmin rgba(239, 68, 68, 0.2) inset; width: 85vw; height: 20vh; flex-direction: row; gap: 4vw;}
         .ar-control-btn.red i { color: #ef4444; }
 
         #ar-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998; }
-
-        @media (orientation: portrait) {
-            .ar-row-buttons { height: 20vh; }
-            .ar-control-btn { font-size: 5vmin; }
-        }
     </style>
 </head>
 <body>
@@ -251,22 +249,20 @@
         <div id="firebase-warning" class="status-warning fade-out"><i class="fa-solid fa-cloud-check"></i> BD Sincronizado</div>
         <div id="ar-status-warning" class="status-warning pulse"><i class="fa-solid fa-camera"></i> A Carregar IA Holográfica...</div>
 
-        <!-- CÂMERA ESCONDIDA E MUTADA (Para evitar bloqueios de autoplay do navegador no telemóvel) -->
+        <!-- CÂMERA ESCONDIDA E MUTADA -->
         <video id="ar-video" playsinline autoplay muted style="display: none;"></video>
-        
         <canvas id="ar-canvas"></canvas>
 
         <!-- PAINEL DE CONTROLE AR EXCLUSIVO DO ADMIN -->
         <div id="ar-dashboard">
-            <div style="color: #00AEEF; font-size: 4vmin; font-weight: 900; letter-spacing: 0.3vmin; text-align: center;">
+            <div style="color: #00AEEF; font-size: 4.5vmin; font-weight: 900; letter-spacing: 0.3vmin; text-align: center;">
                 PAINEL HOLOGRÁFICO
             </div>
-            <div style="color: white; font-size: 2.5vmin; font-weight: 600; margin-top: 1vh; text-align: center;">
+            <div style="color: white; font-size: 3vmin; font-weight: 600; margin-top: 1vh; text-align: center;">
                 EXIBINDO NO TELÃO:<br>
-                <span id="ar-dash-slide-name" style="color: #00ff66; font-size: 5vmin; text-shadow: 0 0 2vmin #00ff66;">A CARREGAR...</span>
+                <span id="ar-dash-slide-name" style="color: #00ff66; font-size: 6vmin; text-shadow: 0 0 2vmin #00ff66;">A CARREGAR...</span>
             </div>
 
-            <!-- Botões Principais (Passo 1) -->
             <div id="ar-main-buttons">
                 <div class="ar-row-buttons">
                     <button id="ar-btn-prev" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('prev')">
@@ -277,24 +273,23 @@
                     </button>
                 </div>
                 
-                <button id="ar-btn-action" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('action')" style="display: none; width: 90vw; height: 18vh; flex-direction: row; gap: 4vw; border-color: rgba(0, 255, 102, 0.4); box-shadow: 0 0 4vmin rgba(0, 255, 102, 0.15) inset;">
+                <button id="ar-btn-action" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('action')" style="display: none; width: 90vw; height: 20vh; flex-direction: row; gap: 4vw; border-color: rgba(0, 255, 102, 0.4); box-shadow: 0 0 4vmin rgba(0, 255, 102, 0.15) inset;">
                     <i class="fa-solid fa-play" style="color: #00ff66;"></i> 
-                    <span style="color: #00ff66;">PLAY / ABRIR MÍDIA</span>
+                    <span style="color: #00ff66;">PLAY / ABRIR</span>
                 </button>
             </div>
 
-            <!-- Botões de Confirmação (Passo 2 - Extremos superior e inferior para precisão) -->
             <div id="ar-confirm-buttons">
                 <button id="ar-btn-ok" class="ar-control-btn green admin-btn-target" onclick="window.executeARConfirm()">
                     <i class="fa-solid fa-check"></i> CONFIRMAR AÇÃO
                 </button>
-                <div style="color: white; font-size: 3vmin; font-weight: bold; text-align: center;">MANTENHA A MÃO NO BOTÃO VERDE</div>
+                <div style="color: var(--txt-muted); font-size: 3.5vmin; font-weight: bold; text-align: center;">MANTENHA A MÃO NO BOTÃO VERDE</div>
                 <button id="ar-btn-cancel" class="ar-control-btn red admin-btn-target" onclick="window.cancelARConfirm()">
                     <i class="fa-solid fa-xmark"></i> CANCELAR
                 </button>
             </div>
             
-            <button id="btn-ar-close" class="admin-btn-target" onclick="window.ARController.toggle()" style="position: absolute; bottom: 3vh; background: #ef4444; color: white; border: none; padding: 2vmin 4vmin; border-radius: 5vmin; font-size: 2.5vmin; font-weight: bold; cursor: pointer; z-index: 9991; box-shadow: 0 1vmin 2vmin rgba(239, 68, 68, 0.3);">
+            <button id="btn-ar-close" class="admin-btn-target" onclick="window.ARController.toggle()" style="position: absolute; bottom: 3vh; background: #ef4444; color: white; border: none; padding: 2vmin 4vmin; border-radius: 5vmin; font-size: 3vmin; font-weight: bold; cursor: pointer; z-index: 9991; box-shadow: 0 1vmin 2vmin rgba(239, 68, 68, 0.3);">
                 <i class="fa-solid fa-power-off"></i> Desligar Painel AR
             </button>
         </div>
@@ -302,7 +297,7 @@
         <!-- CONTEÚDO PRINCIPAL DA APRESENTAÇÃO (TELÃO) -->
         <header class="header-area" id="main-header">
             <div style="display: flex; align-items: center; gap: 3vmin; width: 100%;">
-                <div id="slide-icon" style="width: 8vmin; height: 8vmin; background: linear-gradient(135deg, var(--k-blue), var(--k-dark)); color: white; border-radius: 2vmin; display: flex; align-items: center; justify-content: center; font-size: 4vmin; flex-shrink: 0; box-shadow: 0 0.5vmin 1.5vmin rgba(0,174,239,0.3);">
+                <div id="slide-icon" style="width: 9vmin; height: 9vmin; background: linear-gradient(135deg, var(--k-blue), var(--k-dark)); color: white; border-radius: 2vmin; display: flex; align-items: center; justify-content: center; font-size: 4.5vmin; flex-shrink: 0; box-shadow: 0 0.5vmin 1.5vmin rgba(0,174,239,0.3);">
                     <i class="fa-solid fa-star"></i>
                 </div>
                 <h2 id="slide-title" class="txt-title" data-id="global_title">Título Padrão</h2>
@@ -322,10 +317,10 @@
 
             <!-- CONTAINER PARA BOTÕES ADMIN OCULTOS -->
             <div id="admin-actions" style="display: none; position: absolute; left: 50%; transform: translateX(-50%); gap: 2vw; z-index: 1000; align-items: center;">
-                <button id="btn-ar-toggle" onclick="window.ARController.toggle()" class="btn-extras" style="background: var(--k-dark); color: #00ff66; border: 0.3vmin solid #00ff66; padding: 1.5vmin 3vmin; border-radius: 4vmin; font-weight: 800; font-size: 2vmin; cursor: pointer; box-shadow: 0 0.5vmin 1.5vmin rgba(0, 255, 102, 0.2); opacity: 1;" title="Abrir Painel AR">
+                <button id="btn-ar-toggle" onclick="window.ARController.toggle()" class="btn-extras" style="background: var(--k-dark); color: #00ff66; border: 0.3vmin solid #00ff66; padding: 1.5vmin 3vmin; border-radius: 4vmin; font-weight: 800; font-size: 2.5vmin; cursor: pointer; box-shadow: 0 0.5vmin 1.5vmin rgba(0, 255, 102, 0.2); opacity: 1;" title="Abrir Painel AR">
                     <i class="fa-solid fa-hand-sparkles"></i> MODO APRESENTADOR (AR)
                 </button>
-                <button id="btn-config-cloudinary" style="background: var(--k-orange); color: white; border: none; padding: 1.5vmin 3vmin; border-radius: 4vmin; font-weight: 800; font-size: 2vmin; cursor: pointer; box-shadow: 0 0.5vmin 1.5vmin rgba(243, 146, 0, 0.4);">
+                <button id="btn-config-cloudinary" style="background: var(--k-orange); color: white; border: none; padding: 1.5vmin 3vmin; border-radius: 4vmin; font-weight: 800; font-size: 2.5vmin; cursor: pointer; box-shadow: 0 0.5vmin 1.5vmin rgba(243, 146, 0, 0.4);">
                     <i class="fa-solid fa-gear"></i> CONFIGURAÇÕES
                 </button>
             </div>
@@ -335,7 +330,7 @@
                     <i class="fa-solid fa-expand"></i>
                 </button>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <span class="txt-small" style="color: var(--k-dark);">Reunião 2026</span>
+                    <span class="txt-small" style="color: white;">Reunião 2026</span>
                     <span class="txt-small" style="text-transform: none; color: var(--txt-muted);">powered by <strong style="color: var(--k-blue);">thIAguinho Soluções</strong></span>
                 </div>
             </div>
@@ -346,7 +341,7 @@
 
     <script>
         // =====================================================================
-        // CHAVES DO FIREBASE (Sincronização Ativa)
+        // CHAVES DO FIREBASE
         // =====================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCaFH2nn5VD9eTAdCcdkduDxfg8BbU-dM8",
@@ -374,6 +369,9 @@
         window.savedMedia = safeParseJSON('kumon_v177_media', {});
         window.cloudinaryConfig = safeParseJSON('kumon_v177_cloud', {cloudName: "", preset: ""});
         
+        window.lastRenderedIndex = -1;
+        window.lastSettingsHash = "";
+
         let db = null;
         try {
             firebase.initializeApp(window.firebaseCfg);
@@ -382,14 +380,21 @@
             db.ref("kumon_config/settings").on("value", (snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    window.savedLinks = data.links || window.savedLinks;
-                    window.savedMedia = data.media || window.savedMedia;
+                    const newHash = JSON.stringify(data.links) + JSON.stringify(data.media);
+                    
+                    window.savedLinks = data.links || {};
+                    window.savedMedia = data.media || {};
                     window.cloudinaryConfig = data.cloudinary || window.cloudinaryConfig;
                     
                     localStorage.setItem('kumon_v177_links', JSON.stringify(window.savedLinks));
                     localStorage.setItem('kumon_v177_media', JSON.stringify(window.savedMedia));
                     localStorage.setItem('kumon_v177_cloud', JSON.stringify(window.cloudinaryConfig));
-                    window.renderSlide(true); // Força render na atualização de config
+                    
+                    // V177: SÓ RE-RENDERIZA SE OS LINKS/MÍDIAS MUDAREM DE VERDADE (Evita o vídeo piscar)
+                    if (window.lastSettingsHash !== newHash) {
+                        window.lastSettingsHash = newHash;
+                        window.renderSlide(true);
+                    }
                 }
             });
 
@@ -425,16 +430,6 @@
             if (db) db.ref("kumon_config/state").set({ currentSlide: window.currentIndex });
         };
 
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'kumon_v177_slide') {
-                const newIndex = parseInt(e.newValue, 10);
-                if (!isNaN(newIndex) && newIndex !== window.currentIndex) {
-                    window.currentIndex = newIndex;
-                    window.renderSlide();
-                }
-            }
-        });
-
         window.saveData = function() {
             localStorage.setItem('kumon_v177_links', JSON.stringify(window.savedLinks));
             localStorage.setItem('kumon_v177_media', JSON.stringify(window.savedMedia));
@@ -444,11 +439,10 @@
             }
         }
 
-        // DADOS REAIS
         const slidesData = [
-            { id: 'capa', type: 'cover', t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Bem-vindos!", bg: "linear-gradient(135deg, #00AEEF, #004578)" },
+            { id: 'capa', type: 'cover', t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Bem-vindos!" },
             { id: 'origem', type: 'media-left', title: "Toru Kumon: A Origem", icon: "fa-seedling", mediaId: "media_toru", defaultMedia: "https://kumonmalaysia.com/wp-content/uploads/2019/08/1200x630_ToruKumon_1.jpg", items: ["A metodologia Kumon nasceu da imensa dedicação de um pai com a educação de seu filho.", "Foco total e absoluto no desenvolvimento da autonomia.", "Baseado no amor e na consistência inabalável de estudos diários."] },
-            { id: 'frase1', type: 'quote', text: "Obter máximo resultado com o mínimo de esforço. Produzir os melhores resultados no menor espaço de tempo é possível.", author: "Filosofia Toru Kumon", bg: "#F39200" },
+            { id: 'frase1', type: 'quote', text: "Obter máximo resultado com o mínimo de esforço. Produzir os melhores resultados no menor espaço de tempo é possível.", author: "Filosofia Toru Kumon" },
             { id: 'oque', type: 'grid', title: "O que é o Kumon?", icon: "fa-circle-question", grid: [{ id: 'g1', t: "AUTODIDATISMO", d: "Capacidade de aprender por si, buscando o conhecimento de forma ativa.", i: "fa-brain" }, { id: 'g2', t: "MATERIAL DIDÁTICO", d: "Estruturado e auto-instrutivo, evoluindo de forma suave e lógica.", i: "fa-book-open" }, { id: 'g3', t: "INDIVIDUALIZAÇÃO", d: "Ensino focado no ritmo e na capacidade única de cada aluno.", i: "fa-bullseye" }, { id: 'g4', t: "ORIENTADOR", d: "Guia o aluno a descobrir seu próprio potencial máximo.", i: "fa-compass" }] },
             { id: 'objetivos', type: 'media-right', title: "Objetivos do Kumon", icon: "fa-rocket", mediaId: "media_objetivos", defaultMedia: "https://images.presentationgo.com/2025/07/female-teacher-with-students-classroom.jpg", items: ["Ressignificar o sentido da educação para crianças e jovens.", "Promover mudança de vida e transformação social pós-pandemia.", "Garantir uma organização de estudos com sequência lógica.", "Respeitar o ritmo de cada aluno, construindo a base para a vida."] },
             { id: 'historia', type: 'media-left', title: "Nossa História", icon: "fa-landmark", mediaId: "media_historia", defaultMedia: "https://www.prometheanworld.com/wp-content/uploads/2021/12/GettyImages-633709117-scaled.jpg", items: ["Início em 1993 com a pioneira Fernanda Musolino.", "Única unidade Clube Ouro de São José do Rio Preto desde 1998.", "Atingimos a marca incrível de 450 alunos durante a pandemia.", "Liderada por Maria Flavia Musolino desde 2013. Excelência na Matriz Kumon."] },
@@ -456,7 +450,7 @@
             { id: 'tabela', type: 'table', title: "Estrutura Pedagógica", icon: "fa-sitemap", rows: [{ mat: "Português", ini: "Estágios 7A ao CII", ava: "Estágios DI ao L" }, { mat: "Matemática", ini: "Estágios 6A ao A", ava: "Estágios B ao F | G ao O" }, { mat: "Inglês", ini: "Estágios 7A ao C", ava: "Estágios D ao O" }] },
             { id: 'indicadores', type: 'stats', title: "Nossos Indicadores", icon: "fa-chart-pie", stats: [{ label: "Total de Alunos", val: "364", color: "var(--k-blue)" }, { label: "Acima da Série Escolar", val: "197", color: "var(--k-orange)" }] },
             { id: 'baby', type: 'media-left', title: "Kumon Baby", icon: "fa-baby-carriage", mediaId: "media_baby", defaultMedia: "https://www.habausa.com/cdn/shop/articles/blog-header-wooden-toys_d8ed1971-6c42-417d-9flc-224753fa0le4_1400x.jpg?v=1770859469", items: ["Atendimento especial a partir de 6 meses de idade.", "Estímulos focados desde a primeira infância, com foco motor e cognitivo.", "Construção de uma base sólida para o aprendizado futuro.", "Ambiente lúdico, seguro e extremamente acolhedor para os pequenos."] },
-            { id: 'frase2', type: 'quote', text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?", author: "Reflexão para o Futuro", bg: "#004578" },
+            { id: 'frase2', type: 'quote', text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?", author: "Reflexão para o Futuro" },
             { id: 'complemento', type: 'media-right', title: "Complemento Escolar", icon: "fa-plus", mediaId: "media_escola", defaultMedia: "https://img.freepik.com/premium-photo/selective-focus-school-kid-boy-siting-table-doing-homework-happy-child-holding-red-pen-writing-drawing-white-paper-elementary-school-home-schooling-education-concept_39190-469.jpg", items: ["Preenche possíveis lacunas deixadas pelo ensino tradicional.", "Fortalece ativamente a base de aprendizado escolar.", "Desenvolve o tão importante hábito de estudo diário.", "Aumenta a confiança, reduzindo a ansiedade e preparando com autonomia."] },
             { id: 'inclusao', type: 'media-left', title: "TDAH, TDA e Dislexia", icon: "fa-brain", mediaId: "media_tdah", mediaType: "video", defaultMedia: "https://images.presentationgo.com/2025/07/female-teacher-with-students-classroom.jpg", items: ["Acompanhamento focado no desenvolvimento individual de cada aluno.", "Respeito absoluto ao ritmo e à forma de aprendizado única de cada criança.", "Apoio e direcionamento da nossa psicóloga, Maria Carolina.", "Material didático que permite o aumento da capacidade de concentração.", "Parceria e comunicação contínua entre a unidade Kumon, a escola regular e a família."] },
             { id: 'sophia', type: 'sophia', title: "Aluna Destaque", name: "Sophia Sangolete", mediaId: "media_sophia", details: ["Início: 16/06/2016 (Matemática).", "Atual: Matemática Estágio M 111.", "Concluinte das disciplinas de Português e Inglês."] },
@@ -468,32 +462,25 @@
 
         window.getMediaTag = function(mediaId, defaultType, defaultMediaUrl) {
             let src = window.savedMedia[mediaId] || defaultMediaUrl;
-            if (!src) return `<div style="color: #94a3b8; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 2vmin;"></i></div>`;
+            if (!src) return '<div style="color: var(--txt-muted); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 2vmin;"></i></div>';
             
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
                 let vid = src.split('v=')[1] || src.split('youtu.be/')[1];
                 if(vid && vid.includes('&')) vid = vid.split('&')[0];
-                return `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; border-radius: 2vmin; background: transparent;"></iframe>`;
+                return '<iframe src="https://www.youtube.com/embed/' + vid + '?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; border-radius: 2.5vmin; background: black;"></iframe>';
             }
             if (src.endsWith('.mp4') || defaultType === 'video') {
-                return `<video src="${src}" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; border-radius: 2vmin; background: transparent;"></video>`; 
+                return '<video src="' + src + '" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; border-radius: 2.5vmin; background: black;"></video>'; 
             }
-            return `<img src="${src}" alt="Midia" style="width: 100%; height: 100%; object-fit: contain; border-radius: 2vmin;" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e2e8f0/64748b?text=Erro';" />`;
+            return '<img src="' + src + '" alt="Midia" />';
         }
 
-        // V177: COFRE ANTI-FLICKER E RENDERIZAÇÃO ABSOLUTA
-        window.lastRenderedIndex = -1;
-        window.lastRenderedDataHash = "";
-
         window.renderSlide = function(force = false) {
-            const dataHash = JSON.stringify(window.savedLinks) + JSON.stringify(window.savedMedia);
-            // Evita recarregar a tela inteira (e piscar o vídeo) se nada mudou
-            if (!force && window.currentIndex === window.lastRenderedIndex && window.lastRenderedDataHash === dataHash) {
-                return; 
+            // V177: COFRE ANTI-FLICKER - Bloqueia recarregamento do DOM se for a mesma página
+            if (!force && window.currentIndex === window.lastRenderedIndex) {
+                return;
             }
-            
             window.lastRenderedIndex = window.currentIndex;
-            window.lastRenderedDataHash = dataHash;
 
             const data = slidesData[window.currentIndex];
             const mainContent = document.getElementById('main-content');
@@ -502,9 +489,6 @@
             const actionBtn = document.getElementById('ar-btn-action');
             let html = '';
 
-            document.body.style.background = data.bg ? data.bg : '#f8fafc';
-            document.getElementById('app-container').style.background = data.bg ? 'transparent' : 'transparent';
-            
             if (dashName) { dashName.innerHTML = (data.title || data.t || "APRESENTAÇÃO"); }
 
             let hasAction = false;
@@ -517,58 +501,40 @@
                 header.style.display = 'flex';
                 document.getElementById('slide-title').innerHTML = data.title;
                 document.getElementById('slide-title').dataset.id = data.id + "_title";
-                document.getElementById('slide-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
-                document.getElementById('slide-title').style.color = data.bg ? 'white' : 'var(--k-dark)';
             }
 
-            // GERAÇÃO DE HTML SEGURO (COM BACKTICKS)
+            // GERAÇÃO DE HTML DARK PREMIUM 
             if (data.type === 'cover') {
-                html = `
-                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                        <h1 class="txt-mega editable text-white" data-id="${data.id}_t" style="text-shadow: 0 1vmin 2vmin rgba(0,0,0,0.3); color: white;">${data.t}</h1>
-                        <div style="width: 20vw; height: 1vh; background: var(--k-orange); border-radius: 1vh; margin: 2vh 0;"></div>
-                        <p class="txt-sub editable text-white" data-id="${data.id}_sub" style="color: white; margin-bottom: 2vh;">${data.sub}</p>
-                        <div class="editable" data-id="${data.id}_ext" style="margin-top: 4vh; background: rgba(255,255,255,0.15); border: 0.3vh solid rgba(255,255,255,0.3); padding: 2vh 4vw; border-radius: 4vh;">
-                            <p class="txt-body text-white" style="margin:0; font-weight: 800; color: white;">${data.ext}</p>
-                        </div>
-                    </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">' +
+                    '<h1 class="txt-mega editable" data-id="' + data.id + '_t" style="text-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5);">' + data.t + '</h1>' +
+                    '<div style="width: 25vw; height: 1.2vh; background: var(--k-orange); border-radius: 1vh; margin: 3vh 0; box-shadow: 0 1vmin 2vmin rgba(243, 146, 0, 0.4);"></div>' +
+                    '<p class="txt-sub editable" data-id="' + data.id + '_sub" style="color: white; margin-bottom: 3vh;">' + data.sub + '</p>' +
+                    '<div class="editable" data-id="' + data.id + '_ext" style="margin-top: 5vh; background: rgba(255,255,255,0.05); border: 0.3vh solid rgba(255,255,255,0.2); padding: 3vmin 6vmin; border-radius: 5vmin; backdrop-filter: blur(10px);">' +
+                        '<p class="txt-body" style="margin:0; font-weight: 800; color: white;">' + data.ext + '</p>' +
+                    '</div></div>';
             } else if (data.type === 'list') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}">
-                        <div style="background: #f0f9ff; color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                        <p class="txt-body" style="margin:0;">${data.items[i]}</p>
-                    </div>`;
+                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '"><div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 8vmin; height: 8vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0; color: white;">' + data.items[i] + '</p></div>';
                 }
-                html = `<div class="flex-col-locked" style="width: 100%; max-width: 85vw; margin: auto;">${itemsHtml}</div>`;
+                html = '<div class="flex-col-locked" style="width: 100%; max-width: 90vw; margin: auto;">' + itemsHtml + '</div>';
             } else if (data.type === 'media-left' || data.type === 'media-right') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}" style="padding: 2vmin;">
-                        <div style="background: #f0f9ff; color: var(--k-blue); width: 4.5vmin; height: 4.5vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                        <p class="txt-body" style="margin:0; font-size: 2.2vmin;">${data.items[i]}</p>
-                    </div>`;
+                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '" style="padding: 2.5vmin;"><div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0; font-size: 2.8vmin; color: white;">' + data.items[i] + '</p></div>';
                 }
-                const mediaBlock = `<div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;"><div class="media-box">${window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia)}</div></div>`;
-                const listBlock = `<div class="flex-col-locked" style="flex: 1.2;">${itemsHtml}</div>`;
-                html = `<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">${data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock}</div>`;
+                const mediaBlock = '<div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1;"><div class="media-box">' + window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia) + '</div></div>';
+                const listBlock = '<div class="flex-col-locked" style="flex: 1.2;">' + itemsHtml + '</div>';
+                html = '<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">' + (data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock) + '</div>';
             } else if (data.type === 'quote') {
-                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 80vw; margin: auto;">
-                    <i class="fa-solid fa-quote-left text-white icon-xl" style="opacity: 0.3;"></i>
-                    <h2 class="txt-title editable" data-id="${data.id}_t" style="color: white; font-style: italic; text-transform: none; line-height: 1.4;">"${data.text}"</h2>
-                    <cite class="txt-sub editable" data-id="${data.id}_auth" style="color: white; opacity: 0.8; margin-top: 3vh;">— ${data.author}</cite>
-                </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 85vw; margin: auto;"><i class="fa-solid fa-quote-left icon-xl" style="color: rgba(255,255,255,0.1);"></i><h2 class="txt-title editable" data-id="' + data.id + '_t" style="font-style: italic; text-transform: none; line-height: 1.4; margin-top: 2vh;">"' + data.text + '"</h2><cite class="txt-sub editable" data-id="' + data.id + '_auth" style="color: white; opacity: 0.8; margin-top: 4vh; background: rgba(255,255,255,0.05); padding: 1.5vmin 3vmin; border-radius: 3vmin;">— ' + data.author + '</cite></div>';
             } else if (data.type === 'grid') {
                 let gridHtml = '';
                 for(let g of data.grid) {
-                    gridHtml += `<div class="grid-card editable" data-id="${g.id}">
-                        <div style="color: var(--k-orange);" class="icon-lg"><i class="fa-solid ${g.i}"></i></div>
-                        <h3 class="txt-title" style="margin: 3vh 0 2vh 0; font-size: 3.5vmin;">${g.t}</h3>
-                        <p class="txt-body" style="margin:0; text-align: center;">${g.d}</p>
-                    </div>`;
+                    gridHtml += '<div class="grid-card editable" data-id="' + g.id + '"><div style="color: var(--k-orange); background: rgba(243, 146, 0, 0.1); width: 12vmin; height: 12vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2vmin;" class="icon-lg"><i class="fa-solid ' + g.i + '"></i></div><h3 class="txt-title" style="margin: 2vh 0 1vh 0; font-size: 4.5vmin; color: white;">' + g.t + '</h3><p class="txt-body" style="margin:0; text-align: center; color: var(--txt-muted);">' + g.d + '</p></div>';
                 }
                 const cols = data.grid.length > 3 ? 'grid-4' : 'grid-2';
-                html = `<div class="grid-locked ${cols} w-full h-full" style="align-items: stretch; padding: 2vh 0;">${gridHtml}</div>`;
+                html = '<div class="grid-locked ' + cols + ' w-full h-full" style="align-items: stretch; padding: 2vh 0;">' + gridHtml + '</div>';
             } else if (data.type === 'team') {
                 let groupsHtml = '';
                 for(let gIdx=0; gIdx<data.groups.length; gIdx++) {
@@ -576,84 +542,37 @@
                     let mHtml = '';
                     for(let mIdx=0; mIdx<grp.m.length; mIdx++) {
                         let borderColor = gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)';
-                        mHtml += `<div class="card-box editable" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-width: 1.2vmin; border-left-color: ${borderColor}; padding: 2.5vmin;">
-                            <p class="txt-body" style="margin:0; font-size: 2.6vmin;">${grp.m[mIdx]}</p>
-                        </div>`;
+                        mHtml += '<div class="card-box editable" data-id="' + data.id + '_' + gIdx + '_' + mIdx + '" style="border-left-width: 1.5vmin; border-left-color: ' + borderColor + '; padding: 3vmin;"><p class="txt-body" style="margin:0; font-size: 3vmin; color: white;">' + grp.m[mIdx] + '</p></div>';
                     }
-                    groupsHtml += `<div class="flex-col-locked" style="flex: 1; justify-content: flex-start; gap: 2.5vh;">
-                        <div style="background: var(--k-dark); color: white; padding: 2vmin; border-radius: 1.5vmin; text-align: center; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);">
-                            <span class="txt-title" style="font-size: 3.5vmin; color: white;">${grp.t}</span>
-                        </div>
-                        <div class="flex-col-locked" style="gap: 1.5vh; justify-content: flex-start;">${mHtml}</div>
-                    </div>`;
+                    groupsHtml += '<div class="flex-col-locked" style="flex: 1; justify-content: flex-start; gap: 3vh;"><div style="background: linear-gradient(135deg, var(--k-dark), var(--k-blue)); color: white; padding: 3vmin; border-radius: 2vmin; text-align: center; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.3);"><span class="txt-title" style="font-size: 4vmin; color: white;">' + grp.t + '</span></div><div class="flex-col-locked" style="gap: 2vh; justify-content: flex-start;">' + mHtml + '</div></div>';
                 }
-                html = `<div class="flex-row-locked w-full h-full" style="align-items: flex-start; padding-top: 2vh;">${groupsHtml}</div>`;
+                html = '<div class="flex-row-locked w-full h-full" style="align-items: flex-start; padding-top: 2vh;">' + groupsHtml + '</div>';
             } else if (data.type === 'table') {
                 let rowsHtml = '';
                 for(let i=0; i<data.rows.length; i++) {
                     let r = data.rows[i];
-                    let bg = i%2===0 ? '#f8fafc' : 'white';
-                    rowsHtml += `<tr style="background: ${bg}; border-bottom: 0.2vmin solid #e2e8f0;">
-                        <td>${r.mat}</td><td>${r.ini}</td><td style="color: var(--k-orange); font-weight: 900;">${r.ava}</td>
-                    </tr>`;
+                    rowsHtml += '<tr><td>' + r.mat + '</td><td>' + r.ini + '</td><td style="color: var(--k-orange); font-weight: 900;">' + r.ava + '</td></tr>';
                 }
-                html = `<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr style="background: var(--k-dark); color: white;">
-                                    <th style="text-align: left; width: 33%;">Disciplina</th>
-                                    <th style="text-align: center; width: 33%;">Orientação Inicial</th>
-                                    <th style="text-align: center; width: 33%; color: var(--k-orange);">Orientação Avançada</th>
-                                </tr>
-                            </thead>
-                            <tbody>${rowsHtml}</tbody>
-                        </table>
-                    </div>
-                </div>`;
+                html = '<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;"><div class="table-container"><table><thead><tr><th style="text-align: left; width: 33%;">Disciplina</th><th style="text-align: center; width: 33%;">Orientação Inicial</th><th style="text-align: center; width: 33%; color: var(--k-orange);">Orientação Avançada</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div></div>';
             } else if (data.type === 'stats') {
                 let statsHtml = '';
                 for(let i=0; i<data.stats.length; i++) {
                     let s = data.stats[i];
                     let topColor = i===0 ? 'var(--k-blue)' : 'var(--k-orange)';
-                    statsHtml += `<div class="grid-card editable" data-id="${data.id}_s${i}" style="border-bottom: none; border-top: 2.5vmin solid ${topColor}; justify-content: center; gap: 3vh;">
-                        <div class="txt-mega" style="font-size: 18vmin; color: ${s.color};">${s.val}</div>
-                        <div class="txt-title" style="font-size: 4vmin; color: #94a3b8;">${s.label}</div>
-                    </div>`;
+                    statsHtml += '<div class="grid-card editable" data-id="' + data.id + '_s' + i + '" style="border-bottom: none; border-top: 3vmin solid ' + topColor + '; justify-content: center; gap: 4vh;"><div class="txt-mega" style="font-size: 22vmin; color: ' + s.color + ';">' + s.val + '</div><div class="txt-title" style="font-size: 5vmin; color: var(--txt-muted);">' + s.label + '</div></div>';
                 }
-                html = `<div class="flex-row-locked w-full h-full" style="justify-content: center;">${statsHtml}</div>`;
+                html = '<div class="flex-row-locked w-full h-full" style="justify-content: center;">' + statsHtml + '</div>';
             } else if (data.type === 'sophia') {
                 let dHtml = '';
                 for(let i=0; i<data.details.length; i++) {
-                    dHtml += `<div style="display: flex; align-items: flex-start; gap: 2.5vmin;" class="editable" data-id="${data.id}_d${i}">
-                        <i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 3.5vmin; margin-top: 0.5vmin;"></i>
-                        <span class="txt-body" style="font-size: 3vmin;">${data.details[i]}</span>
-                    </div>`;
+                    dHtml += '<div style="display: flex; align-items: flex-start; gap: 3vmin;" class="editable" data-id="' + data.id + '_d' + i + '"><i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 4vmin; margin-top: 0.5vmin;"></i><span class="txt-body" style="font-size: 3.5vmin; color: white;">' + data.details[i] + '</span></div>';
                 }
-                html = `<div class="flex-row-locked w-full h-full slide-sophia" style="align-items: stretch; padding: 2vh 0;">
-                    <div class="flex-col-locked" style="flex: 1.2; background: #f8fafc; padding: 5vmin; border-radius: 3vmin; border-left: 1.5vmin solid var(--k-blue); justify-content: center;">
-                        <div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);" class="txt-small">
-                            <i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO
-                        </div>
-                        <h3 class="txt-mega editable" data-id="${data.id}_name" style="margin: 3vh 0;">${data.name}</h3>
-                        <div class="flex-col-locked" style="gap: 2.5vh; justify-content: flex-start;">${dHtml}</div>
-                    </div>
-                    <div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;">
-                        <div class="media-box">${window.getMediaTag(data.mediaId, 'video', data.defaultMedia)}</div>
-                    </div>
-                </div>`;
+                html = '<div class="flex-row-locked w-full h-full slide-sophia" style="align-items: stretch; padding: 2vh 0;"><div class="flex-col-locked" style="flex: 1.2; background: var(--bg-card); padding: 6vmin; border-radius: 3vmin; border-left: 2vmin solid var(--k-blue); justify-content: center; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.3); border: 0.2vmin solid var(--border-card); border-left: 2vmin solid var(--k-blue);"><div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(255,183,3,0.3);" class="txt-small"><i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO</div><h3 class="txt-mega editable" data-id="' + data.id + '_name" style="margin: 4vh 0;">' + data.name + '</h3><div class="flex-col-locked" style="gap: 3vh; justify-content: flex-start;">' + dHtml + '</div></div><div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1;"><div class="media-box">' + window.getMediaTag(data.mediaId, 'video', data.defaultMedia) + '</div></div></div>';
             } else if (data.type === 'end') {
-                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                    <i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 2vh;"></i>
-                    <h2 class="txt-mega editable" data-id="${data.id}_t" style="font-size: 9vmin;">${data.title}</h2>
-                    <p class="txt-sub editable" data-id="${data.id}_sub" style="margin: 2vh 0; color: var(--k-dark);">${data.subtitle}</p>
-                    <div class="editable" data-id="${data.id}_contact" style="background: var(--k-blue); color: white; padding: 2.5vh 5vw; border-radius: 5vh; margin-top: 3vh; box-shadow: 0 2vmin 4vmin rgba(0,174,239,0.3);">
-                        <span class="txt-title" style="color: white; text-transform: none; font-size: 4vmin;">${data.contact}</span>
-                    </div>
-                </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;"><i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 3vh;"></i><h2 class="txt-mega editable" data-id="' + data.id + '_t" style="font-size: 12vmin;">' + data.title + '</h2><p class="txt-sub editable" data-id="' + data.id + '_sub" style="margin: 3vh 0; color: white;">' + data.subtitle + '</p><div class="editable" data-id="' + data.id + '_contact" style="background: var(--k-blue); color: white; padding: 3vmin 6vmin; border-radius: 6vmin; margin-top: 5vh; box-shadow: 0 2vmin 5vmin rgba(0,174,239,0.3);"><span class="txt-title" style="color: white; text-transform: none; font-size: 5vmin;">' + data.contact + '</span></div></div>';
             }
 
-            mainContent.innerHTML = `<div class="slide active">${html}</div>`;
+            mainContent.innerHTML = '<div class="slide active">' + html + '</div>';
             document.getElementById('progress-bar').style.width = (((window.currentIndex + 1) / slidesData.length) * 100) + '%';
             
             window.setupGestor();
@@ -665,18 +584,20 @@
             else { window.executeMediaAction(); }
         };
 
-        // V177: EXECUÇÃO LOCAL (TELA DA APRESENTAÇÃO APENAS)
+        // V177: EXECUÇÃO LOCAL (TELA DA APRESENTAÇÃO APENAS - ADMIN SILENCIADO)
         window.executeMediaAction = function() {
-            // TRAVA DE SEGURANÇA: Se for o admin no celular dele, o vídeo NUNCA vai tocar áudio localmente.
-            if (window.isAdmin || document.getElementById('ar-dashboard').style.display === 'flex') return;
+            if (window.isAdmin) return; 
 
             const activeSlide = document.querySelector('.slide.active');
             if (!activeSlide) return;
 
             const video = activeSlide.querySelector('video.slide-video');
             if (video) {
-                if (video.paused) video.play().catch(e => console.warn("Autoplay bloqueado pelo navegador na TV. Clique F ou toque na tela antes.", e)); 
-                else video.pause();
+                if (video.paused) {
+                    video.play().catch(e => console.warn("Autoplay bloqueado. Clique na tela primeiro.", e)); 
+                } else {
+                    video.pause();
+                }
                 return;
             }
 
@@ -694,7 +615,7 @@
             }
         };
 
-        // NAVEGAÇÃO
+        // NAVEGAÇÃO SEGURA (NUNCA PULA SOZINHO SE NÃO TIVER VÍDEO)
         window.nextSlide = function() { if (window.currentIndex < slidesData.length - 1) { window.currentIndex++; window.syncSlideState(); window.renderSlide(); } };
         window.prevSlide = function() { if (window.currentIndex > 0) { window.currentIndex--; window.syncSlideState(); window.renderSlide(); } };
 
@@ -710,7 +631,9 @@
             if (e.target.tagName === 'INPUT') return;
             if (['Space', ' ', 'ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(e.key)) e.preventDefault();
 
+            // V177: Espaço só dá play. NUNCA muda de slide sozinho.
             if (e.key === ' ' || e.key === 'Enter') { window.executeMediaAction(); return; }
+            
             if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'ArrowDown') window.nextSlide();
             if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'ArrowUp' || e.key === 'Backspace') window.prevSlide();
             if (e.key === 'f' || e.key === 'F') window.toggleFullScreen();
@@ -737,32 +660,14 @@
         window.openLinkModal = function(linkId) {
             window.currentEditingId = linkId;
             const currentUrl = (window.savedLinks[linkId]||"").replace(/"/g, '&quot;');
-            overlay.innerHTML = `
-                <div class="admin-modal-content">
-                    <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--k-dark); text-align: center;">🔗 Editar Redirecionamento</h3>
-                    <input type="text" id="link-input" class="admin-input" value="${currentUrl}" placeholder="Ex: https://wa.me/...">
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
-                        <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
-                        <button class="admin-btn btn-danger" onclick="delete window.savedLinks[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Remover</button>
-                        <button class="admin-btn btn-primary" onclick="const v=document.getElementById('link-input').value.trim(); if(v==='') delete window.savedLinks[window.currentEditingId]; else window.savedLinks[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Salvar</button>
-                    </div>
-                </div>`;
+            overlay.innerHTML = '<div class="admin-modal-content"><h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vh; color: white; text-align: center;">🔗 Editar Redirecionamento</h3><input type="text" id="link-input" class="admin-input" value="' + currentUrl + '" placeholder="Ex: https://wa.me/..."><div style="display: flex; gap: 2vw; justify-content: center; margin-top: 2vh;"><button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button><button class="admin-btn btn-danger" onclick="delete window.savedLinks[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Remover</button><button class="admin-btn btn-primary" onclick="const v=document.getElementById(\'link-input\').value.trim(); if(v===\'\') delete window.savedLinks[window.currentEditingId]; else window.savedLinks[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Salvar</button></div></div>';
             overlay.style.display = 'flex';
         }
 
         window.openMediaModal = function(mediaId) {
             window.currentEditingId = mediaId;
             const currentUrl = (window.savedMedia[mediaId]||"").replace(/"/g, '&quot;');
-            overlay.innerHTML = `
-                <div class="admin-modal-content">
-                    <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 10px; color: var(--k-blue); text-align: center;">📸 Enviar ou Alterar Mídia</h3>
-                    <input type="text" id="media-link-input" class="admin-input" value="${currentUrl}" placeholder="Ex: https://youtu.be/... ou arquivo.mp4">
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
-                        <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
-                        <button class="admin-btn btn-danger" onclick="delete window.savedMedia[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Restaurar</button>
-                        <button class="admin-btn btn-primary" onclick="const v=document.getElementById('media-link-input').value.trim(); if(v==='') delete window.savedMedia[window.currentEditingId]; else window.savedMedia[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Salvar</button>
-                    </div>
-                </div>`;
+            overlay.innerHTML = '<div class="admin-modal-content"><h3 style="font-size: 3.5vmin; font-weight: 900; margin-bottom: 1.5vh; color: var(--k-blue); text-align: center;">📸 Enviar ou Alterar Mídia</h3><input type="text" id="media-link-input" class="admin-input" value="' + currentUrl + '" placeholder="Ex: https://youtu.be/... ou arquivo.mp4"><div style="display: flex; gap: 2vw; justify-content: center; margin-top: 2vh;"><button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button><button class="admin-btn btn-danger" onclick="delete window.savedMedia[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Restaurar</button><button class="admin-btn btn-primary" onclick="const v=document.getElementById(\'media-link-input\').value.trim(); if(v===\'\') delete window.savedMedia[window.currentEditingId]; else window.savedMedia[window.currentEditingId]=v; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Salvar</button></div></div>';
             overlay.style.display = 'flex';
         }
 
@@ -784,16 +689,7 @@
         document.getElementById('btn-config-cloudinary').addEventListener('click', () => {
             const cName = window.cloudinaryConfig.cloudName;
             const cPreset = window.cloudinaryConfig.preset;
-            overlay.innerHTML = `
-                <div class="admin-modal-content">
-                    <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--k-dark);">⚙️ Configuração Cloudinary</h3>
-                    <input type="text" id="cfg-cloudname" class="admin-input" value="${cName}" placeholder="Cloud Name">
-                    <input type="text" id="cfg-preset" class="admin-input" value="${cPreset}" placeholder="Upload Preset">
-                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
-                        <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
-                        <button class="admin-btn btn-primary" onclick="window.cloudinaryConfig.cloudName=document.getElementById('cfg-cloudname').value.trim(); window.cloudinaryConfig.preset=document.getElementById('cfg-preset').value.trim(); window.saveData(); window.closeAdminModal();">Guardar</button>
-                    </div>
-                </div>`;
+            overlay.innerHTML = '<div class="admin-modal-content"><h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vh; color: white;">⚙️ Configuração Cloudinary</h3><input type="text" id="cfg-cloudname" class="admin-input" value="' + cName + '" placeholder="Cloud Name"><input type="text" id="cfg-preset" class="admin-input" value="' + cPreset + '" placeholder="Upload Preset"><div style="display: flex; gap: 2vw; justify-content: flex-end; margin-top: 2vh;"><button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button><button class="admin-btn btn-primary" onclick="window.cloudinaryConfig.cloudName=document.getElementById(\'cfg-cloudname\').value.trim(); window.cloudinaryConfig.preset=document.getElementById(\'cfg-preset\').value.trim(); window.saveData(); window.closeAdminModal();">Guardar</button></div></div>';
             overlay.style.display = 'flex';
         });
 
