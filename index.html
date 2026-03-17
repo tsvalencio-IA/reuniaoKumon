@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
-    <!-- TENSORFLOW & MOVENET (Para a Magia AR) -->
+    <!-- TENSORFLOW & MOVENET (Pacote consolidado) -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
@@ -28,7 +28,7 @@
         body, html {
             width: 100vw; height: 100vh;
             overflow: hidden; 
-            background-color: #0b0f19; /* Fundo Dark Profundo e Elegante */
+            background-color: #0b0f19; /* Dark Mode Premium */
             font-family: 'Poppins', sans-serif;
             touch-action: none;
         }
@@ -41,12 +41,12 @@
 
         .bg-blobs::before {
             content: ''; position: absolute; top: -10vh; right: -5vw; width: 40vmin; height: 40vmin;
-            background: radial-gradient(circle, rgba(0, 174, 239, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 174, 239, 0.15) 0%, transparent 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
         .bg-blobs::after {
             content: ''; position: absolute; bottom: -10vh; left: -5vw; width: 50vmin; height: 50vmin;
-            background: radial-gradient(circle, rgba(243, 146, 0, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(243, 146, 0, 0.1) 0%, transparent 70%);
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
 
@@ -55,9 +55,9 @@
             --k-dark: #004578;
             --k-orange: #F39200;
             --k-yellow: #FFB703;
-            --txt-main: #ffffff; /* Branco puro para contraste brutal */
+            --txt-main: #ffffff; 
             --txt-muted: #cbd5e1;
-            --bg-card: #1e293b; /* Fundo dos cards mais claro que o fundo da tela para destacar */
+            --bg-card: #1e293b; 
             --border-card: rgba(255, 255, 255, 0.1);
         }
 
@@ -126,13 +126,19 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex: 1 1 0; min-width: 0; min-height: 0;
         }
 
-        /* AJUSTES ISOLADOS PARA AS DUAS TELAS REBELDES (Tamanho de fonte menor SÓ AQUI para não estourar) */
-        .layout-is-grid-4 .txt-title { font-size: 3vmin !important; margin: 1.5vh 0 !important; }
-        .layout-is-grid-4 .txt-body { font-size: 2vmin !important; word-wrap: break-word; hyphens: auto; }
+        /* -------------------------------------------------------------------------
+           V177: CORREÇÕES ISOLADAS PARA "O QUE É O KUMON" E "TRÍADE" 
+           Garante que as palavras compridas quebram e cabem perfeitamente.
+           ------------------------------------------------------------------------- */
+        .layout-is-grid-4 .txt-title { font-size: 3vmin !important; word-wrap: break-word; hyphens: auto; }
+        .layout-is-grid-4 .txt-body { font-size: 1.8vmin !important; word-wrap: break-word; line-height: 1.3; }
+        .layout-is-grid-4 .grid-card { padding: 1.5vmin; }
+        
         .layout-is-team .txt-title { font-size: 3.5vmin !important; }
-        .layout-is-team .txt-body { font-size: 2.2vmin !important; }
+        .layout-is-team .txt-body { font-size: 2vmin !important; }
+        .layout-is-team .card-box { padding: 1.5vmin; }
 
-        /* MEDIA BOX (Não corta imagens) */
+        /* MÍDIA BOX E ESCUDO DE CLIQUE (BLINDA OS VÍDEOS PARA EDIÇÃO ADMIN) */
         .media-box {
             background: #000; border-radius: 2vmin; overflow: hidden;
             width: 100%; height: 100%; border: 0.4vmin solid rgba(255,255,255,0.2); box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.8);
@@ -140,6 +146,9 @@
         }
         .media-box img { width: 100%; height: 100%; object-fit: cover; } 
         .media-box video, .media-box iframe { width: 100%; height: 100%; object-fit: contain; border: none; background: black; } 
+
+        .admin-click-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; cursor: pointer; display: none; }
+        .admin-mode .admin-click-shield { display: block; }
 
         /* TABELA PREMIUM ESCURA */
         .table-container { width: 100%; max-width: 90vw; background: var(--bg-card); border-radius: 2vmin; overflow: hidden; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5); border: 0.1vmin solid var(--border-card); }
@@ -188,14 +197,9 @@
         
         .admin-mode .editable-media { outline: 0.5vmin dashed var(--k-blue); cursor: pointer; position: relative; }
         .admin-mode .editable-media::after { content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,174,239,0.95); color: white; padding: 2vmin 4vmin; border-radius: 1vmin; font-size: 3vmin; font-weight: bold; pointer-events: none; z-index: 100;}
-        
-        /* ESCUDO DE VIDRO PARA GARANTIR QUE A MÍDIA É CLICÁVEL (Resolve o bug do TDAH) */
-        .admin-click-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 90; background: transparent; cursor: pointer; display: none; }
-        .admin-mode .admin-click-shield { display: block; }
+        .has-link:not(.editable) { cursor: pointer; border-bottom: 0.4vmin solid var(--k-blue); }
 
-        .has-link:not(.editable) { cursor: pointer; border-bottom: 0.3vmin solid var(--k-blue); }
-
-        /* BARRA FLUTUANTE DE AÇÕES DO ADMIN (Não some no celular) */
+        /* BARRA FLUTUANTE DE AÇÕES DO ADMIN */
         #admin-actions-bar {
             position: fixed; bottom: 15vh; left: 50%; transform: translateX(-50%);
             display: none; align-items: center; gap: 3vw; z-index: 9995;
@@ -217,6 +221,7 @@
         .btn-primary { background: var(--k-blue); color: white; }
         .btn-secondary { background: #334155; color: white; }
         .btn-danger { background: #ef4444; color: white; }
+        .btn-upload { background: var(--k-orange); color: white; width: 100%; margin-bottom: 3vmin; font-size: 2.5vmin; padding: 2.5vmin;}
         
         .status-warning {
             position: fixed; top: 2vh; right: 2vw; background: #22c55e; color: white;
@@ -229,7 +234,7 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* =========================================================================
-           8. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD)
+           7. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD)
            ========================================================================= */
         #ar-dashboard {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -237,7 +242,7 @@
             padding-top: 5vh;
         }
         
-        #ar-main-buttons { display: flex; flex-direction: column; width: 90vw; gap: 4vh; align-items: center; margin-top: 5vh; }
+        #ar-main-buttons { display: flex; flex-direction: column; width: 90vw; gap: 4vh; align-items: center; margin-top: 8vh; }
         .ar-row-buttons { display: flex; width: 100%; justify-content: space-between; height: 25vh; }
         #ar-confirm-buttons { display: none; flex-direction: column; width: 90vw; height: 60vh; justify-content: space-between; align-items: center; margin-top: 5vh; }
 
@@ -258,7 +263,6 @@
         .ar-control-btn.red i { color: #ef4444; }
 
         #ar-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998; }
-
     </style>
 </head>
 <body>
@@ -272,7 +276,7 @@
         <video id="ar-video" playsinline autoplay muted style="display: none;"></video>
         <canvas id="ar-canvas"></canvas>
 
-        <!-- BARRA DE ADMIN FLUTUANTE V177 (Resolve o problema de sumir no celular) -->
+        <!-- BARRA DE ADMIN FLUTUANTE V177 -->
         <div id="admin-actions-bar">
             <button id="btn-ar-toggle" onclick="window.ARController.toggle()" style="background: var(--k-dark); color: #00ff66; border: 0.3vmin solid #00ff66; padding: 1.5vmin 3vmin; border-radius: 4vmin; font-weight: 800; font-size: 2.2vmin; cursor: pointer; box-shadow: 0 0.5vmin 1.5vmin rgba(0, 255, 102, 0.2);">
                 <i class="fa-solid fa-hand-sparkles"></i> MODO AR
@@ -292,7 +296,6 @@
                 <span id="ar-dash-slide-name" style="color: #00ff66; font-size: 5.5vmin; text-shadow: 0 0 2vmin #00ff66;">A CARREGAR...</span>
             </div>
 
-            <!-- Botões Principais -->
             <div id="ar-main-buttons">
                 <div class="ar-row-buttons">
                     <button id="ar-btn-prev" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('prev')">
@@ -303,24 +306,23 @@
                     </button>
                 </div>
                 
-                <button id="ar-btn-action" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('action')" style="display: none; width: 90vw; height: 18vh; flex-direction: row; gap: 4vw; border-color: rgba(0, 255, 102, 0.4); box-shadow: 0 0 4vmin rgba(0, 255, 102, 0.15) inset;">
+                <button id="ar-btn-action" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('action')" style="display: none; width: 90vw; height: 20vh; flex-direction: row; gap: 4vw; border-color: rgba(0, 255, 102, 0.4); box-shadow: 0 0 4vmin rgba(0, 255, 102, 0.15) inset;">
                     <i class="fa-solid fa-play" style="color: #00ff66;"></i> 
-                    <span style="color: #00ff66;">PLAY / ABRIR MÍDIA</span>
+                    <span style="color: #00ff66;">PLAY / ABRIR</span>
                 </button>
             </div>
 
-            <!-- Botões de Confirmação -->
             <div id="ar-confirm-buttons">
                 <button id="ar-btn-ok" class="ar-control-btn green admin-btn-target" onclick="window.executeARConfirm()">
                     <i class="fa-solid fa-check"></i> CONFIRMAR AÇÃO
                 </button>
-                <div style="color: white; font-size: 3vmin; font-weight: bold; text-align: center;">MANTENHA A MÃO NO BOTÃO VERDE</div>
+                <div style="color: var(--txt-muted); font-size: 3.5vmin; font-weight: bold; text-align: center;">MANTENHA A MÃO NO BOTÃO VERDE</div>
                 <button id="ar-btn-cancel" class="ar-control-btn red admin-btn-target" onclick="window.cancelARConfirm()">
                     <i class="fa-solid fa-xmark"></i> CANCELAR
                 </button>
             </div>
             
-            <button id="btn-ar-close" class="admin-btn-target" onclick="window.ARController.toggle()" style="position: absolute; bottom: 3vh; background: #ef4444; color: white; border: none; padding: 2vmin 4vmin; border-radius: 5vmin; font-size: 2.5vmin; font-weight: bold; cursor: pointer; z-index: 9991; box-shadow: 0 1vmin 2vmin rgba(239, 68, 68, 0.3);">
+            <button id="btn-ar-close" class="admin-btn-target" onclick="window.ARController.toggle()" style="position: absolute; bottom: 3vh; background: #ef4444; color: white; border: none; padding: 2vmin 4vmin; border-radius: 5vmin; font-size: 3vmin; font-weight: bold; cursor: pointer; z-index: 9991; box-shadow: 0 1vmin 2vmin rgba(239, 68, 68, 0.3);">
                 <i class="fa-solid fa-power-off"></i> Desligar Painel AR
             </button>
         </div>
@@ -362,7 +364,7 @@
 
     <script>
         // =====================================================================
-        // CHAVES DO FIREBASE (Sincronização Ativa)
+        // CHAVES DO FIREBASE E INICIALIZAÇÃO
         // =====================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCaFH2nn5VD9eTAdCcdkduDxfg8BbU-dM8",
@@ -412,7 +414,7 @@
                     localStorage.setItem('kumon_v177_media', JSON.stringify(window.savedMedia));
                     localStorage.setItem('kumon_v177_cloud', JSON.stringify(window.cloudinaryConfig));
                     
-                    // COFRE ANTI-FLICKER: Só atualiza se a mídia/link mudou de verdade
+                    // COFRE ANTI-FLICKER
                     if (window.lastSettingsHash !== newHash) {
                         window.lastSettingsHash = newHash;
                         window.renderSlide(true);
@@ -426,7 +428,7 @@
                     if (state.currentSlide !== undefined && state.currentSlide !== window.currentIndex) {
                         window.currentIndex = state.currentSlide;
                         localStorage.setItem('kumon_v177_slide', window.currentIndex);
-                        window.renderSlide(); // O cofre anti-flicker vai garantir que recarregue limpo
+                        window.renderSlide();
                     }
                 }
             });
@@ -461,7 +463,7 @@
             }
         }
 
-        // DADOS REAIS E INTOCADOS
+        // DADOS REAIS
         const slidesData = [
             { id: 'capa', type: 'cover', t: "REUNIÃO DE PAIS 2026", sub: "KUMON RIO PRETO SHOPPING", ext: "Bem-vindos!" },
             { id: 'origem', type: 'media-left', title: "Toru Kumon: A Origem", icon: "fa-seedling", mediaId: "media_toru", defaultMedia: "https://kumonmalaysia.com/wp-content/uploads/2019/08/1200x630_ToruKumon_1.jpg", items: ["A metodologia Kumon nasceu da imensa dedicação de um pai com a educação de seu filho.", "Foco total e absoluto no desenvolvimento da autonomia.", "Baseado no amor e na consistência inabalável de estudos diários."] },
@@ -475,7 +477,7 @@
             { id: 'baby', type: 'media-left', title: "Kumon Baby", icon: "fa-baby-carriage", mediaId: "media_baby", defaultMedia: "https://www.habausa.com/cdn/shop/articles/blog-header-wooden-toys_d8ed1971-6c42-417d-9flc-224753fa0le4_1400x.jpg?v=1770859469", items: ["Atendimento especial a partir de 6 meses de idade.", "Estímulos focados desde a primeira infância, com foco motor e cognitivo.", "Construção de uma base sólida para o aprendizado futuro.", "Ambiente lúdico, seguro e extremamente acolhedor para os pequenos."] },
             { id: 'frase2', type: 'quote', text: "Seus filhos vão herdar seus hábitos. Isso te preocupa ou te tranquiliza?", author: "Reflexão para o Futuro" },
             { id: 'complemento', type: 'media-right', title: "Complemento Escolar", icon: "fa-plus", mediaId: "media_escola", defaultMedia: "https://img.freepik.com/premium-photo/selective-focus-school-kid-boy-siting-table-doing-homework-happy-child-holding-red-pen-writing-drawing-white-paper-elementary-school-home-schooling-education-concept_39190-469.jpg", items: ["Preenche possíveis lacunas deixadas pelo ensino tradicional.", "Fortalece ativamente a base de aprendizado escolar.", "Desenvolve o tão importante hábito de estudo diário.", "Aumenta a confiança, reduzindo a ansiedade e preparando com autonomia."] },
-            { id: 'inclusao', type: 'media-left', title: "TDAH, TDA e Dislexia", icon: "fa-brain", mediaId: "media_tdah", mediaType: "video", defaultMedia: "https://images.presentationgo.com/2025/07/female-teacher-with-students-classroom.jpg", items: ["Acompanhamento focado no desenvolvimento individual de cada aluno.", "Respeito absoluto ao ritmo e à forma de aprendizado única de cada criança.", "Apoio e direcionamento da nossa psicóloga, Maria Carolina.", "Material didático que permite o aumento da capacidade de concentração.", "Parceria e comunicação contínua entre a unidade Kumon, a escola regular e a família."] },
+            { id: 'inclusao', type: 'media-left', title: "TDAH, TDA, Dislexia, Fono e Psicopedagogia", icon: "fa-brain", mediaId: "media_tdah", mediaType: "video", defaultMedia: "https://images.presentationgo.com/2025/07/female-teacher-with-students-classroom.jpg", items: ["Acompanhamento focado no desenvolvimento individual de cada aluno.", "Respeito absoluto ao ritmo e à forma de aprendizado única de cada criança.", "Apoio e direcionamento da nossa psicóloga, Maria Carolina.", "Material didático que permite o aumento da capacidade de concentração.", "Parceria e comunicação contínua entre a unidade Kumon, a escola regular e a família."] },
             { id: 'sophia', type: 'sophia', title: "Aluna Destaque", name: "Sophia Sangolete", mediaId: "media_sophia", details: ["Início: 16/06/2016 (Matemática).", "Atual: Matemática Estágio M 111.", "Concluinte das disciplinas de Português e Inglês."] },
             { id: 'connect', type: 'media-right', title: "Kumon Connect", icon: "fa-tablet-screen-button", mediaId: "media_connect", defaultMedia: "https://img.freepik.com/premium-photo/asian-girl-using-digital-tablet-with-stylus-pen-online-learning-drawing-home-cute-kid-studying-with-technology-creative-art-smart-education-concept_39704-20138.jpg", items: ["A evolução do nosso método tradicional para o formato digital.", "Estudo diário realizado através de tablets e canetas interativas.", "Correção ágil e acompanhamento da evolução em tempo real.", "Sustentabilidade e inovação educacional na palma da mão."] },
             { id: 'triade', type: 'grid', title: "A Tríade Kumon", icon: "fa-circle-nodes", grid: [{ id: 'tr1', t: "A Unidade", d: "Responsável pelo planejamento, orientação individual e motivação constante.", i: "fa-school" }, { id: 'tr2', t: "Os Pais", d: "Essenciais no acompanhamento diário, fornecendo elogios e um ambiente tranquilo.", i: "fa-house-chimney-user" }, { id: 'tr3', t: "O Aluno", d: "Protagonista do método, focado na resolução diária e busca pela autonomia.", i: "fa-user-graduate" }] },
@@ -485,26 +487,21 @@
 
         window.getMediaTag = function(mediaId, defaultType, defaultMediaUrl) {
             let src = window.savedMedia[mediaId] || defaultMediaUrl;
-            if (!src) return `<div style="color: var(--txt-muted); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 2vmin;"></i></div>`;
+            if (!src) return '<div style="color: var(--txt-muted); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 2vmin;"></i></div>';
             
-            // Para Youtube
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
                 let vid = src.split('v=')[1] || src.split('youtu.be/')[1];
                 if(vid && vid.includes('&')) vid = vid.split('&')[0];
-                return `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; background: black;"></iframe>`;
+                return '<iframe src="https://www.youtube.com/embed/' + vid + '?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; border-radius: 2.5vmin; background: black;"></iframe>';
             }
-            // Para MP4 - V177: Adicionado bloqueio visual se for admin
             if (src.endsWith('.mp4') || defaultType === 'video') {
-                return `<video src="${src}" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; background: black; ${window.isAdmin ? 'pointer-events: none;' : ''}"></video>`; 
+                return '<video src="' + src + '" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; border-radius: 2.5vmin; background: black;"></video>'; 
             }
-            return `<img src="${src}" alt="Midia" />`;
+            return '<img src="' + src + '" alt="Midia" />';
         }
 
         window.renderSlide = function(force = false) {
-            // COFRE ANTI-FLICKER: Se não mudou o slide nem a mídia, não recarrega a tag de vídeo, impedindo o piscar!
-            if (!force && window.currentIndex === window.lastRenderedIndex) {
-                return;
-            }
+            if (!force && window.currentIndex === window.lastRenderedIndex) return;
             window.lastRenderedIndex = window.currentIndex;
 
             const data = slidesData[window.currentIndex];
@@ -526,59 +523,41 @@
                 header.style.display = 'flex';
                 document.getElementById('slide-title').innerHTML = data.title;
                 document.getElementById('slide-title').dataset.id = data.id + "_title";
-                document.getElementById('slide-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
-                document.getElementById('slide-title').style.color = 'white';
             }
 
-            // GERAÇÃO DE HTML SEGURO 
+            // GERAÇÃO DE HTML 
             if (data.type === 'cover') {
-                html = `
-                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                        <h1 class="txt-mega editable text-white" data-id="${data.id}_t" style="text-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5);">${data.t}</h1>
-                        <div style="width: 25vw; height: 1.2vh; background: var(--k-orange); border-radius: 1vh; margin: 3vh 0; box-shadow: 0 1vmin 2vmin rgba(243, 146, 0, 0.4);"></div>
-                        <p class="txt-sub editable text-white" data-id="${data.id}_sub" style="color: white; margin-bottom: 3vh;">${data.sub}</p>
-                        <div class="editable" data-id="${data.id}_ext" style="margin-top: 5vh; background: rgba(255,255,255,0.05); border: 0.3vh solid rgba(255,255,255,0.2); padding: 3vmin 6vmin; border-radius: 5vmin; backdrop-filter: blur(10px);">
-                            <p class="txt-body text-white" style="margin:0; font-weight: 800; color: white;">${data.ext}</p>
-                        </div>
-                    </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">' +
+                    '<h1 class="txt-mega editable" data-id="' + data.id + '_t" style="text-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5);">' + data.t + '</h1>' +
+                    '<div style="width: 25vw; height: 1.2vh; background: var(--k-orange); border-radius: 1vh; margin: 3vh 0; box-shadow: 0 1vmin 2vmin rgba(243, 146, 0, 0.4);"></div>' +
+                    '<p class="txt-sub editable" data-id="' + data.id + '_sub" style="color: white; margin-bottom: 3vh;">' + data.sub + '</p>' +
+                    '<div class="editable" data-id="' + data.id + '_ext" style="margin-top: 5vh; background: rgba(255,255,255,0.05); border: 0.3vh solid rgba(255,255,255,0.2); padding: 3vmin 6vmin; border-radius: 5vmin; backdrop-filter: blur(10px);">' +
+                        '<p class="txt-body" style="margin:0; font-weight: 800; color: white;">' + data.ext + '</p>' +
+                    '</div></div>';
             } else if (data.type === 'list') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}">
-                        <div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 8vmin; height: 8vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                        <p class="txt-body" style="margin:0; color: white;">${data.items[i]}</p>
-                    </div>`;
+                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '"><div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 8vmin; height: 8vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0; color: white;">' + data.items[i] + '</p></div>';
                 }
-                html = `<div class="flex-col-locked" style="width: 100%; max-width: 90vw; margin: auto;">${itemsHtml}</div>`;
+                html = '<div class="flex-col-locked" style="width: 100%; max-width: 90vw; margin: auto;">' + itemsHtml + '</div>';
             } else if (data.type === 'media-left' || data.type === 'media-right') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}" style="padding: 2.5vmin;">
-                        <div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                        <p class="txt-body" style="margin:0; font-size: 2.8vmin; color: white;">${data.items[i]}</p>
-                    </div>`;
+                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '" style="padding: 2.5vmin;"><div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0; font-size: 2.8vmin; color: white;">' + data.items[i] + '</p></div>';
                 }
-                const clickShield = window.isAdmin ? `<div class="admin-click-shield"></div>` : ``; // V177: Escudo garante o clique do Admin!
-                const mediaBlock = `<div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;"><div class="media-box">${clickShield}${window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia)}</div></div>`;
-                const listBlock = `<div class="flex-col-locked" style="flex: 1.2;">${itemsHtml}</div>`;
-                html = `<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">${data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock}</div>`;
+                const clickShield = window.isAdmin ? '<div class="admin-click-shield"></div>' : '';
+                const mediaBlock = '<div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1;"><div class="media-box">' + clickShield + window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia) + '</div></div>';
+                const listBlock = '<div class="flex-col-locked" style="flex: 1.2;">' + itemsHtml + '</div>';
+                html = '<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">' + (data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock) + '</div>';
             } else if (data.type === 'quote') {
-                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 85vw; margin: auto;">
-                    <i class="fa-solid fa-quote-left icon-xl" style="color: rgba(255,255,255,0.1);"></i>
-                    <h2 class="txt-title editable" data-id="${data.id}_t" style="font-style: italic; text-transform: none; line-height: 1.4; margin-top: 2vh;">"${data.text}"</h2>
-                    <cite class="txt-sub editable" data-id="${data.id}_auth" style="color: white; opacity: 0.8; margin-top: 4vh; background: rgba(255,255,255,0.05); padding: 1.5vmin 3vmin; border-radius: 3vmin;">— ${data.author}</cite>
-                </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 85vw; margin: auto;"><i class="fa-solid fa-quote-left icon-xl" style="color: rgba(255,255,255,0.1);"></i><h2 class="txt-title editable" data-id="' + data.id + '_t" style="font-style: italic; text-transform: none; line-height: 1.4; margin-top: 2vh;">"' + data.text + '"</h2><cite class="txt-sub editable" data-id="' + data.id + '_auth" style="color: white; opacity: 0.8; margin-top: 4vh; background: rgba(255,255,255,0.05); padding: 1.5vmin 3vmin; border-radius: 3vmin;">— ' + data.author + '</cite></div>';
             } else if (data.type === 'grid') {
                 let gridHtml = '';
                 for(let g of data.grid) {
-                    gridHtml += `<div class="grid-card editable" data-id="${g.id}">
-                        <div style="color: var(--k-orange); background: rgba(243, 146, 0, 0.1); width: 12vmin; height: 12vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2vmin;" class="icon-lg"><i class="fa-solid ${g.i}"></i></div>
-                        <h3 class="txt-title" style="margin: 2vh 0 1vh 0; color: white;">${g.t}</h3>
-                        <p class="txt-body" style="margin:0; text-align: center; color: var(--txt-muted);">${g.d}</p>
-                    </div>`;
+                    gridHtml += '<div class="grid-card editable" data-id="' + g.id + '"><div style="color: var(--k-orange); background: rgba(243, 146, 0, 0.1); width: 12vmin; height: 12vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2vmin;" class="icon-lg"><i class="fa-solid ' + g.i + '"></i></div><h3 class="txt-title" style="margin: 2vh 0 1vh 0; color: white;">' + g.t + '</h3><p class="txt-body" style="margin:0; text-align: center; color: var(--txt-muted);">' + g.d + '</p></div>';
                 }
                 const cols = data.grid.length > 3 ? 'grid-4' : 'grid-2';
-                html = `<div class="grid-locked layout-is-${cols} w-full h-full" style="align-items: stretch; padding: 2vh 0;">${gridHtml}</div>`;
+                html = '<div class="grid-locked layout-is-' + cols + ' w-full h-full" style="align-items: stretch; padding: 2vh 0;">' + gridHtml + '</div>';
             } else if (data.type === 'team') {
                 let groupsHtml = '';
                 for(let gIdx=0; gIdx<data.groups.length; gIdx++) {
@@ -586,84 +565,41 @@
                     let mHtml = '';
                     for(let mIdx=0; mIdx<grp.m.length; mIdx++) {
                         let borderColor = gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)';
-                        mHtml += `<div class="card-box editable" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-width: 1.5vmin; border-left-color: ${borderColor}; padding: 3vmin;">
-                            <p class="txt-body" style="margin:0; color: white;">${grp.m[mIdx]}</p>
-                        </div>`;
+                        mHtml += '<div class="card-box editable" data-id="' + data.id + '_' + gIdx + '_' + mIdx + '" style="border-left-width: 1.5vmin; border-left-color: ' + borderColor + ';">' +
+                            '<p class="txt-body" style="margin:0; color: white;">' + grp.m[mIdx] + '</p></div>';
                     }
-                    groupsHtml += `<div class="flex-col-locked" style="flex: 1; justify-content: flex-start; gap: 3vh;">
-                        <div style="background: linear-gradient(135deg, var(--k-dark), var(--k-blue)); color: white; padding: 3vmin; border-radius: 2vmin; text-align: center; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.3);">
-                            <span class="txt-title" style="color: white;">${grp.t}</span>
-                        </div>
-                        <div class="flex-col-locked" style="gap: 2vh; justify-content: flex-start;">${mHtml}</div>
-                    </div>`;
+                    groupsHtml += '<div class="flex-col-locked" style="flex: 1 1 0; min-width: 0; justify-content: flex-start; gap: 3vh;">' +
+                        '<div style="background: linear-gradient(135deg, var(--k-dark), var(--k-blue)); color: white; padding: 3vmin; border-radius: 2vmin; text-align: center; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.3);"><span class="txt-title" style="color: white;">' + grp.t + '</span></div>' +
+                        '<div class="flex-col-locked" style="gap: 2vh; justify-content: flex-start;">' + mHtml + '</div></div>';
                 }
-                html = `<div class="flex-row-locked layout-is-team w-full h-full" style="align-items: flex-start; padding-top: 2vh;">${groupsHtml}</div>`;
+                html = '<div class="flex-row-locked layout-is-team w-full h-full" style="align-items: flex-start; padding-top: 2vh; width: 100%;">' + groupsHtml + '</div>';
             } else if (data.type === 'table') {
                 let rowsHtml = '';
                 for(let i=0; i<data.rows.length; i++) {
                     let r = data.rows[i];
-                    rowsHtml += `<tr>
-                        <td>${r.mat}</td><td>${r.ini}</td><td style="color: var(--k-orange); font-weight: 900;">${r.ava}</td>
-                    </tr>`;
+                    rowsHtml += '<tr><td>' + r.mat + '</td><td>' + r.ini + '</td><td style="color: var(--k-orange); font-weight: 900;">' + r.ava + '</td></tr>';
                 }
-                html = `<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="text-align: left; width: 33%;">Disciplina</th>
-                                    <th style="text-align: center; width: 33%;">Orientação Inicial</th>
-                                    <th style="text-align: center; width: 33%; color: var(--k-orange);">Orientação Avançada</th>
-                                </tr>
-                            </thead>
-                            <tbody>${rowsHtml}</tbody>
-                        </table>
-                    </div>
-                </div>`;
+                html = '<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;"><div class="table-container"><table><thead><tr><th style="text-align: left; width: 33%;">Disciplina</th><th style="text-align: center; width: 33%;">Orientação Inicial</th><th style="text-align: center; width: 33%; color: var(--k-orange);">Orientação Avançada</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div></div>';
             } else if (data.type === 'stats') {
                 let statsHtml = '';
                 for(let i=0; i<data.stats.length; i++) {
                     let s = data.stats[i];
                     let topColor = i===0 ? 'var(--k-blue)' : 'var(--k-orange)';
-                    statsHtml += `<div class="grid-card editable" data-id="${data.id}_s${i}" style="border-bottom: none; border-top: 3vmin solid ${topColor}; justify-content: center; gap: 4vh;">
-                        <div class="txt-mega" style="font-size: 22vmin; color: ${s.color};">${s.val}</div>
-                        <div class="txt-title" style="color: var(--txt-muted);">${s.label}</div>
-                    </div>`;
+                    statsHtml += '<div class="grid-card editable" data-id="' + data.id + '_s' + i + '" style="border-bottom: none; border-top: 3vmin solid ' + topColor + '; justify-content: center; gap: 4vh;"><div class="txt-mega" style="font-size: 22vmin; color: ' + s.color + ';">' + s.val + '</div><div class="txt-title" style="color: var(--txt-muted);">' + s.label + '</div></div>';
                 }
-                html = `<div class="flex-row-locked w-full h-full" style="justify-content: center;">${statsHtml}</div>`;
+                html = '<div class="flex-row-locked w-full h-full" style="justify-content: center;">' + statsHtml + '</div>';
             } else if (data.type === 'sophia') {
                 let dHtml = '';
                 for(let i=0; i<data.details.length; i++) {
-                    dHtml += `<div style="display: flex; align-items: flex-start; gap: 3vmin;" class="editable" data-id="${data.id}_d${i}">
-                        <i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 4vmin; margin-top: 0.5vmin;"></i>
-                        <span class="txt-body" style="color: white;">${data.details[i]}</span>
-                    </div>`;
+                    dHtml += '<div style="display: flex; align-items: flex-start; gap: 3vmin;" class="editable" data-id="' + data.id + '_d' + i + '"><i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 4vmin; margin-top: 0.5vmin;"></i><span class="txt-body" style="color: white;">' + data.details[i] + '</span></div>';
                 }
-                const clickShield = window.isAdmin ? `<div class="admin-click-shield"></div>` : ``;
-                html = `<div class="flex-row-locked w-full h-full slide-sophia" style="align-items: stretch; padding: 2vh 0;">
-                    <div class="flex-col-locked" style="flex: 1.2; background: var(--bg-card); padding: 6vmin; border-radius: 3vmin; border-left: 2vmin solid var(--k-blue); justify-content: center; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.3); border: 0.2vmin solid var(--border-card);">
-                        <div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(255,183,3,0.3);" class="txt-small">
-                            <i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO
-                        </div>
-                        <h3 class="txt-mega editable" data-id="${data.id}_name" style="margin: 4vh 0;">${data.name}</h3>
-                        <div class="flex-col-locked" style="gap: 3vh; justify-content: flex-start;">${dHtml}</div>
-                    </div>
-                    <div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;">
-                        <div class="media-box">${clickShield}${window.getMediaTag(data.mediaId, 'video', data.defaultMedia)}</div>
-                    </div>
-                </div>`;
+                const clickShield = window.isAdmin ? '<div class="admin-click-shield"></div>' : '';
+                html = '<div class="flex-row-locked w-full h-full slide-sophia" style="align-items: stretch; padding: 2vh 0;"><div class="flex-col-locked" style="flex: 1.2; background: var(--bg-card); padding: 6vmin; border-radius: 3vmin; border-left: 2vmin solid var(--k-blue); justify-content: center; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.3); border: 0.2vmin solid var(--border-card); border-left: 2vmin solid var(--k-blue);"><div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(255,183,3,0.3);" class="txt-small"><i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO</div><h3 class="txt-mega editable" data-id="' + data.id + '_name" style="margin: 4vh 0;">' + data.name + '</h3><div class="flex-col-locked" style="gap: 3vh; justify-content: flex-start;">' + dHtml + '</div></div><div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1;"><div class="media-box">' + clickShield + window.getMediaTag(data.mediaId, 'video', data.defaultMedia) + '</div></div></div>';
             } else if (data.type === 'end') {
-                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                    <i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 3vh;"></i>
-                    <h2 class="txt-mega editable" data-id="${data.id}_t" style="font-size: 12vmin;">${data.title}</h2>
-                    <p class="txt-sub editable" data-id="${data.id}_sub" style="margin: 3vh 0; color: white;">${data.subtitle}</p>
-                    <div class="editable" data-id="${data.id}_contact" style="background: var(--k-blue); color: white; padding: 3vmin 6vmin; border-radius: 6vmin; margin-top: 5vh; box-shadow: 0 2vmin 5vmin rgba(0,174,239,0.3);">
-                        <span class="txt-title" style="color: white; text-transform: none;">${data.contact}</span>
-                    </div>
-                </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;"><i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 3vh;"></i><h2 class="txt-mega editable" data-id="' + data.id + '_t" style="font-size: 12vmin;">' + data.title + '</h2><p class="txt-sub editable" data-id="' + data.id + '_sub" style="margin: 3vh 0; color: white;">' + data.subtitle + '</p><div class="editable" data-id="' + data.id + '_contact" style="background: var(--k-blue); color: white; padding: 3vmin 6vmin; border-radius: 6vmin; margin-top: 5vh; box-shadow: 0 2vmin 5vmin rgba(0,174,239,0.3);"><span class="txt-title" style="color: white; text-transform: none;">' + data.contact + '</span></div></div>';
             }
 
-            mainContent.innerHTML = `<div class="slide active">${html}</div>`;
+            mainContent.innerHTML = '<div class="slide active">' + html + '</div>';
             document.getElementById('progress-bar').style.width = (((window.currentIndex + 1) / slidesData.length) * 100) + '%';
             
             window.setupGestor();
@@ -676,21 +612,17 @@
             else { window.executeMediaAction(); }
         };
 
-        // EXECUÇÃO LOCAL (BLINDADO CONTRA ADMIN)
+        // EXECUÇÃO LOCAL (ADMIN SILENCIADO)
         window.executeMediaAction = function() {
-            // V177: O ADMIN NUNCA ESCUTA ÁUDIO OU RODA O VÍDEO LOCALMENTE
-            if (window.isAdmin) return; 
+            if (window.isAdmin) return; // NUNCA RODA VÍDEO NO CELULAR DO ADMIN
 
             const activeSlide = document.querySelector('.slide.active');
             if (!activeSlide) return;
 
             const video = activeSlide.querySelector('video.slide-video');
             if (video) {
-                if (video.paused) {
-                    video.play().catch(e => console.warn("Para o áudio funcionar, dê um clique no PC que está ligado ao telão antes de iniciar a palestra.", e)); 
-                } else {
-                    video.pause();
-                }
+                if (video.paused) { video.play().catch(e => console.warn("Autoplay bloqueado.", e)); } 
+                else { video.pause(); }
                 return;
             }
 
@@ -708,7 +640,6 @@
             }
         };
 
-        // NAVEGAÇÃO SEGURA
         window.nextSlide = function() { if (window.currentIndex < slidesData.length - 1) { window.currentIndex++; window.syncSlideState(); window.renderSlide(); } };
         window.prevSlide = function() { if (window.currentIndex > 0) { window.currentIndex--; window.syncSlideState(); window.renderSlide(); } };
 
@@ -724,26 +655,20 @@
             if (e.target.tagName === 'INPUT') return;
             if (['Space', ' ', 'ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(e.key)) e.preventDefault();
 
-            // NUNCA MUDA DE SLIDE NO ESPAÇO. O espaço SÓ dá Play ou Pause.
             if (e.key === ' ' || e.key === 'Enter') { window.executeMediaAction(); return; }
-            
             if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'ArrowDown') window.nextSlide();
             if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'ArrowUp' || e.key === 'Backspace') window.prevSlide();
             if (e.key === 'f' || e.key === 'F') window.toggleFullScreen();
         });
 
-        // GESTOR MANUAL 
+        // GESTOR MANUAL E CLOUDINARY
         document.getElementById('logo-btn').addEventListener('click', () => {
             window.adminClicks++;
             if (window.adminClicks === 3) {
                 const pass = prompt("SISTEMA GESTOR (*177). SENHA:");
                 if (pass === "*177") {
                     window.isAdmin = true; document.body.classList.add('admin-mode');
-                    document.getElementById('admin-actions-bar').style.display = 'flex'; 
-                    
-                    // V177: Silencia qualquer mídia existente forçadamente se virou admin
-                    document.querySelectorAll('video, iframe').forEach(el => el.style.pointerEvents = 'none');
-                    
+                    document.getElementById('admin-actions-bar').style.display = 'flex';
                     window.renderSlide(true); 
                 } else { alert("Senha Incorreta."); }
                 window.adminClicks = 0;
@@ -760,7 +685,8 @@
             overlay.innerHTML = `
                 <div class="admin-modal-content">
                     <h3 style="font-size: 3vmin; font-weight: 800; margin-bottom: 2vh; color: white; text-align: center;">🔗 Editar Redirecionamento</h3>
-                    <input type="text" id="link-input" class="admin-input" value="${currentUrl}" placeholder="Ex: https://wa.me/...">
+                    <button class="admin-btn btn-upload" id="btn-upload-link" style="background: var(--k-orange); color: white; width: 100%; margin-bottom: 3vmin; font-size: 2.5vmin; padding: 2.5vmin; border: none; border-radius: 1vmin; cursor: pointer; font-weight: bold;"><i class="fa-solid fa-cloud-arrow-up"></i> ENVIAR ARQUIVO PARA GALERIA</button>
+                    <input type="text" id="link-input" class="admin-input" value="${currentUrl}" placeholder="Ou cole o link (Ex: https://wa.me/...)">
                     <div style="display: flex; gap: 2vw; justify-content: center; margin-top: 2vh;">
                         <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
                         <button class="admin-btn btn-danger" onclick="delete window.savedLinks[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Remover</button>
@@ -768,6 +694,14 @@
                     </div>
                 </div>`;
             overlay.style.display = 'flex';
+
+            document.getElementById('btn-upload-link').addEventListener('click', () => {
+                if(typeof cloudinary === 'undefined') { alert("Cloudinary não carregou."); return; }
+                if(!window.cloudinaryConfig.cloudName || !window.cloudinaryConfig.preset) { alert("Configure o Cloudinary no botão inferior primeiro!"); return; }
+                cloudinary.createUploadWidget({ cloudName: window.cloudinaryConfig.cloudName, uploadPreset: window.cloudinaryConfig.preset, sources: ['local', 'url', 'camera'], multiple: false }, (error, result) => {
+                    if (!error && result && result.event === "success") { document.getElementById('link-input').value = result.info.secure_url; }
+                }).open();
+            });
         }
 
         window.openMediaModal = function(mediaId) {
@@ -776,7 +710,8 @@
             overlay.innerHTML = `
                 <div class="admin-modal-content">
                     <h3 style="font-size: 3.5vmin; font-weight: 900; margin-bottom: 1.5vh; color: var(--k-blue); text-align: center;">📸 Enviar ou Alterar Mídia</h3>
-                    <input type="text" id="media-link-input" class="admin-input" value="${currentUrl}" placeholder="Ex: https://youtu.be/... ou arquivo.mp4">
+                    <button class="admin-btn btn-upload" id="btn-upload-media" style="background: var(--k-orange); color: white; width: 100%; margin-bottom: 3vmin; font-size: 2.5vmin; padding: 2.5vmin; border: none; border-radius: 1vmin; cursor: pointer; font-weight: bold;"><i class="fa-solid fa-cloud-arrow-up"></i> ENVIAR ARQUIVO PARA GALERIA</button>
+                    <input type="text" id="media-link-input" class="admin-input" value="${currentUrl}" placeholder="Ou cole o link (YouTube/MP4)">
                     <div style="display: flex; gap: 2vw; justify-content: center; margin-top: 2vh;">
                         <button class="admin-btn btn-secondary" onclick="window.closeAdminModal()">Cancelar</button>
                         <button class="admin-btn btn-danger" onclick="delete window.savedMedia[window.currentEditingId]; window.saveData(); window.closeAdminModal(); window.renderSlide(true);">Restaurar</button>
@@ -784,6 +719,14 @@
                     </div>
                 </div>`;
             overlay.style.display = 'flex';
+
+            document.getElementById('btn-upload-media').addEventListener('click', () => {
+                if(typeof cloudinary === 'undefined') { alert("Cloudinary não carregou."); return; }
+                if(!window.cloudinaryConfig.cloudName || !window.cloudinaryConfig.preset) { alert("Configure o Cloudinary no botão inferior primeiro!"); return; }
+                cloudinary.createUploadWidget({ cloudName: window.cloudinaryConfig.cloudName, uploadPreset: window.cloudinaryConfig.preset, sources: ['local', 'url', 'camera'], multiple: false }, (error, result) => {
+                    if (!error && result && result.event === "success") { document.getElementById('media-link-input').value = result.info.secure_url; }
+                }).open();
+            });
         }
 
         window.setupGestor = function() {
@@ -794,7 +737,6 @@
                     else if (window.savedLinks[el.dataset.id]) { e.stopPropagation(); e.preventDefault(); window.open(window.savedLinks[el.dataset.id], '_blank'); }
                 };
             });
-            // O Escudo garante que o clique caia na DIV pai e não no vídeo/iframe
             if (window.isAdmin) {
                 document.querySelectorAll('.editable-media').forEach(box => {
                     box.onclick = (e) => { e.stopPropagation(); e.preventDefault(); window.openMediaModal(box.dataset.mediaId); };
@@ -819,7 +761,7 @@
         });
 
         // =========================================================================
-        // MÓDULO AR V177: TWO-STEP VERIFICATION & KINETIC MAPPING SEGURO
+        // MÓDULO AR V177: TWO-STEP VERIFICATION & KINETIC MAPPING
         // =========================================================================
         
         window.triggerARConfirm = function(actionType) {
