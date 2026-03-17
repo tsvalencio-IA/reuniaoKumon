@@ -29,7 +29,7 @@
             width: 100%; height: 100%;
             height: 100dvh;
             overflow: hidden;
-            background-color: #f8fafc; /* Fundo mais claro e elegante para o Telão */
+            background-color: #f8fafc; 
             font-family: 'Poppins', sans-serif;
             touch-action: pan-y;
         }
@@ -43,7 +43,6 @@
             background-color: transparent; position: relative;
         }
 
-        /* Fundo Geométrico Vibrante (Mas elegante) */
         .bg-blobs::before {
             content: ''; position: fixed; top: -15vh; right: -10vw; width: 60vmin; height: 60vmin;
             background: radial-gradient(circle, rgba(0, 174, 239, 0.12) 0%, transparent 70%);
@@ -55,7 +54,6 @@
             border-radius: 50%; z-index: 0; pointer-events: none;
         }
 
-        /* CORES INSTITUCIONAIS */
         :root {
             --k-blue: #00AEEF;
             --k-dark: #004578;
@@ -114,7 +112,6 @@
         .layout-col { display: flex; flex-direction: column; gap: 20px; flex: 1 1 350px; justify-content: center; }
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; width: 100%; }
 
-        /* CARDS PREMIUM */
         .card-box {
             background: white; padding: 25px 30px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.06); border-left: 8px solid var(--k-blue);
@@ -131,7 +128,6 @@
         }
         .grid-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
 
-        /* MEDIA BOX PREMIUM */
         .media-box {
             background: radial-gradient(circle, #ffffff 0%, #f8fafc 100%); border-radius: 25px; 
             overflow: hidden; width: 100%; aspect-ratio: 16/9; max-height: 60vh;
@@ -140,7 +136,7 @@
         }
         .slide-sophia .media-box { aspect-ratio: auto; height: 100%; min-height: 450px; }
         .media-box img, .media-box video, .media-box iframe { width: 100%; height: 100%; object-fit: contain; border: none; outline: none; border-radius: 18px; background: black; }
-        .media-box img { background: transparent; padding: 0; object-fit: cover; } /* Imagem preenche todo o espaço para ficar bonita */
+        .media-box img { background: transparent; padding: 0; object-fit: cover; } 
 
         /* =========================================================================
            6. BOTÕES DO RODAPÉ
@@ -169,7 +165,7 @@
         .btn-extras.active-ar { color: #00ff66; text-shadow: 0 0 10px #00ff66; }
 
         /* =========================================================================
-           7. MODO GESTOR (Apenas clique manual)
+           7. MODO GESTOR E MODAIS
            ========================================================================= */
         .admin-mode .editable { outline: 3px dashed var(--k-orange); position: relative; cursor: pointer; border-radius: 8px; transition: background 0.2s; }
         .admin-mode .editable:hover { background: rgba(243, 146, 0, 0.1); }
@@ -179,14 +175,12 @@
         .admin-mode .editable-media > * { pointer-events: none !important; }
         .has-link:not(.editable) { cursor: pointer; border-bottom: 3px solid var(--k-blue); }
 
-        /* Tabela Responsiva */
         .table-wrapper { width: 100%; overflow-x: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
         table { width: 100%; min-width: 600px; border-collapse: collapse; background: white; }
         th { background: var(--k-dark); color: white; padding: 20px; font-size: clamp(1.1rem, 2.2vw, 1.4rem); text-align: center; }
         td { padding: 20px; text-align: center; font-size: clamp(1rem, 2vw, 1.3rem); font-weight: 600; color: var(--txt-main); border-bottom: 2px solid #f1f5f9; }
         td:first-child { background: #f8fafc; text-align: left; color: var(--k-dark); font-weight: 800; }
 
-        /* MODAIS CUSTOMIZADOS */
         #admin-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8);
             z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
@@ -214,25 +208,25 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* =========================================================================
-           8. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD)
+           8. PAINEL DE CONTROLE AR (MINORITY REPORT DASHBOARD) V177
            ========================================================================= */
         #ar-dashboard {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-            z-index: 9990; display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9990; display: none; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding-top: 5vh;
         }
         
-        /* Contêiner dos botões principais */
         #ar-main-buttons {
-            display: flex; flex-direction: column; width: 90vw; gap: 3vh; align-items: center; margin-top: 5vh;
+            display: flex; flex-direction: column; width: 90vw; gap: 4vh; align-items: center; margin-top: 5vh;
         }
         .ar-row-buttons {
-            display: flex; width: 100%; justify-content: space-between; gap: 4vw; height: 22vh;
+            display: flex; width: 100%; justify-content: space-between; gap: 6vw; height: 25vh;
         }
         
-        /* Contêiner de Confirmação (2 Etapas) */
         #ar-confirm-buttons {
-            display: none; flex-direction: column; width: 90vw; gap: 3vh; align-items: center; margin-top: 5vh;
+            display: none; flex-direction: column; width: 90vw; height: 60vh; 
+            justify-content: center; align-items: center; gap: 4vh; margin-top: 2vh;
         }
 
         .ar-control-btn {
@@ -243,13 +237,14 @@
             cursor: pointer; outline: none;
         }
         .ar-control-btn i { font-size: 8vmin; color: var(--k-blue); }
+        
         .ar-control-btn.orange { border-color: rgba(243, 146, 0, 0.4); box-shadow: 0 0 30px rgba(243, 146, 0, 0.1) inset; }
         .ar-control-btn.orange i { color: var(--k-orange); }
         
-        .ar-control-btn.green { border-color: rgba(0, 255, 102, 0.5); box-shadow: 0 0 40px rgba(0, 255, 102, 0.2) inset; }
+        .ar-control-btn.green { border-color: rgba(0, 255, 102, 0.5); box-shadow: 0 0 40px rgba(0, 255, 102, 0.2) inset; width: 80vw; flex: none; height: 20vh; flex-direction: row; gap: 4vw;}
         .ar-control-btn.green i { color: #00ff66; }
 
-        .ar-control-btn.red { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 40px rgba(239, 68, 68, 0.2) inset; }
+        .ar-control-btn.red { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 40px rgba(239, 68, 68, 0.2) inset; width: 80vw; flex: none; height: 20vh; flex-direction: row; gap: 4vw;}
         .ar-control-btn.red i { color: #ef4444; }
 
         #ar-canvas {
@@ -262,7 +257,9 @@
             .header-area { padding: 15px 20px; }
             .main-area { padding: 25px 5vw; }
             .footer-area { padding: 15px 5vw; }
-            .ar-row-buttons { height: 20vh; }
+            .ar-row-buttons { height: 22vh; gap: 4vw; }
+            .ar-control-btn { font-size: 5vmin; border-radius: 20px; }
+            .ar-control-btn.green, .ar-control-btn.red { height: 15vh; width: 85vw; }
         }
     </style>
 </head>
@@ -273,8 +270,8 @@
         <div id="firebase-warning" class="status-warning fade-out"><i class="fa-solid fa-cloud-check"></i> BD Sincronizado</div>
         <div id="ar-status-warning" class="status-warning pulse"><i class="fa-solid fa-camera"></i> A Carregar IA Holográfica...</div>
 
-        <!-- CÂMERA ESCONDIDA -->
-        <video id="ar-video" playsinline autoplay style="display: none;"></video>
+        <!-- CÂMERA ESCONDIDA (V177: Muted para evitar erros de política de Autoplay do Navegador) -->
+        <video id="ar-video" playsinline autoplay muted style="display: none;"></video>
         
         <!-- CANVAS DO ESQUELETO MÁGICO -->
         <canvas id="ar-canvas"></canvas>
@@ -301,31 +298,30 @@
                     </button>
                 </div>
                 
-                <button id="ar-btn-action" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('action')" style="display: none; width: 100%; height: 15vh; flex-direction: row; gap: 4vw;">
-                    <i class="fa-solid fa-play" style="color: white;"></i> 
-                    <span style="color: white;">PLAY / ABRIR MÍDIA</span>
+                <!-- Botão de Ação / Play -->
+                <button id="ar-btn-action" class="ar-control-btn admin-btn-target" onclick="window.triggerARConfirm('action')" style="display: none; width: 100%; height: 18vh; flex-direction: row; gap: 4vw; border-color: rgba(0, 255, 102, 0.4); box-shadow: 0 0 40px rgba(0, 255, 102, 0.15) inset;">
+                    <i class="fa-solid fa-play" style="color: #00ff66;"></i> 
+                    <span style="color: #00ff66;">PLAY / ABRIR MÍDIA</span>
                 </button>
             </div>
 
-            <!-- Botões de Confirmação (Passo 2 - Evita clique acidental) -->
+            <!-- Botões de Confirmação (Passo 2) -->
             <div id="ar-confirm-buttons">
-                <div style="color: white; font-size: 3vmin; font-weight: bold; margin-bottom: 1vh;">CONFIRME A AÇÃO:</div>
-                <div class="ar-row-buttons" style="height: 25vh;">
-                    <button id="ar-btn-cancel" class="ar-control-btn red admin-btn-target" onclick="window.cancelARConfirm()">
-                        <i class="fa-solid fa-xmark"></i> CANCELAR
-                    </button>
-                    <button id="ar-btn-ok" class="ar-control-btn green admin-btn-target" onclick="window.executeARConfirm()">
-                        <i class="fa-solid fa-check"></i> SIM, EXECUTAR
-                    </button>
-                </div>
+                <div style="color: white; font-size: 4vmin; font-weight: bold; margin-bottom: 2vh; text-align: center;">CONFIRME A AÇÃO:</div>
+                <button id="ar-btn-ok" class="ar-control-btn green admin-btn-target" onclick="window.executeARConfirm()">
+                    <i class="fa-solid fa-check"></i> SIM, EXECUTAR
+                </button>
+                <button id="ar-btn-cancel" class="ar-control-btn red admin-btn-target" onclick="window.cancelARConfirm()">
+                    <i class="fa-solid fa-xmark"></i> CANCELAR
+                </button>
             </div>
             
-            <button id="btn-ar-close" class="admin-btn-target" onclick="window.ARController.toggle()" style="position: absolute; bottom: 4vh; background: #ef4444; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 2.5vmin; font-weight: bold; cursor: pointer; z-index: 9991; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);">
+            <button id="btn-ar-close" class="admin-btn-target" onclick="window.ARController.toggle()" style="position: absolute; bottom: 3vh; background: #ef4444; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 2.5vmin; font-weight: bold; cursor: pointer; z-index: 9991; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);">
                 <i class="fa-solid fa-power-off"></i> Desligar Painel AR
             </button>
         </div>
 
-        <!-- CONTEÚDO PRINCIPAL DA APRESENTAÇÃO (Visão dos Pais / Projetor) -->
+        <!-- CONTEÚDO PRINCIPAL DA APRESENTAÇÃO -->
         <header class="header-area" id="main-header">
             <div style="display: flex; align-items: center; gap: 20px; width: 100%;">
                 <div id="slide-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--k-blue), var(--k-dark)); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 5px 15px rgba(0,174,239,0.3);">
@@ -391,7 +387,6 @@
 
         window.isAdmin = false; window.adminClicks = 0; window.currentEditingId = null;
 
-        // V177: Variáveis de Confirmação AR (Two-Step Verification)
         window.arPendingAction = null;
         window.arConfirmTimeout = null;
 
@@ -489,7 +484,7 @@
             { id: 'connect', type: 'media-right', title: "Kumon Connect", icon: "fa-tablet-screen-button", mediaId: "media_connect", defaultMedia: "https://img.freepik.com/premium-photo/asian-girl-using-digital-tablet-with-stylus-pen-online-learning-drawing-home-cute-kid-studying-with-technology-creative-art-smart-education-concept_39704-20138.jpg", items: ["A evolução do nosso método tradicional para o formato digital.", "Estudo diário realizado através de tablets e canetas interativas.", "Correção ágil e acompanhamento da evolução em tempo real.", "Sustentabilidade e inovação educacional na palma da mão."] },
             { id: 'triade', type: 'grid', title: "A Tríade Kumon", icon: "fa-circle-nodes", grid: [{ id: 'tr1', t: "A Unidade", d: "Responsável pelo planejamento, orientação individual e motivação constante.", i: "fa-school" }, { id: 'tr2', t: "Os Pais", d: "Essenciais no acompanhamento diário, fornecendo elogios e um ambiente tranquilo.", i: "fa-house-chimney-user" }, { id: 'tr3', t: "O Aluno", d: "Protagonista do método, focado na resolução diária e busca pela autonomia.", i: "fa-user-graduate" }] },
             { id: 'avisos', type: 'media-left', title: "Avisos Importantes", icon: "fa-bell", mediaId: "media_avisos", defaultMedia: "https://static.vecteezy.com/system/resources/previews/035/633/004/non_2x/paper-spiral-wall-calendar-and-clocks-calendar-clocks-flat-icon-schedule-appointment-organizer-timesheet-time-management-important-date-illustration-in-flat-style-vector.jpg", items: ["Atenção máxima aos horários de aula agendados na unidade.", "As reposições devem ser marcadas sempre com antecedência na recepção.", "Lembre-se: A consistência diária é o que garante os resultados do método.", "Mantenham sempre comunicação aberta com a nossa equipe administrativa."] },
-            { id: 'fim', type: 'end', title: "MUITO OBRIGADO!", subtitle: "Unidade Kumon Rio Preto Shopping", contact: "Tel: (17) 98225-2244" }
+            { id: 'fim', type: 'end', title: "MUITO OBRIGADO!", subtitle: "Unidade Kumon Rio Preto Shopping", contact: "Tel: 3227-0644" }
         ];
 
         window.getMediaTag = function(mediaId, defaultType, defaultMediaUrl) {
@@ -523,7 +518,6 @@
                 dashName.innerHTML = (data.title || data.t || "APRESENTAÇÃO");
             }
 
-            // Lógica para mostrar/ocultar o botão PLAY no AR
             let hasAction = false;
             if (data.mediaId || window.savedMedia[data.mediaId] || data.type === 'media-left' || data.type === 'media-right' || data.type === 'sophia') {
                 hasAction = true;
@@ -546,9 +540,6 @@
                 document.getElementById('slide-title').style.color = data.bg ? 'white' : 'var(--k-dark)';
             }
 
-            // =====================================================================
-            // GERAÇÃO DE HTML (SEM A CLASSE admin-btn-target NAS ÁREAS PARA EVITAR CLIQUES AR)
-            // =====================================================================
             if (data.type === 'cover') {
                 html = '<div class="layout-col" style="align-items: center; text-align: center;">' +
                     '<h1 class="txt-mega editable text-white" data-id="' + data.id + '_t" style="text-shadow: 0 10px 20px rgba(0,0,0,0.2);">' + data.t + '</h1>' +
@@ -678,7 +669,7 @@
             if (e.key === 'f' || e.key === 'F') window.toggleFullScreen();
         });
 
-        // GESTOR
+        // GESTOR MANUAL 
         document.getElementById('logo-btn').addEventListener('click', () => {
             window.adminClicks++;
             if (window.adminClicks === 3) {
@@ -710,7 +701,6 @@
             overlay.style.display = 'flex';
         }
 
-        // BIND MANUAL
         window.setupGestor = function() {
             document.querySelectorAll('.editable').forEach(el => {
                 if (window.savedLinks[el.dataset.id]) el.classList.add('has-link'); else el.classList.remove('has-link');
@@ -726,7 +716,6 @@
             }
         }
 
-        // CLOUDINARY CONFIG
         document.getElementById('btn-config-cloudinary').addEventListener('click', () => {
             const cName = window.cloudinaryConfig.cloudName;
             const cPreset = window.cloudinaryConfig.preset;
@@ -735,20 +724,17 @@
         });
 
         // =========================================================================
-        // MÓDULO AR V177: TWO-STEP VERIFICATION (HOVER -> CONFIRM)
+        // MÓDULO AR V177: TWO-STEP VERIFICATION & KINETIC MAPPING
         // =========================================================================
         
         window.triggerARConfirm = function(actionType) {
-            // Guarda qual ação o usuário quer fazer
             if (actionType === 'next') window.arPendingAction = () => window.nextSlide();
             if (actionType === 'prev') window.arPendingAction = () => window.prevSlide();
             if (actionType === 'action') window.arPendingAction = () => window.triggerRemoteAction();
 
-            // Esconde botões principais e mostra botões de confirmação
             document.getElementById('ar-main-buttons').style.display = 'none';
             document.getElementById('ar-confirm-buttons').style.display = 'flex';
             
-            // Se o usuário não confirmar em 6 segundos, volta ao normal automaticamente
             if(window.arConfirmTimeout) clearTimeout(window.arConfirmTimeout);
             window.arConfirmTimeout = setTimeout(() => {
                 window.cancelARConfirm();
@@ -759,7 +745,7 @@
             if (window.arPendingAction) {
                 window.arPendingAction();
             }
-            window.cancelARConfirm(); // Volta o UI ao normal
+            window.cancelARConfirm(); 
         };
 
         window.cancelARConfirm = function() {
@@ -807,7 +793,12 @@
                     await new Promise((resolve) => {
                         this.video.onloadedmetadata = () => resolve();
                     });
-                    this.video.play();
+                    
+                    try {
+                        await this.video.play();
+                    } catch (e) {
+                        console.warn("Autoplay bloqueado, mas continuará silenciado", e);
+                    }
 
                     const w = this.canvas.width = window.innerWidth;
                     const h = this.canvas.height = window.innerHeight;
@@ -823,7 +814,7 @@
                     document.getElementById('ar-status-warning').style.display = 'none';
                     
                     document.getElementById('ar-dashboard').style.display = 'flex';
-                    window.cancelARConfirm(); // Garante que a UI começa no estado base
+                    window.cancelARConfirm();
                     window.renderSlide(); 
                     
                     this.loop();
@@ -866,18 +857,18 @@
                     const mapKpy = (valY) => (valY / vH) * h;
 
                     this.ctx.lineWidth = 6;
-                    this.ctx.strokeStyle = "rgba(0, 255, 255, 0.6)";
+                    this.ctx.strokeStyle = "rgba(0, 255, 255, 0.4)";
                     this.ctx.fillStyle = "#fff";
 
                     const drawBone = (p1Name, p2Name) => {
                         const kp1 = kps.find(k => k.name === p1Name);
                         const kp2 = kps.find(k => k.name === p2Name);
-                        if (kp1 && kp2 && kp1.score > 0.25 && kp2.score > 0.25) {
+                        if (kp1 && kp2 && kp1.score > 0.3 && kp2.score > 0.3) {
                             const x1 = mapKpx(kp1.x); const y1 = mapKpy(kp1.y);
                             const x2 = mapKpx(kp2.x); const y2 = mapKpy(kp2.y);
                             this.ctx.beginPath(); this.ctx.moveTo(x1, y1); this.ctx.lineTo(x2, y2); this.ctx.stroke();
-                            this.ctx.beginPath(); this.ctx.arc(x1, y1, 6, 0, Math.PI*2); this.ctx.fill();
-                            this.ctx.beginPath(); this.ctx.arc(x2, y2, 6, 0, Math.PI*2); this.ctx.fill();
+                            this.ctx.beginPath(); this.ctx.arc(x1, y1, 5, 0, Math.PI*2); this.ctx.fill();
+                            this.ctx.beginPath(); this.ctx.arc(x2, y2, 5, 0, Math.PI*2); this.ctx.fill();
                         }
                     };
 
@@ -887,15 +878,29 @@
 
                     const rw = kps.find(k => k.name === 'right_wrist');
                     const lw = kps.find(k => k.name === 'left_wrist');
+                    const rs = kps.find(k => k.name === 'right_shoulder');
+                    const ls = kps.find(k => k.name === 'left_shoulder');
+
                     let domWrist = null;
-                    if (rw && rw.score > 0.25 && lw && lw.score > 0.25) domWrist = rw.y < lw.y ? rw : lw;
-                    else if (rw && rw.score > 0.25) domWrist = rw; 
-                    else if (lw && lw.score > 0.25) domWrist = lw;
+                    if (rw && rw.score > 0.4 && lw && lw.score > 0.4) domWrist = rw.y < lw.y ? rw : lw;
+                    else if (rw && rw.score > 0.4) domWrist = rw; 
+                    else if (lw && lw.score > 0.4) domWrist = lw;
 
                     if (domWrist) {
-                        this.cursor.x = mapKpx(domWrist.x);
-                        this.cursor.y = mapKpy(domWrist.y);
-                        this.cursor.active = true;
+                        let isHandRaised = true;
+                        let shoulderY = (rs && ls) ? (rs.y + ls.y) / 2 : (vH * 0.5);
+                        
+                        if (rs && ls && domWrist.y > shoulderY + (vH * 0.15)) {
+                            isHandRaised = false; 
+                        } else if (domWrist.y > vH * 0.7) {
+                            isHandRaised = false; 
+                        }
+
+                        if (isHandRaised) {
+                            this.cursor.x = mapKpx(domWrist.x);
+                            this.cursor.y = mapKpy(domWrist.y);
+                            this.cursor.active = true;
+                        }
                     }
                 }
 
