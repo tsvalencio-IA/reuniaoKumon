@@ -99,7 +99,7 @@
         }
 
         /* =========================================================================
-           4. LAYOUTS INTERNOS (Blindados)
+           4. LAYOUTS INTERNOS (Garantindo que fiquem dentro da tela)
            ========================================================================= */
         .slide { display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; }
         .slide.active { display: flex; animation: fadeIn 0.4s ease-out; }
@@ -110,7 +110,7 @@
         
         .grid-locked { display: grid; gap: 2vmin; height: 100%; width: 100%; }
         .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5vw; }
+        .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } /* Sem espaçamento vazando a tela */
 
         .card-box {
             background: var(--bg-card); padding: 2.5vmin; border-radius: 2vmin;
@@ -126,17 +126,14 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex: 1 1 0; min-width: 0; min-height: 0;
         }
 
-        /* REGRAS ISOLADAS DE DIMENSIONAMENTO */
-        .layout-is-grid-4 .txt-title { font-size: 3vmin !important; margin: 1.5vh 0 !important; word-break: break-word; hyphens: auto; }
-        .layout-is-grid-4 .txt-body { font-size: 2vmin !important; word-wrap: break-word; hyphens: auto; }
-        .layout-is-team .txt-title { font-size: 3.5vmin !important; }
-        .layout-is-team .txt-body { font-size: 2.2vmin !important; }
-
         .media-box {
             background: #000; border-radius: 2vmin; overflow: hidden;
             width: 100%; height: 100%; border: 0.4vmin solid rgba(255,255,255,0.2); box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.8);
             position: relative; display: flex; align-items: center; justify-content: center;
         }
+        .media-box img { width: 100%; height: 100%; object-fit: cover; } 
+        .media-box video, .media-box iframe { width: 100%; height: 100%; object-fit: contain; border: none; background: black; } 
+
         .table-container { width: 100%; max-width: 90vw; background: var(--bg-card); border-radius: 2vmin; overflow: hidden; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5); border: 0.1vmin solid var(--border-card); }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         th { background: rgba(0, 174, 239, 0.2); color: var(--k-blue); padding: 2.5vmin; font-size: 2.8vmin; font-family: 'Nunito', sans-serif; text-transform: uppercase; }
@@ -181,10 +178,10 @@
         .admin-mode .editable::before { content: '🔗 LINK'; position: absolute; top: -3vmin; left: 0; background: var(--k-orange); color: white; font-size: 2vmin; font-weight: bold; padding: 0.5vmin 1.5vmin; border-radius: 0.5vmin; z-index: 100; }
         
         .admin-mode .editable-media { outline: 0.5vmin dashed var(--k-blue); cursor: pointer; position: relative; }
-        .admin-mode .editable-media::after { content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,174,239,0.95); color: white; padding: 2vmin 4vmin; border-radius: 1vmin; font-size: 3vmin; font-weight: bold; pointer-events: none; z-index: 1000;}
+        .admin-mode .editable-media::after { content: '📸 ALTERAR MÍDIA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,174,239,0.95); color: white; padding: 2vmin 4vmin; border-radius: 1vmin; font-size: 3vmin; font-weight: bold; pointer-events: none; z-index: 100;}
         .has-link:not(.editable) { cursor: pointer; border-bottom: 0.4vmin solid var(--k-blue); }
 
-        /* ESCUDO DE CLIQUE ADMIN */
+        /* ESCUDO DE CLIQUE ADMIN (Bloqueia o vídeo de roubar o toque na tela TDAH) */
         .admin-click-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; background: transparent; cursor: pointer; display: none; }
         .admin-mode .admin-click-shield { display: block; }
 
@@ -250,6 +247,7 @@
         .ar-control-btn.red i { color: #ef4444; }
 
         #ar-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998; }
+
     </style>
 </head>
 <body>
@@ -314,7 +312,7 @@
             </button>
         </div>
 
-        <!-- CONTEÚDO PRINCIPAL DA APRESENTAÇÃO (TELÃO) -->
+        <!-- CONTEÚDO PRINCIPAL DA APRESENTAÇÃO -->
         <header class="header-area" id="main-header">
             <div style="display: flex; align-items: center; gap: 3vmin; width: 100%;">
                 <div id="slide-icon" style="width: 9vmin; height: 9vmin; background: linear-gradient(135deg, var(--k-blue), var(--k-dark)); color: white; border-radius: 2vmin; display: flex; align-items: center; justify-content: center; font-size: 4.5vmin; flex-shrink: 0; box-shadow: 0 0.5vmin 1.5vmin rgba(0,174,239,0.3);">
@@ -351,7 +349,7 @@
 
     <script>
         // =====================================================================
-        // CHAVES DO FIREBASE E INICIALIZAÇÃO
+        // CHAVES DO FIREBASE
         // =====================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCaFH2nn5VD9eTAdCcdkduDxfg8BbU-dM8",
@@ -401,7 +399,6 @@
                     localStorage.setItem('kumon_v177_media', JSON.stringify(window.savedMedia));
                     localStorage.setItem('kumon_v177_cloud', JSON.stringify(window.cloudinaryConfig));
                     
-                    // COFRE ANTI-FLICKER
                     if (window.lastSettingsHash !== newHash) {
                         window.lastSettingsHash = newHash;
                         window.renderSlide(true);
@@ -466,35 +463,24 @@
             { id: 'inclusao', type: 'media-left', title: "TDAH, TDA e Dislexia", icon: "fa-brain", mediaId: "media_tdah", mediaType: "video", defaultMedia: "https://images.presentationgo.com/2025/07/female-teacher-with-students-classroom.jpg", items: ["Acompanhamento focado no desenvolvimento individual de cada aluno.", "Respeito absoluto ao ritmo e à forma de aprendizado única de cada criança.", "Apoio e direcionamento da nossa psicóloga, Maria Carolina.", "Material didático que permite o aumento da capacidade de concentração.", "Parceria e comunicação contínua entre a unidade Kumon, a escola regular e a família."] },
             { id: 'sophia', type: 'sophia', title: "Aluna Destaque", name: "Sophia Sangolete", mediaId: "media_sophia", details: ["Início: 16/06/2016 (Matemática).", "Atual: Matemática Estágio M 111.", "Concluinte das disciplinas de Português e Inglês."] },
             { id: 'connect', type: 'media-right', title: "Kumon Connect", icon: "fa-tablet-screen-button", mediaId: "media_connect", defaultMedia: "https://img.freepik.com/premium-photo/asian-girl-using-digital-tablet-with-stylus-pen-online-learning-drawing-home-cute-kid-studying-with-technology-creative-art-smart-education-concept_39704-20138.jpg", items: ["A evolução do nosso método tradicional para o formato digital.", "Estudo diário realizado através de tablets e canetas interativas.", "Correção ágil e acompanhamento da evolução em tempo real.", "Sustentabilidade e inovação educacional na palma da mão."] },
-            { id: 'triade', type: 'grid', title: "A Tríade Kumon", icon: "fa-circle-nodes", grid: [{ id: 'tr1', t: "A Unidade", d: "Responsável pelo planejamento, orientação individual e motivação constante.", i: "fa-school" }, { id: 'tr2', t: "Os Pais", d: "Essenciais no acompanhamento diário, fornecendo elogios e um ambiente tranquilo.", i: "fa-house-chimney-user" }, { id: 'tr3', t: "O Aluno", d: "Protagonista do método, focado na resolução diária e busca pela autonomia.", i: "fa-user-graduate" }] },
+            { id: 'triade', type: 'team', title: "A Tríade Kumon", icon: "fa-circle-nodes", groups: [{ t: "A Unidade", m: ["Responsável pelo planejamento, orientação individual e motivação constante."] }, { t: "Os Pais", m: ["Essenciais no acompanhamento diário, fornecendo elogios e um ambiente tranquilo."] }, { t: "O Aluno", m: ["Protagonista do método, focado na resolução diária e busca pela autonomia."] }] },
             { id: 'avisos', type: 'media-left', title: "Avisos Importantes", icon: "fa-bell", mediaId: "media_avisos", defaultMedia: "https://static.vecteezy.com/system/resources/previews/035/633/004/non_2x/paper-spiral-wall-calendar-and-clocks-calendar-clocks-flat-icon-schedule-appointment-organizer-timesheet-time-management-important-date-illustration-in-flat-style-vector.jpg", items: ["Atenção máxima aos horários de aula agendados na unidade.", "As reposições devem ser marcadas sempre com antecedência na recepção.", "Lembre-se: A consistência diária é o que garante os resultados do método.", "Mantenham sempre comunicação aberta com a nossa equipe administrativa."] },
             { id: 'fim', type: 'end', title: "MUITO OBRIGADO!", subtitle: "Unidade Kumon Rio Preto Shopping", contact: "Tel: 3227-0644" }
         ];
 
-        // V177: CORREÇÃO ABSOLUTA DA INTELIGÊNCIA DA MÍDIA
-        // A IA agora checa se o seu link do Cloudinary é uma imagem real. Se for, ela DESTRÓI a tag <video> e cria uma <img>.
         window.getMediaTag = function(mediaId, defaultType, defaultMediaUrl) {
             let src = window.savedMedia[mediaId] || defaultMediaUrl;
-            if (!src) return `<div style="color: var(--txt-muted); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 2vmin;"></i></div>`;
+            if (!src) return '<div style="color: var(--txt-muted); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><i class="fa-solid fa-video icon-xl" style="margin-bottom: 2vmin;"></i></div>';
             
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
                 let vid = src.split('v=')[1] || src.split('youtu.be/')[1];
                 if(vid && vid.includes('&')) vid = vid.split('&')[0];
-                return `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; border-radius: 2.5vmin; background: transparent;"></iframe>`;
+                return '<iframe src="https://www.youtube.com/embed/' + vid + '?autoplay=0&enablejsapi=1" allowfullscreen style="pointer-events: none; width: 100%; height: 100%; object-fit: contain; border-radius: 2vmin; background: transparent;"></iframe>';
             }
-            
-            // VERIFICAÇÃO BLINDADA: É foto ou é vídeo?
-            let isImage = src.match(/\.(jpeg|jpg|gif|png|webp|avif|bmp)$/i);
-            let isVideoUrl = src.match(/\.(mp4|webm|ogg|mov)$/i);
-            
-            if (isImage) {
-                return `<img src="${src}" alt="Midia" style="width: 100%; height: 100%; object-fit: contain; background: transparent; border-radius: 2.5vmin;" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e2e8f0/64748b?text=Erro';" />`;
-            } else if (isVideoUrl || defaultType === 'video') {
-                return `<video src="${src}" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; border-radius: 2.5vmin; background: transparent;"></video>`; 
+            if (src.endsWith('.mp4') || defaultType === 'video') {
+                return '<video src="' + src + '" controls class="slide-video" style="width: 100%; height: 100%; object-fit: contain; border-radius: 2vmin; background: transparent;"></video>'; 
             }
-            
-            // Se não tiver extensão clara, tenta exibir como imagem por segurança
-            return `<img src="${src}" alt="Midia" style="width: 100%; height: 100%; object-fit: contain; background: transparent; border-radius: 2.5vmin;" onerror="this.onerror=null; this.src='https://placehold.co/800x600/e2e8f0/64748b?text=Erro';" />`;
+            return '<img src="' + src + '" alt="Midia" style="width: 100%; height: 100%; object-fit: cover; border-radius: 2vmin;" onerror="this.onerror=null; this.src=\'https://placehold.co/800x600/e2e8f0/64748b?text=Erro\';" />';
         }
 
         window.renderSlide = function(force = false) {
@@ -520,58 +506,43 @@
                 header.style.display = 'flex';
                 document.getElementById('slide-title').innerHTML = data.title;
                 document.getElementById('slide-title').dataset.id = data.id + "_title";
+                document.getElementById('slide-icon').innerHTML = '<i class="fa-solid ' + data.icon + '"></i>';
+                document.getElementById('slide-title').style.color = 'white';
             }
 
-            const classIsolated = (data.id === 'oque' || data.id === 'triade') ? ` slide-id-${data.id}` : '';
-
+            // GERAÇÃO DE HTML RESTAURADA (COM O ESCUDO INVISÍVEL NO VÍDEO)
             if (data.type === 'cover') {
-                html = `
-                    <div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                        <h1 class="txt-mega editable text-white" data-id="${data.id}_t" style="text-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5);">${data.t}</h1>
-                        <div style="width: 25vw; height: 1.2vh; background: var(--k-orange); border-radius: 1vh; margin: 3vh 0; box-shadow: 0 1vmin 2vmin rgba(243, 146, 0, 0.4);"></div>
-                        <p class="txt-sub editable text-white" data-id="${data.id}_sub" style="color: white; margin-bottom: 3vh;">${data.sub}</p>
-                        <div class="editable" data-id="${data.id}_ext" style="margin-top: 5vh; background: rgba(255,255,255,0.05); border: 0.3vh solid rgba(255,255,255,0.2); padding: 3vmin 6vmin; border-radius: 5vmin; backdrop-filter: blur(10px);">
-                            <p class="txt-body text-white" style="margin:0; font-weight: 800; color: white;">${data.ext}</p>
-                        </div>
-                    </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">' +
+                    '<h1 class="txt-mega editable text-white" data-id="' + data.id + '_t" style="text-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5);">' + data.t + '</h1>' +
+                    '<div style="width: 25vw; height: 1.2vh; background: var(--k-orange); border-radius: 1vh; margin: 3vh 0; box-shadow: 0 1vmin 2vmin rgba(243, 146, 0, 0.4);"></div>' +
+                    '<p class="txt-sub editable text-white" data-id="' + data.id + '_sub" style="color: white; margin-bottom: 3vh;">' + data.sub + '</p>' +
+                    '<div class="editable" data-id="' + data.id + '_ext" style="margin-top: 5vh; background: rgba(255,255,255,0.05); border: 0.3vh solid rgba(255,255,255,0.2); padding: 3vmin 6vmin; border-radius: 5vmin; backdrop-filter: blur(10px);">' +
+                        '<p class="txt-body text-white" style="margin:0; font-weight: 800; color: white;">' + data.ext + '</p>' +
+                    '</div></div>';
             } else if (data.type === 'list') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}">
-                        <div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 8vmin; height: 8vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                        <p class="txt-body" style="margin:0; color: white;">${data.items[i]}</p>
-                    </div>`;
+                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '"><div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 8vmin; height: 8vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0; color: white;">' + data.items[i] + '</p></div>';
                 }
-                html = `<div class="flex-col-locked" style="width: 100%; max-width: 90vw; margin: auto;">${itemsHtml}</div>`;
+                html = '<div class="flex-col-locked" style="width: 100%; max-width: 90vw; margin: auto;">' + itemsHtml + '</div>';
             } else if (data.type === 'media-left' || data.type === 'media-right') {
                 let itemsHtml = '';
                 for(let i=0; i<data.items.length; i++) {
-                    itemsHtml += `<div class="card-box editable" data-id="${data.id}_i${i}" style="padding: 2.5vmin;">
-                        <div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div>
-                        <p class="txt-body" style="margin:0; font-size: 2.8vmin; color: white;">${data.items[i]}</p>
-                    </div>`;
+                    itemsHtml += '<div class="card-box editable" data-id="' + data.id + '_i' + i + '" style="padding: 2.5vmin;"><div style="background: rgba(0, 174, 239, 0.2); color: var(--k-blue); width: 6vmin; height: 6vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" class="icon-md"><i class="fa-solid fa-check"></i></div><p class="txt-body" style="margin:0; font-size: 2.8vmin; color: white;">' + data.items[i] + '</p></div>';
                 }
-                const clickShield = window.isAdmin ? `<div class="admin-click-shield"></div>` : ``; 
-                const mediaBlock = `<div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;"><div class="media-box">${clickShield}${window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia)}</div></div>`;
-                const listBlock = `<div class="flex-col-locked" style="flex: 1.2;">${itemsHtml}</div>`;
-                html = `<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">${data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock}</div>`;
+                const clickShield = window.isAdmin ? '<div class="admin-click-shield"></div>' : '';
+                const mediaBlock = '<div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1;"><div class="media-box">' + clickShield + window.getMediaTag(data.mediaId, data.mediaType, data.defaultMedia) + '</div></div>';
+                const listBlock = '<div class="flex-col-locked" style="flex: 1.2;">' + itemsHtml + '</div>';
+                html = '<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;">' + (data.type === 'media-left' ? mediaBlock + listBlock : listBlock + mediaBlock) + '</div>';
             } else if (data.type === 'quote') {
-                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 85vw; margin: auto;">
-                    <i class="fa-solid fa-quote-left icon-xl" style="color: rgba(255,255,255,0.1);"></i>
-                    <h2 class="txt-title editable" data-id="${data.id}_t" style="font-style: italic; text-transform: none; line-height: 1.4; margin-top: 2vh;">"${data.text}"</h2>
-                    <cite class="txt-sub editable" data-id="${data.id}_auth" style="color: white; opacity: 0.8; margin-top: 4vh; background: rgba(255,255,255,0.05); padding: 1.5vmin 3vmin; border-radius: 3vmin;">— ${data.author}</cite>
-                </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; max-width: 85vw; margin: auto;"><i class="fa-solid fa-quote-left icon-xl" style="color: rgba(255,255,255,0.1);"></i><h2 class="txt-title editable" data-id="' + data.id + '_t" style="font-style: italic; text-transform: none; line-height: 1.4; margin-top: 2vh;">"' + data.text + '"</h2><cite class="txt-sub editable" data-id="' + data.id + '_auth" style="color: white; opacity: 0.8; margin-top: 4vh; background: rgba(255,255,255,0.05); padding: 1.5vmin 3vmin; border-radius: 3vmin;">— ' + data.author + '</cite></div>';
             } else if (data.type === 'grid') {
                 let gridHtml = '';
                 for(let g of data.grid) {
-                    gridHtml += `<div class="grid-card editable" data-id="${g.id}">
-                        <div style="color: var(--k-orange); background: rgba(243, 146, 0, 0.1); width: 12vmin; height: 12vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2vmin;" class="icon-lg"><i class="fa-solid ${g.i}"></i></div>
-                        <h3 class="txt-title" style="margin: 2vh 0 1vh 0; color: white;">${g.t}</h3>
-                        <p class="txt-body" style="margin:0; text-align: center; color: var(--txt-muted);">${g.d}</p>
-                    </div>`;
+                    gridHtml += '<div class="grid-card editable" data-id="' + g.id + '"><div style="color: var(--k-orange); background: rgba(243, 146, 0, 0.1); width: 12vmin; height: 12vmin; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2vmin;" class="icon-lg"><i class="fa-solid ' + g.i + '"></i></div><h3 class="txt-title" style="margin: 3vh 0 2vh 0; font-size: 3.5vmin; color: white; word-break: break-word; hyphens: auto;">' + g.t + '</h3><p class="txt-body" style="margin:0; text-align: center; font-size: 2.2vmin; color: var(--txt-muted); word-break: break-word;">' + g.d + '</p></div>';
                 }
                 const cols = data.grid.length > 3 ? 'grid-4' : 'grid-2';
-                html = `<div class="grid-locked layout-is-${cols} w-full h-full" style="align-items: stretch; padding: 2vh 0;">${gridHtml}</div>`;
+                html = '<div class="grid-locked ' + cols + ' w-full h-full" style="align-items: stretch; padding: 2vh 0;">' + gridHtml + '</div>';
             } else if (data.type === 'team') {
                 let groupsHtml = '';
                 for(let gIdx=0; gIdx<data.groups.length; gIdx++) {
@@ -579,84 +550,38 @@
                     let mHtml = '';
                     for(let mIdx=0; mIdx<grp.m.length; mIdx++) {
                         let borderColor = gIdx===0 ? 'var(--k-orange)' : 'var(--k-blue)';
-                        mHtml += `<div class="card-box editable" data-id="${data.id}_${gIdx}_${mIdx}" style="border-left-width: 1.5vmin; border-left-color: ${borderColor}; padding: 3vmin;">
-                            <p class="txt-body" style="margin:0; color: white;">${grp.m[mIdx]}</p>
-                        </div>`;
+                        mHtml += '<div class="card-box editable" data-id="' + data.id + '_' + gIdx + '_' + mIdx + '" style="border-left-width: 1.2vmin; border-left-color: ' + borderColor + '; padding: 2.5vmin;"><p class="txt-body" style="margin:0; font-size: 2.6vmin; color: white; word-break: break-word;">' + grp.m[mIdx] + '</p></div>';
                     }
-                    groupsHtml += `<div class="flex-col-locked" style="flex: 1 1 0; min-width: 0; justify-content: flex-start; gap: 3vh;">
-                        <div style="background: linear-gradient(135deg, var(--k-dark), var(--k-blue)); color: white; padding: 3vmin; border-radius: 2vmin; text-align: center; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.3);">
-                            <span class="txt-title" style="color: white;">${grp.t}</span>
-                        </div>
-                        <div class="flex-col-locked" style="gap: 2vh; justify-content: flex-start;">${mHtml}</div>
-                    </div>`;
+                    groupsHtml += '<div class="flex-col-locked" style="flex: 1; min-width: 0; justify-content: flex-start; gap: 2.5vh;"><div style="background: var(--k-dark); color: white; padding: 2vmin; border-radius: 1.5vmin; text-align: center; box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);"><span class="txt-title" style="font-size: 3.5vmin; color: white; word-break: break-word;">' + grp.t + '</span></div><div class="flex-col-locked" style="gap: 1.5vh; justify-content: flex-start;">' + mHtml + '</div></div>';
                 }
-                html = `<div class="flex-row-locked layout-is-team w-full h-full" style="align-items: flex-start; padding-top: 2vh; width: 100%;">${groupsHtml}</div>`;
+                html = '<div class="flex-row-locked w-full h-full" style="align-items: flex-start; padding-top: 2vh;">' + groupsHtml + '</div>';
             } else if (data.type === 'table') {
                 let rowsHtml = '';
                 for(let i=0; i<data.rows.length; i++) {
                     let r = data.rows[i];
-                    rowsHtml += `<tr>
-                        <td>${r.mat}</td><td>${r.ini}</td><td style="color: var(--k-orange); font-weight: 900;">${r.ava}</td>
-                    </tr>`;
+                    rowsHtml += '<tr><td>' + r.mat + '</td><td>' + r.ini + '</td><td style="color: var(--k-orange); font-weight: 900;">' + r.ava + '</td></tr>';
                 }
-                html = `<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="text-align: left; width: 33%;">Disciplina</th>
-                                    <th style="text-align: center; width: 33%;">Orientação Inicial</th>
-                                    <th style="text-align: center; width: 33%; color: var(--k-orange);">Orientação Avançada</th>
-                                </tr>
-                            </thead>
-                            <tbody>${rowsHtml}</tbody>
-                        </table>
-                    </div>
-                </div>`;
+                html = '<div class="flex-col-locked w-full h-full" style="justify-content: center; align-items: center;"><div class="table-container"><table><thead><tr><th style="text-align: left; width: 33%;">Disciplina</th><th style="text-align: center; width: 33%;">Orientação Inicial</th><th style="text-align: center; width: 33%; color: var(--k-orange);">Orientação Avançada</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div></div>';
             } else if (data.type === 'stats') {
                 let statsHtml = '';
                 for(let i=0; i<data.stats.length; i++) {
                     let s = data.stats[i];
                     let topColor = i===0 ? 'var(--k-blue)' : 'var(--k-orange)';
-                    statsHtml += `<div class="grid-card editable" data-id="${data.id}_s${i}" style="border-bottom: none; border-top: 3vmin solid ${topColor}; justify-content: center; gap: 4vh;">
-                        <div class="txt-mega" style="font-size: 22vmin; color: ${s.color};">${s.val}</div>
-                        <div class="txt-title" style="color: var(--txt-muted);">${s.label}</div>
-                    </div>`;
+                    statsHtml += '<div class="grid-card editable" data-id="' + data.id + '_s' + i + '" style="border-bottom: none; border-top: 2.5vmin solid ' + topColor + '; justify-content: center; gap: 3vh;"><div class="txt-mega" style="font-size: 18vmin; color: ' + s.color + ';">' + s.val + '</div><div class="txt-title" style="font-size: 4vmin; color: var(--txt-muted); word-break: break-word;">' + s.label + '</div></div>';
                 }
-                html = `<div class="flex-row-locked w-full h-full" style="justify-content: center;">${statsHtml}</div>`;
+                html = '<div class="flex-row-locked w-full h-full" style="justify-content: center;">' + statsHtml + '</div>';
             } else if (data.type === 'sophia') {
                 let dHtml = '';
                 for(let i=0; i<data.details.length; i++) {
-                    dHtml += `<div style="display: flex; align-items: flex-start; gap: 3vmin;" class="editable" data-id="${data.id}_d${i}">
-                        <i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 4vmin; margin-top: 0.5vmin;"></i>
-                        <span class="txt-body" style="color: white;">${data.details[i]}</span>
-                    </div>`;
+                    dHtml += '<div style="display: flex; align-items: flex-start; gap: 2.5vmin;" class="editable" data-id="' + data.id + '_d' + i + '"><i class="fa-solid fa-check" style="color: var(--k-blue); font-size: 3.5vmin; margin-top: 0.5vmin;"></i><span class="txt-body" style="font-size: 3vmin; color: white;">' + data.details[i] + '</span></div>';
                 }
-                const clickShield = window.isAdmin ? `<div class="admin-click-shield"></div>` : ``; 
-                html = `<div class="flex-row-locked w-full h-full slide-sophia" style="align-items: stretch; padding: 2vh 0;">
-                    <div class="flex-col-locked" style="flex: 1.2; background: var(--bg-card); padding: 6vmin; border-radius: 3vmin; border-left: 2vmin solid var(--k-blue); justify-content: center; box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.3); border: 0.2vmin solid var(--border-card);">
-                        <div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(255,183,3,0.3);" class="txt-small">
-                            <i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO
-                        </div>
-                        <h3 class="txt-mega editable" data-id="${data.id}_name" style="margin: 4vh 0;">${data.name}</h3>
-                        <div class="flex-col-locked" style="gap: 3vh; justify-content: flex-start;">${dHtml}</div>
-                    </div>
-                    <div class="editable-media" data-media-id="${data.mediaId}" style="flex: 1;">
-                        <div class="media-box">${clickShield}${window.getMediaTag(data.mediaId, 'video', data.defaultMedia)}</div>
-                    </div>
-                </div>`;
+                const clickShield = window.isAdmin ? '<div class="admin-click-shield"></div>' : '';
+                html = '<div class="flex-row-locked w-full h-full" style="align-items: stretch; padding: 2vh 0;"><div class="flex-col-locked" style="flex: 1.2; background: var(--bg-card); padding: 5vmin; border-radius: 3vmin; border-left: 1.5vmin solid var(--k-blue); justify-content: center; box-shadow: 0 1vmin 3vmin rgba(0,0,0,0.5);"><div style="background: var(--k-yellow); color: var(--k-dark); padding: 1.5vmin 3vmin; border-radius: 3vmin; font-weight: 900; align-self: flex-start; box-shadow: 0 1vmin 2vmin rgba(255,183,3,0.3);" class="txt-small"><i class="fa-solid fa-trophy"></i> ALUNA DE SUCESSO</div><h3 class="txt-mega editable" data-id="' + data.id + '_name" style="margin: 3vh 0;">' + data.name + '</h3><div class="flex-col-locked" style="gap: 2.5vh; justify-content: flex-start;">' + dHtml + '</div></div><div class="editable-media" data-media-id="' + data.mediaId + '" style="flex: 1;"><div class="media-box">' + clickShield + window.getMediaTag(data.mediaId, 'video', data.defaultMedia) + '</div></div></div>';
             } else if (data.type === 'end') {
-                html = `<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;">
-                    <i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 3vh;"></i>
-                    <h2 class="txt-mega editable" data-id="${data.id}_t" style="font-size: 12vmin;">${data.title}</h2>
-                    <p class="txt-sub editable" data-id="${data.id}_sub" style="margin: 3vh 0; color: white;">${data.subtitle}</p>
-                    <div class="editable" data-id="${data.id}_contact" style="background: var(--k-blue); color: white; padding: 3vmin 6vmin; border-radius: 6vmin; margin-top: 5vh; box-shadow: 0 2vmin 5vmin rgba(0,174,239,0.3);">
-                        <span class="txt-title" style="color: white; text-transform: none;">${data.contact}</span>
-                    </div>
-                </div>`;
+                html = '<div class="flex-col-locked" style="align-items: center; text-align: center; height: 100%;"><i class="fa-regular fa-handshake icon-xl" style="color: var(--k-orange); margin-bottom: 2vh;"></i><h2 class="txt-mega editable" data-id="' + data.id + '_t" style="font-size: 9vmin;">' + data.title + '</h2><p class="txt-sub editable" data-id="' + data.id + '_sub" style="margin: 2vh 0; color: white;">' + data.subtitle + '</p><div class="editable" data-id="' + data.id + '_contact" style="background: var(--k-blue); color: white; padding: 2.5vh 5vw; border-radius: 5vh; margin-top: 3vh; box-shadow: 0 2vmin 4vmin rgba(0,174,239,0.3);"><span class="txt-title" style="color: white; text-transform: none; font-size: 4vmin;">' + data.contact + '</span></div></div>';
             }
 
-            mainContent.innerHTML = `<div class="slide active${classIsolated}">${html}</div>`;
+            mainContent.innerHTML = '<div class="slide active">' + html + '</div>';
             document.getElementById('progress-bar').style.width = (((window.currentIndex + 1) / slidesData.length) * 100) + '%';
             
             window.setupGestor();
@@ -669,9 +594,9 @@
             else { window.executeMediaAction(); }
         };
 
-        // EXECUÇÃO LOCAL (ADMIN COMPLETAMENTE SILENCIADO)
+        // EXECUÇÃO LOCAL BLINDADA
         window.executeMediaAction = function() {
-            if (window.isAdmin) return; // NUNCA TOCA VÍDEO SE FOR O ADMIN
+            if (window.isAdmin) return; 
 
             const activeSlide = document.querySelector('.slide.active');
             if (!activeSlide) return;
@@ -718,7 +643,7 @@
             if (e.key === 'f' || e.key === 'F') window.toggleFullScreen();
         });
 
-        // GESTOR MANUAL E CLOUDINARY
+        // GESTOR MANUAL E MODAIS
         document.getElementById('logo-btn').addEventListener('click', () => {
             window.adminClicks++;
             if (window.adminClicks === 3) {
@@ -809,7 +734,7 @@
         });
 
         // =========================================================================
-        // MÓDULO AR V177: KINETIC MAPPING ORIGINAL (Sem bloqueio de ombros)
+        // MÓDULO AR V177
         // =========================================================================
         
         window.triggerARConfirm = function(actionType) {
@@ -860,13 +785,13 @@
             async start() {
                 try {
                     if (typeof tf === 'undefined' || typeof poseDetection === 'undefined') {
-                        alert("As bibliotecas de IA estão a carregar. Verifique a internet.");
+                        alert("As bibliotecas de Inteligência Artificial ainda estão a carregar. Verifique a sua internet.");
                         document.getElementById('ar-status-warning').style.display = 'none';
                         return;
                     }
 
                     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                        alert("Câmera bloqueada. O link precisa ser https://");
+                        alert("O seu navegador bloqueou o acesso à câmera. É obrigatório usar um link 'https://'.");
                         document.getElementById('ar-status-warning').style.display = 'none';
                         return;
                     }
