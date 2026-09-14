@@ -1,0 +1,15 @@
+{
+  "id": "./controle.html",
+  "name": "Kumon Controle",
+  "short_name": "Kumon Controle",
+  "description": "Controle remoto da apresentação Kumon",
+  "start_url": "./controle.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080d17",
+  "theme_color": "#F39200",
+  "icons": [
+    {"src":"assets/icon-controle-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"assets/icon-controle-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
