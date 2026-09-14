@@ -14,7 +14,7 @@ window.KumonAdminFields=(()=>{
     ['end','Encerramento']
   ];
   const icons=[
-    ['fa-star','⭐ Estrela'],['fa-book-open','📖 Livro'],['fa-graduation-cap','🎓 Educação'],['fa-school','🏫 Escola'],
+    ['fa-star','⭐ Estrela'],['fa-book-open','📖 Livro'],['fa-graduation-cap','🎓 Educação'],['fa-school','🏫 Escola'],['fa-landmark','🏛️ História / unidade'],
     ['fa-brain','🧠 Aprendizado'],['fa-lightbulb','💡 Ideia'],['fa-seedling','🌱 Desenvolvimento'],['fa-rocket','🚀 Evolução'],
     ['fa-bullseye','🎯 Objetivo'],['fa-compass','🧭 Direção'],['fa-chart-line','📈 Crescimento'],['fa-chart-pie','📊 Indicadores'],
     ['fa-users','👥 Pessoas'],['fa-user-graduate','🧑‍🎓 Aluno'],['fa-children','🧒 Crianças'],['fa-baby-carriage','👶 Baby'],
@@ -27,7 +27,7 @@ window.KumonAdminFields=(()=>{
   ];
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function typeOptions(selected=''){return types.map(([v,l])=>`<option value="${v}" ${v===selected?'selected':''}>${l}</option>`).join('')}
-  function iconOptions(selected='fa-star'){return icons.map(([v,l])=>`<option value="${v}" ${v===selected?'selected':''}>${l}</option>`).join('')}
+  function iconOptions(selected='fa-star'){const list=icons.some(([v])=>v===selected)?icons:[[selected,`Ícone atual (${selected})`],...icons];return list.map(([v,l])=>`<option value="${v}" ${v===selected?'selected':''}>${l}</option>`).join('')}
   function titleOf(s){return s.type==='cover'?(s.t||''):s.type==='quote'?(s.text||''):(s.title||'')}
   function labelOf(s){return s.title||s.t||s.text||s.name||'Slide sem título'}
   function needsMedia(type){return['media-left','media-right','media-full','sophia'].includes(type)}
