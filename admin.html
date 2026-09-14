@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Editor • Reunião Kumon</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin-v2.css">
+<script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+</head>
+<body>
+<div id="login" class="login-overlay">
+  <form id="loginForm" class="login-card">
+    <div class="login-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+    <h1>Editor da Apresentação</h1>
+    <p>Reunião de Pais 2026 • Kumon Rio Preto Shopping</p>
+    <input id="adminPin" type="password" inputmode="text" autocomplete="current-password" placeholder="PIN do gestor" required>
+    <button type="submit" class="primary">ENTRAR NO EDITOR</button>
+  </form>
+</div>
+<div class="admin-shell">
+  <header class="admin-topbar">
+    <div><b>Kumon Presentation Studio</b><span id="saveStatus">Sincronizando...</span></div>
+    <nav>
+      <a href="apresentacao.html" target="kumonPresentation"><i class="fa-solid fa-display"></i><span>Apresentar</span></a>
+      <a href="controle.html" target="kumonRemote"><i class="fa-solid fa-mobile-screen-button"></i><span>Controle</span></a>
+    </nav>
+  </header>
+  <main class="admin-workspace">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-head"><strong>Slides</strong><button id="newSlide" class="icon-action" title="Novo slide"><i class="fa-solid fa-plus"></i></button></div>
+      <div id="slideList" class="slide-list"></div>
+    </aside>
+    <section class="editor-panel">
+      <div id="emptyEditor" class="empty-editor"><i class="fa-regular fa-rectangle-list"></i><strong>Selecione um slide</strong><span>Edite conteúdo, estrutura e mídia sem alterar código.</span></div>
+      <form id="editorForm" class="editor-form hidden">
+        <div class="editor-heading"><div><span id="slideNumber">SLIDE</span><h1 id="editorTitle">Editar slide</h1></div><div class="editor-actions"><button type="button" id="moveUp" title="Subir"><i class="fa-solid fa-arrow-up"></i></button><button type="button" id="moveDown" title="Descer"><i class="fa-solid fa-arrow-down"></i></button><button type="button" id="duplicateSlide" title="Duplicar"><i class="fa-regular fa-copy"></i></button><button type="button" id="deleteSlide" class="danger" title="Excluir"><i class="fa-regular fa-trash-can"></i></button></div></div>
+        <div class="form-grid">
+          <label><span>Estrutura do slide</span><select id="fieldType"></select></label>
+          <label><span>Ícone</span><input id="fieldIcon" type="text" placeholder="fa-star"></label>
+          <label class="wide"><span>Título principal</span><input id="fieldTitle" type="text"></label>
+          <label class="wide optional-field" data-key="subtitle"><span>Subtítulo</span><input id="fieldSubtitle" type="text"></label>
+          <label class="wide optional-field" data-key="author"><span>Autor / assinatura da frase</span><input id="fieldAuthor" type="text"></label>
+          <label class="wide optional-field" data-key="contact"><span>Contato / chamada final</span><input id="fieldContact" type="text"></label>
+        </div>
+        <section id="mediaSection" class="editor-section">
+          <div class="section-title"><div><i class="fa-regular fa-images"></i><strong>Imagem / vídeo</strong></div><span>Cloudinary ou URL</span></div>
+          <div class="media-editor"><div id="mediaPreview" class="media-preview"></div><div class="media-fields"><label><span>URL da mídia</span><input id="fieldMedia" type="url" placeholder="https://..."></label><div class="button-row"><button type="button" id="uploadMedia" class="primary"><i class="fa-solid fa-cloud-arrow-up"></i> Enviar mídia</button><button type="button" id="clearMedia"><i class="fa-solid fa-eraser"></i> Limpar</button></div></div></div>
+        </section>
+        <section class="editor-section">
+          <div class="section-title"><div><i class="fa-solid fa-layer-group"></i><strong>Campos do conteúdo</strong></div><button type="button" id="addField" class="small-primary"><i class="fa-solid fa-plus"></i> Adicionar</button></div>
+          <div id="dynamicFields" class="dynamic-fields"></div>
+        </section>
+        <details class="advanced"><summary>Configurações avançadas do slide</summary><label><span>ID interno</span><input id="fieldId" type="text" readonly></label><label><span>JSON do slide</span><textarea id="jsonEditor" rows="12" spellcheck="false"></textarea></label><button type="button" id="applyJson">Aplicar JSON</button></details>
+        <div class="save-bar"><span id="dirtyLabel">Sem alterações pendentes</span><button type="submit" class="primary save"><i class="fa-solid fa-floppy-disk"></i> SALVAR ALTERAÇÕES</button></div>
+      </form>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<script src="js/admin-v2.js"></script>
+</body>
+</html>
