@@ -1,0 +1,1 @@
+window.KUMON_DEFAULT_SLIDES.push({id:'indicadores',type:'stats',title:'Nossos Indicadores',icon:'fa-chart-pie',stats:[{label:'Total de Alunos',val:'364'},{label:'Acima da Série Escolar',val:'197'}]});
