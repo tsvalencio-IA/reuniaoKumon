@@ -23,19 +23,20 @@
   <main id="stage" class="presentation-stage"><div class="loading">Carregando apresentação...</div></main>
   <footer class="presentation-footer">
     <div class="nav-controls">
-      <button id="prev" class="round-btn"><i class="fa-solid fa-chevron-left"></i></button>
-      <button id="home" class="round-btn logo-btn">K</button>
-      <button id="next" class="round-btn"><i class="fa-solid fa-chevron-right"></i></button>
+      <button id="prev" class="round-btn" aria-label="Voltar"><i class="fa-solid fa-chevron-left"></i></button>
+      <button id="home" class="round-btn logo-btn" aria-label="Primeiro slide">K</button>
+      <button id="next" class="round-btn" aria-label="Avançar"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
     <div class="footer-tools">
       <a class="tool-btn" href="controle.html" target="kumonRemote" title="Controle remoto"><i class="fa-solid fa-mobile-screen-button"></i></a>
       <a class="tool-btn" href="admin.html" target="kumonAdmin" title="Editor"><i class="fa-solid fa-pen-to-square"></i></a>
-      <button id="fullscreen" class="tool-btn" title="Tela cheia"><i class="fa-solid fa-expand"></i></button>
+      <button id="fullscreen" class="tool-btn" title="Tela cheia" aria-label="Tela cheia"><i class="fa-solid fa-expand"></i></button>
     </div>
     <div class="signature">Reunião 2026<br>Powered by <b>thIAguinho Soluções Digitais</b></div>
   </footer>
 </div>
 <script src="js/legacy-parser.js"></script>
+<script src="js/v2-renderer.js"></script>
 <script src="js/apresentacao-v2.js"></script>
 </body>
 </html>
