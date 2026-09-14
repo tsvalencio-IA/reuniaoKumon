@@ -1,0 +1,1 @@
+window.KUMON_DEFAULT_SLIDES.push({ id:'tabela', type:'table', title:'Estrutura Pedagógica', icon:'fa-sitemap', rows:[{ mat:'Português', ini:'Estágios 7A ao CII', ava:'Estágios DI ao L' },{ mat:'Matemática', ini:'Estágios 6A ao A', ava:'Estágios B ao F | G ao O' },{ mat:'Inglês', ini:'Estágios 7A ao C', ava:'Estágios D ao O' }] });
