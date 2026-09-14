@@ -31,7 +31,9 @@ window.KumonRenderer=(()=>{
       const trackWidth=frame.getBoundingClientRect().width||frame.parentElement?.getBoundingClientRect().width||600;
       const stageRect=activeStage.getBoundingClientRect();
       const mobile=window.matchMedia('(max-width:820px),(orientation:portrait)').matches;
-      const maxHeight=Math.max(220,Math.min(window.innerHeight*(mobile?.42:.61),stageRect.height*(mobile?.58:.94)));
+      const viewportFactor=mobile ? .42 : .61;
+      const stageFactor=mobile ? .58 : .94;
+      const maxHeight=Math.max(220,Math.min(window.innerHeight*viewportFactor,stageRect.height*stageFactor));
       let targetW=trackWidth;
       let targetH=targetW/ratio;
       if(targetH>maxHeight){targetH=maxHeight;targetW=targetH*ratio}
