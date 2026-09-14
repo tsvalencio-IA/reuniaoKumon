@@ -3,7 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f1827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kumon Studio">
 <title>Editor • Reunião Kumon</title>
+<link rel="manifest" href="manifest-admin.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-admin-192.png">
+<link rel="apple-touch-icon" href="assets/icon-admin-192.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/admin-v2.css">
@@ -41,15 +48,15 @@
         <div class="editor-heading"><div><span id="slideNumber">SLIDE</span><h1 id="editorTitle">Editar slide</h1></div><div class="editor-actions"><button type="button" id="moveUp" title="Subir"><i class="fa-solid fa-arrow-up"></i></button><button type="button" id="moveDown" title="Descer"><i class="fa-solid fa-arrow-down"></i></button><button type="button" id="duplicateSlide" title="Duplicar"><i class="fa-regular fa-copy"></i></button><button type="button" id="deleteSlide" class="danger" title="Excluir"><i class="fa-regular fa-trash-can"></i></button></div></div>
         <div class="form-grid">
           <label><span>Estrutura do slide</span><select id="fieldType"></select></label>
-          <label><span>Ícone</span><input id="fieldIcon" type="text" placeholder="fa-star"></label>
+          <label><span>Ícone do slide</span><select id="fieldIcon"></select></label>
           <label class="wide"><span>Título principal</span><input id="fieldTitle" type="text"></label>
           <label class="wide optional-field" data-key="subtitle"><span>Subtítulo</span><input id="fieldSubtitle" type="text"></label>
           <label class="wide optional-field" data-key="author"><span>Autor / assinatura da frase</span><input id="fieldAuthor" type="text"></label>
           <label class="wide optional-field" data-key="contact"><span>Contato / chamada final</span><input id="fieldContact" type="text"></label>
         </div>
         <section id="mediaSection" class="editor-section">
-          <div class="section-title"><div><i class="fa-regular fa-images"></i><strong>Imagem / vídeo</strong></div><span>Cloudinary ou URL</span></div>
-          <div class="media-editor"><div id="mediaPreview" class="media-preview"></div><div class="media-fields"><label><span>URL da mídia</span><input id="fieldMedia" type="url" placeholder="https://..."></label><div class="button-row"><button type="button" id="uploadMedia" class="primary"><i class="fa-solid fa-cloud-arrow-up"></i> Enviar mídia</button><button type="button" id="clearMedia"><i class="fa-solid fa-eraser"></i> Limpar</button></div></div></div>
+          <div class="section-title"><div><i class="fa-regular fa-images"></i><strong>Foto / vídeo</strong></div><span>Cloudinary, URL ou YouTube</span></div>
+          <div class="media-editor"><div id="mediaPreview" class="media-preview"></div><div class="media-fields"><label><span>URL da mídia</span><input id="fieldMedia" type="url" placeholder="https://..."></label><div class="button-row"><button type="button" id="uploadMedia" class="primary"><i class="fa-solid fa-cloud-arrow-up"></i> ENVIAR FOTO OU VÍDEO</button><button type="button" id="clearMedia"><i class="fa-solid fa-eraser"></i> Limpar</button></div></div></div>
         </section>
         <section class="editor-section">
           <div class="section-title"><div><i class="fa-solid fa-layer-group"></i><strong>Campos do conteúdo</strong></div><button type="button" id="addField" class="small-primary"><i class="fa-solid fa-plus"></i> Adicionar</button></div>
@@ -61,6 +68,12 @@
     </section>
   </main>
 </div>
+<dialog id="newSlideDialog" class="new-slide-dialog">
+  <div class="new-slide-card">
+    <div class="new-slide-head"><div><span>NOVA TELA</span><h2>Escolha uma estrutura pronta</h2><p>Você pode mudar depois sem precisar alterar código.</p></div><button id="newSlideCancel" type="button" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="newSlideChoices" class="new-slide-choices"></div>
+  </div>
+</dialog>
 <div id="toast" class="toast"></div>
 <script src="js/legacy-parser.js"></script>
 <script src="js/admin-fields.js"></script>
