@@ -13,6 +13,7 @@ window.KumonAdminFields=(()=>{
     ['sophia','Pessoa / aluno em destaque + mídia'],
     ['end','Encerramento']
   ];
+
   const icons=[
     ['fa-star','⭐ Estrela'],['fa-book-open','📖 Livro'],['fa-graduation-cap','🎓 Educação'],['fa-school','🏫 Escola'],['fa-landmark','🏛️ História / unidade'],
     ['fa-brain','🧠 Aprendizado'],['fa-lightbulb','💡 Ideia'],['fa-seedling','🌱 Desenvolvimento'],['fa-rocket','🚀 Evolução'],
@@ -25,14 +26,24 @@ window.KumonAdminFields=(()=>{
     ['fa-clock','🕒 Horário'],['fa-earth-americas','🌎 Mundo'],['fa-plus','➕ Complemento'],['fa-circle-question','❓ Pergunta'],
     ['fa-circle-nodes','🔗 Conexão'],['fa-pen-nib','✒️ Escrita'],['fa-puzzle-piece','🧩 Inclusão'],['fa-magnifying-glass','🔎 Pesquisa']
   ];
+
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  function typeOptions(selected=''){return types.map(([v,l])=>`<option value="${v}" ${v===selected?'selected':''}>${l}</option>`).join('')}
-  function iconOptions(selected='fa-star'){const list=icons.some(([v])=>v===selected)?icons:[[selected,`Ícone atual (${selected})`],...icons];return list.map(([v,l])=>`<option value="${v}" ${v===selected?'selected':''}>${l}</option>`).join('')}
+
+  function typeOptions(selected=''){
+    return types.map(([v,l])=>`<option value="${v}" ${v===selected?'selected':''}>${l}</option>`).join('');
+  }
+
+  function iconOptions(selected='fa-star'){
+    const list=icons.some(([v])=>v===selected)?icons:[[selected,`Ícone atual (${selected})`],...icons];
+    return list.map(([v,l])=>`<option value="${v}" ${v===selected?'selected':''}>${l}</option>`).join('');
+  }
+
   function titleOf(s){return s.type==='cover'?(s.t||''):s.type==='quote'?(s.text||''):(s.title||'')}
   function labelOf(s){return s.title||s.t||s.text||s.name||'Slide sem título'}
   function needsMedia(type){return['media-left','media-right','media-full','sophia'].includes(type)}
   function optional(type){return{subtitle:['cover','end'].includes(type),author:type==='quote',contact:type==='end'}}
   function newId(prefix='slide'){return prefix+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,6)}
+
   function fresh(type='list',title='Novo slide'){
     const id=newId('slide'),base={id,type};
     if(type==='cover')return{...base,t:title,sub:'',ext:'Bem-vindos!'};
@@ -46,9 +57,43 @@ window.KumonAdminFields=(()=>{
     if(type==='media-left'||type==='media-right'||type==='media-full')return{...base,title,icon:'fa-image',mediaId:'media_'+id,mediaType:'auto',items:type==='media-full'?[]:['Novo tópico']};
     return{...base,title,icon:'fa-list-check',items:['Novo tópico']};
   }
-  function convert(old,type){if(old.type===type)return old;const n=fresh(type,labelOf(old));n.id=old.id;n.icon=old.icon||n.icon;if(needsMedia(type)){n.mediaId=old.mediaId||('media_'+old.id);n.mediaType=old.mediaType||n.mediaType;n.defaultMedia=old.defaultMedia||n.defaultMedia}if(n.items&&old.items)n.items=structuredClone(old.items);if(n.grid&&old.grid)n.grid=structuredClone(old.grid);if(n.groups&&old.groups)n.groups=structuredClone(old.groups);if(n.rows&&old.rows)n.rows=structuredClone(old.rows);if(n.stats&&old.stats)n.stats=structuredClone(old.stats);if(n.details&&old.details)n.details=structuredClone(old.details);return n}
+
+  function safeClone(v){
+    if(v===undefined)return undefined;
+    if(typeof structuredClone==='function')return structuredClone(v);
+    return JSON.parse(JSON.stringify(v));
+  }
+
+  function convert(old,type){
+    if(old.type===type)return old;
+    const n=fresh(type,labelOf(old));
+
+    n.id=old.id;
+    n.icon=old.icon||n.icon;
+
+    if(needsMedia(type)){
+      n.mediaId=old.mediaId||('media_'+old.id);
+      n.mediaType=old.mediaType||n.mediaType;
+
+      if(old.defaultMedia!==undefined && old.defaultMedia!==null && old.defaultMedia!==''){
+        n.defaultMedia=old.defaultMedia;
+      }
+    }
+
+    if(n.items&&old.items)n.items=safeClone(old.items);
+    if(n.grid&&old.grid)n.grid=safeClone(old.grid);
+    if(n.groups&&old.groups)n.groups=safeClone(old.groups);
+    if(n.rows&&old.rows)n.rows=safeClone(old.rows);
+    if(n.stats&&old.stats)n.stats=safeClone(old.stats);
+    if(n.details&&old.details)n.details=safeClone(old.details);
+
+    return n;
+  }
+
   const del='<button type="button" data-remove title="Remover"><i class="fa-solid fa-xmark"></i></button>';
-  function renderDynamic(s,root){let h='';
+
+  function renderDynamic(s,root){
+    let h='';
     if(s.type==='cover')h=`<div class="dynamic-row"><input data-prop="ext" value="${esc(s.ext||'')}" placeholder="Texto de boas-vindas">${del}</div>`;
     else if(['list','media-left','media-right'].includes(s.type))h=(s.items||[]).map((x,i)=>`<div class="dynamic-row" data-index="${i}"><input data-prop="item" value="${esc(x)}" placeholder="Tópico">${del}</div>`).join('');
     else if(s.type==='media-full')h='<div style="color:var(--muted);font-size:12px">Este layout prioriza a foto ou o vídeo. Título e mídia são configurados acima.</div>';
@@ -60,16 +105,53 @@ window.KumonAdminFields=(()=>{
     else h='<div style="color:var(--muted);font-size:12px">Este tipo não usa campos adicionais.</div>';
     root.innerHTML=h;
   }
+
   function collect(s,root){
-    if(s.type==='cover'){const e=root.querySelector('[data-prop="ext"]');s.ext=e?e.value:''}
-    else if(['list','media-left','media-right'].includes(s.type))s.items=[...root.querySelectorAll('[data-prop="item"]')].map(x=>x.value);
-    else if(s.type==='grid')s.grid=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({id:s.grid?.[Number(r.dataset.index)]?.id||newId('card'),t:r.querySelector('[data-prop="t"]').value,d:r.querySelector('[data-prop="d"]').value,i:r.querySelector('[data-prop="i"]').value||'fa-star'}));
-    else if(s.type==='team')s.groups=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({t:r.querySelector('[data-prop="t"]').value,m:r.querySelector('[data-prop="m"]').value.split('\n').map(x=>x.trim()).filter(Boolean)}));
-    else if(s.type==='table')s.rows=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({mat:r.querySelector('[data-prop="mat"]').value,ini:r.querySelector('[data-prop="ini"]').value,ava:r.querySelector('[data-prop="ava"]').value}));
-    else if(s.type==='stats')s.stats=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({label:r.querySelector('[data-prop="label"]').value,val:r.querySelector('[data-prop="val"]').value}));
-    else if(s.type==='sophia'){s.name=root.querySelector('[data-prop="name"]')?.value||'';s.details=[...root.querySelectorAll('[data-prop="detail"]')].map(x=>x.value)}
-    return s
+    if(s.type==='cover'){
+      const e=root.querySelector('[data-prop="ext"]');
+      s.ext=e?e.value:'';
+    } else if(['list','media-left','media-right'].includes(s.type)){
+      s.items=[...root.querySelectorAll('[data-prop="item"]')].map(x=>x.value);
+    } else if(s.type==='grid'){
+      s.grid=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({
+        id:s.grid?.[Number(r.dataset.index)]?.id||newId('card'),
+        t:r.querySelector('[data-prop="t"]').value,
+        d:r.querySelector('[data-prop="d"]').value,
+        i:r.querySelector('[data-prop="i"]').value||'fa-star'
+      }));
+    } else if(s.type==='team'){
+      s.groups=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({
+        t:r.querySelector('[data-prop="t"]').value,
+        m:r.querySelector('[data-prop="m"]').value.split('\n').map(x=>x.trim()).filter(Boolean)
+      }));
+    } else if(s.type==='table'){
+      s.rows=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({
+        mat:r.querySelector('[data-prop="mat"]').value,
+        ini:r.querySelector('[data-prop="ini"]').value,
+        ava:r.querySelector('[data-prop="ava"]').value
+      }));
+    } else if(s.type==='stats'){
+      s.stats=[...root.querySelectorAll('.dynamic-row[data-index]')].map(r=>({
+        label:r.querySelector('[data-prop="label"]').value,
+        val:r.querySelector('[data-prop="val"]').value
+      }));
+    } else if(s.type==='sophia'){
+      s.name=root.querySelector('[data-prop="name"]')?.value||'';
+      s.details=[...root.querySelectorAll('[data-prop="detail"]')].map(x=>x.value);
+    }
+    return s;
   }
-  function add(s){if(s.type==='cover')s.ext=s.ext||'Novo texto';else if(['list','media-left','media-right'].includes(s.type))(s.items??=[]).push('Novo tópico');else if(s.type==='grid')(s.grid??=[]).push({id:newId('card'),t:'Novo tópico',d:'Descrição',i:'fa-star'});else if(s.type==='team')(s.groups??=[]).push({t:'Novo grupo',m:['Novo item']});else if(s.type==='table')(s.rows??=[]).push({mat:'Item',ini:'Informação',ava:'Destaque'});else if(s.type==='stats')(s.stats??=[]).push({label:'Indicador',val:'0'});else if(s.type==='sophia')(s.details??=[]).push('Nova informação');return s}
+
+  function add(s){
+    if(s.type==='cover')s.ext=s.ext||'Novo texto';
+    else if(['list','media-left','media-right'].includes(s.type))(s.items??=[]).push('Novo tópico');
+    else if(s.type==='grid')(s.grid??=[]).push({id:newId('card'),t:'Novo tópico',d:'Descrição',i:'fa-star'});
+    else if(s.type==='team')(s.groups??=[]).push({t:'Novo grupo',m:['Novo item']});
+    else if(s.type==='table')(s.rows??=[]).push({mat:'Item',ini:'Informação',ava:'Destaque'});
+    else if(s.type==='stats')(s.stats??=[]).push({label:'Indicador',val:'0'});
+    else if(s.type==='sophia')(s.details??=[]).push('Nova informação');
+    return s;
+  }
+
   return{types,icons,typeOptions,iconOptions,titleOf,labelOf,needsMedia,optional,newId,fresh,convert,renderDynamic,collect,add,esc};
 })();
