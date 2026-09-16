@@ -65,8 +65,32 @@
 
   .slide-video{
     display:block;
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
+    transform:none!important;
+    backface-visibility:visible!important;
+    -webkit-backface-visibility:visible!important;
+    will-change:auto!important;
+    filter:none!important;
+    opacity:1!important;
+  }
+
+  .media-frame.has-video{
+    overflow:visible!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    border-color:transparent!important;
+    background:#000!important;
+    contain:none!important;
+    isolation:auto!important;
+  }
+
+  .media-frame.has-video video{
+    border-radius:0!important;
+    transform:none!important;
+    backface-visibility:visible!important;
+    -webkit-backface-visibility:visible!important;
+    will-change:auto!important;
+    filter:none!important;
+    opacity:1!important;
   }
 }
 
