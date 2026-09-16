@@ -1,4 +1,4 @@
-let db=null,current=0,slides=[];
+let db=null,current=0,slides=[],currentSpeed=1;
 
 const fallbackTitles=[
   'REUNIÃO DE PAIS 2026',
@@ -26,6 +26,20 @@ const fallbackTitles=[
 ];
 
 const el=id=>document.getElementById(id);
+
+function clampSpeed(rate){
+  rate=Number(rate);
+  return [1,1.5,2].includes(rate)?rate:1;
+}
+
+function updateSpeedUI(){
+  const rate=clampSpeed(currentSpeed);
+  const label=el('speedLabel');
+  if(label)label.textContent=rate===1.5?'1,5x':rate+'x';
+  document.querySelectorAll('.speed-btn').forEach(b=>{
+    b.classList.toggle('active',Number(b.dataset.speed)===rate);
+  });
+}
 
 function normalise(raw){
   if(!raw)return[];
@@ -107,6 +121,11 @@ async function start(){
     current=clampIndex(s.val()||0);
     render();
   });
+
+  db.ref('kumon_config/state/mediaSpeed').on('value',s=>{
+    currentSpeed=clampSpeed(s.val()||1);
+    updateSpeedUI();
+  });
 }
 
 function render(){
@@ -125,6 +144,8 @@ function render(){
   if(active&&typeof active.scrollIntoView==='function'){
     active.scrollIntoView({block:'nearest',behavior:'smooth'});
   }
+
+  updateSpeedUI();
 }
 
 async function go(i){
@@ -142,11 +163,30 @@ async function media(){
   }
 }
 
+async function setSpeed(rate){
+  if(!db)return;
+  rate=clampSpeed(rate);
+  currentSpeed=rate;
+  updateSpeedUI();
+
+  await db.ref('kumon_config/state/mediaSpeed').set(rate);
+  await db.ref('kumon_config/action').set({
+    type:'MEDIA_SPEED',
+    rate,
+    ts:Date.now()
+  });
+}
+
 el('unlock').onclick=start;
 el('prev').onclick=()=>go(current-1);
 el('next').onclick=()=>go(current+1);
 el('nextBig').onclick=()=>go(current+1);
 el('media').onclick=media;
 
+document.querySelectorAll('.speed-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>setSpeed(Number(btn.dataset.speed)));
+});
+
 rebuildList();
 render();
+updateSpeedUI();

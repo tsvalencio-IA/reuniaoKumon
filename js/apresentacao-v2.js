@@ -2,13 +2,18 @@
   const $=id=>document.getElementById(id);
   const stage=$('stage'),header=$('header'),titleEl=$('slideTitle'),iconEl=$('slideIcon'),progress=$('progress');
 
-  let db=null,slides=[],media={},links={},current=0,lastActionTs=0,touchX=null;
+  let db=null,slides=[],media={},links={},current=0,lastActionTs=0,touchX=null,playbackRate=1;
   let lastRenderKey='';
 
   function normalise(raw){
     if(!raw)return[];
     if(Array.isArray(raw))return raw.filter(Boolean);
     return Object.keys(raw).sort((a,b)=>Number(a)-Number(b)).map(k=>raw[k]).filter(Boolean);
+  }
+
+  function clampRate(rate){
+    rate=Number(rate);
+    return [1,1.5,2].includes(rate)?rate:1;
   }
 
   function clampIndex(i){
@@ -67,6 +72,7 @@
     lastRenderKey=key;
 
     window.KumonRenderer.render(stage,header,titleEl,iconEl,s,media,links);
+    window.KumonRenderer.setPlaybackRate(stage,playbackRate);
     progress.style.width=`${((current+1)/slides.length)*100}%`;
     document.title=`${s.title||s.t||'Reunião de Pais 2026'} • Kumon`;
   }
@@ -123,6 +129,11 @@
       }
     });
 
+    db.ref('kumon_config/state/mediaSpeed').on('value',snap=>{
+      playbackRate=clampRate(snap.val()||1);
+      window.KumonRenderer.setPlaybackRate(stage,playbackRate);
+    });
+
     db.ref('kumon_config/action').on('value',snap=>{
       const a=snap.val()||{};
 
@@ -131,6 +142,11 @@
 
         if(a.type==='MEDIA_ACTION'){
           window.KumonRenderer.mediaAction(stage);
+        }
+
+        if(a.type==='MEDIA_SPEED'){
+          playbackRate=clampRate(a.rate);
+          window.KumonRenderer.setPlaybackRate(stage,playbackRate);
         }
       }
     });

@@ -20,7 +20,7 @@ window.KumonRenderer=(()=>{
     if(y)return `<iframe class="slide-iframe" src="https://www.youtube.com/embed/${esc(y)}?enablejsapi=1&playsinline=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
 
     const isVideo=slide.mediaType==='video'||/\.(mp4|webm|mov)(\?|$)/i.test(src)||/\/video\/upload\//i.test(src);
-    if(isVideo)return `<video class="slide-video" src="${esc(src)}" controls playsinline preload="auto"></video>`;
+    if(isVideo)return `<video class="slide-video" src="${esc(src)}" controls playsinline preload="metadata" disablepictureinpicture></video>`;
 
     return `<img class="slide-image" src="${esc(src)}" alt="${esc(slide.title||slide.t||'Mídia')}" loading="eager">`;
   }
@@ -152,6 +152,7 @@ window.KumonRenderer=(()=>{
       }
 
       if(video){
+        frame.classList.add('has-video');
         const set=()=>sizeFrame(frame,video.videoWidth,video.videoHeight);
         if(video.readyState>=1&&video.videoWidth)set();
         else video.addEventListener('loadedmetadata',set,{once:true});
@@ -208,6 +209,32 @@ window.KumonRenderer=(()=>{
     });
   }
 
+  function setPlaybackRate(stage,rate){
+    rate=Number(rate);
+    if(![1,1.5,2].includes(rate))rate=1;
+
+    const v=stage.querySelector('video.slide-video');
+    if(v){
+      v.defaultPlaybackRate=rate;
+      v.playbackRate=rate;
+      return true;
+    }
+
+    const f=stage.querySelector('iframe.slide-iframe');
+    if(f){
+      try{
+        f.contentWindow?.postMessage(JSON.stringify({
+          event:'command',
+          func:'setPlaybackRate',
+          args:[rate]
+        }),'*');
+      }catch(e){}
+      return true;
+    }
+
+    return false;
+  }
+
   function mediaAction(stage){
     const v=stage.querySelector('video.slide-video');
     if(v){
@@ -227,5 +254,5 @@ window.KumonRenderer=(()=>{
     }
   }
 
-  return{render,mediaAction,esc};
+  return{render,mediaAction,setPlaybackRate,esc};
 })();
